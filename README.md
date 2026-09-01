@@ -17,7 +17,6 @@
 
 PLGRND is a visual playground for Solana. Instead of writing a script to derive an ATA, build an instruction and send a transaction, you wire together nodes on a canvas: each one is a ready, tested block of code with typed inputs and outputs. Values flow along the edges and evaluate live, so you see the actual public key, the actual lamport amount, the actual transaction at every step. Import a program's IDL and its instructions become nodes you can call. Every flow encodes into its own URL, so a working example is a link you can send to someone.
 
-
 ## Built with
 
 | Area         | Technology                                                                                                                                                                                        |
@@ -155,6 +154,10 @@ Widget appearance is not trusted state: any script able to reach the widget's `c
 ### Legacy links
 
 Old-style `https://plgrnd.io/#flow=…?view=true` links keep working — they are rewritten client-side to `/embed` with default options.
+
+## Contributing
+
+Anyone can add nodes — upstream into this repository (they ship on plgrnd.io) or in your own fork and deployment. The full guide, from the node contract to the PR checklist, is in [CONTRIBUTING.md](CONTRIBUTING.md). Node PRs must also extend the [Node categories](#node-categories) table above.
 
 ## Getting started
 
