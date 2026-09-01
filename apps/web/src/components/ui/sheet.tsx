@@ -47,7 +47,7 @@ function SheetContent({
       <SheetPrimitive.Content
         data-slot="sheet-content"
         className={cn(
-          'bg-background border-border fixed z-60 flex flex-col gap-4 shadow-lg overflow-visible',
+          'bg-card border-border fixed z-60 flex flex-col gap-4 shadow-lg overflow-visible',
           side === 'right' &&
             'inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm data-[state=closed]:animate-slide-out-to-right data-[state=open]:animate-slide-in-from-right',
           side === 'left' &&

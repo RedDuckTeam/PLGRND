@@ -15,6 +15,7 @@ import type { NodeActionConfig } from '@/types/node-action'
 import { generateNodeId } from '@/utils/crypto/crypto.utils'
 import type { HandleConfig } from '@/types/node-handle'
 import { BaseTooltip } from '@/components/ui/tooltip'
+import { useFlowMode } from '@/components/flow/flow-mode-context'
 
 interface Props extends PropsWithChildren, NodeProps {
   className?: string
@@ -36,9 +37,12 @@ export const CustomNode = ({
   extraHandles,
 }: Props) => {
   const { setNodes, setEdges } = useReactFlow()
+  const { mode } = useFlowMode()
   const sourceConnections = useNodeConnections({ handleType: 'source', id })
   const targetConnections = useNodeConnections({ handleType: 'target', id })
   const updateNodeInternals = useUpdateNodeInternals()
+
+  const showSelected = selected && mode === 'editor'
 
   const nodeStyles = getNodeStyles(type as NodeType)
   const nodeConfig = getNodeConfig(type as NodeType)
@@ -63,6 +67,7 @@ export const CustomNode = ({
   const minHeight = Math.max(maxHandleCount * 16, nodeStyles.height ?? 0)
 
   const addDisplayNodeOnDoubleClick = (handleId: string, position: Position) => {
+    if (mode !== 'editor') return
     if (position === Position.Left) return
 
     const newPosition = { x: positionAbsoluteX + (nodeStyles.width ?? 200) + 50, y: positionAbsoluteY }
@@ -93,14 +98,14 @@ export const CustomNode = ({
   }
 
   return (
-    <div style={{ width: nodeStyles.width }} className={cn('relative rounded-[8px] text-foreground')}>
+    <div style={{ width: nodeStyles.width }} className={cn('relative rounded-lg text-foreground')}>
       <div
         style={{ height: nodeStyles.height ?? 'auto', minHeight }}
         className={cn(
           'relative z-20',
-          'p-3 rounded-[8px] transition-all bg-background border-border border shadow-md',
+          'p-3 rounded-lg transition-all bg-card border-border border shadow-md',
           className,
-          selected && 'border-active-border bg-border'
+          showSelected && 'border-active-border bg-border'
         )}
       >
         {allHandles.map((handle) => {
@@ -134,7 +139,7 @@ export const CustomNode = ({
               data-type={(handle as HandleConfig & { dataType?: string }).dataType}
               data-max-connections={handle.maxConnections}
             >
-              {!isConnected && <div className="pointer-events-none absolute inset-1 rounded-full bg-background"></div>}
+              {!isConnected && <div className="pointer-events-none absolute inset-1 rounded-full bg-card"></div>}
               <div
                 className={cn(
                   'absolute text-[7px] whitespace-nowrap top-1/2 translate-y-[-50%] leading-[8px]',
@@ -148,38 +153,39 @@ export const CustomNode = ({
             </Handle>
           )
         })}
-        {actions?.map((action) => {
-          const posKey = String(action.position)
-          const index = handleIndices[posKey] ?? 0
-          const count = handleCounts[posKey] ?? 1
-          const offsetFromCenter = (index - (count - 1) / 2) * handleSpacing
+        {mode !== 'readonly' &&
+          actions?.map((action) => {
+            const posKey = String(action.position)
+            const index = handleIndices[posKey] ?? 0
+            const count = handleCounts[posKey] ?? 1
+            const offsetFromCenter = (index - (count - 1) / 2) * handleSpacing
 
-          handleIndices[posKey] = index + 1
-          return (
-            <button
-              onClick={action.onClick}
-              key={id + '-' + action.label + '-' + action.position}
-              className={cn(
-                'absolute cursor-pointer group top-1/2 flex transition-all active:scale-90 items-center gap-0.5 translate-y-[-50%]',
-                action.position === Position.Left ? 'left-0 -translate-x-1' : 'right-0 translate-x-1 flex-row-reverse'
-              )}
-              style={{ marginTop: offsetFromCenter }}
-            >
-              <div style={{ backgroundColor: nodeStyles.color }} className="rounded-[2px] p-1"></div>
-              <div className={cn('text-[7px] leading-[10px]')}>{action.label}</div>
-            </button>
-          )
-        })}
+            handleIndices[posKey] = index + 1
+            return (
+              <button
+                onClick={action.onClick}
+                key={id + '-' + action.label + '-' + action.position}
+                className={cn(
+                  'absolute cursor-pointer group top-1/2 flex transition-all active:scale-90 items-center gap-0.5 translate-y-[-50%]',
+                  action.position === Position.Left ? 'left-0 -translate-x-1' : 'right-0 translate-x-1 flex-row-reverse'
+                )}
+                style={{ marginTop: offsetFromCenter }}
+              >
+                <div style={{ backgroundColor: nodeStyles.color }} className="rounded-[2px] p-1"></div>
+                <div className={cn('text-[7px] leading-[10px]')}>{action.label}</div>
+              </button>
+            )
+          })}
         {children}
       </div>
       <div
         style={{ backgroundColor: nodeStyles.color }}
         className={cn(
-          'absolute z-10 top-0 flex items-end justify-center left-0 h-[calc(100%+12px)] w-full border-border border rounded-[8px]',
-          selected && 'border-active-border'
+          'absolute z-10 top-0 flex items-end justify-center left-0 h-[calc(100%+12px)] w-full border-border border rounded-lg',
+          showSelected && 'border-active-border'
         )}
       >
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 text-node-strip-foreground">
           <p className="uppercase text-[10px] leading-[12px] font-bold">{nodeConfig.label}</p>
           <BaseTooltip type={type as NodeType} />
         </div>

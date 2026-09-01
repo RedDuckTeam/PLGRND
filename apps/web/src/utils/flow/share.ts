@@ -1,30 +1,11 @@
 import LZString from 'lz-string'
 import type { FlowSnapshot } from '@/stores/flow-store'
 import { FLOW_STORAGE_VERSION, sanitizeNodes } from '@/stores/flow-store'
+import { FLOW_HASH_KEY, isLegacyViewMode, normalizeHash, parseLocationParams } from '@/embed/embed-location'
 
-export const FLOW_HASH_KEY = 'flow'
-const VIEW_PARAM_KEY = 'view'
+export { FLOW_HASH_KEY, parseLocationParams }
 
-const parseLocationParams = (): URLSearchParams => {
-  const merged = new URLSearchParams()
-  if (typeof window === 'undefined') return merged
-  const search = new URLSearchParams(window.location.search)
-  for (const [k, v] of search.entries()) merged.set(k, v)
-  const rawHash = window.location.hash.startsWith('#') ? window.location.hash.slice(1) : window.location.hash
-  if (rawHash) {
-    const normalizedHash = rawHash.replace(/\?/g, '&')
-    const hashParams = new URLSearchParams(normalizedHash)
-    for (const [k, v] of hashParams.entries()) {
-      if (k === FLOW_HASH_KEY) continue
-      if (!merged.has(k)) merged.set(k, v)
-    }
-  }
-  return merged
-}
-
-export const isViewModeFromLocation = (): boolean => {
-  return parseLocationParams().get(VIEW_PARAM_KEY) === 'true'
-}
+export const isViewModeFromLocation = isLegacyViewMode
 
 interface SerializedFlow {
   v: number
@@ -33,11 +14,14 @@ interface SerializedFlow {
   viewport?: FlowSnapshot['viewport']
 }
 
+const stripSelection = <T extends { selected?: boolean }>(items: T[]): T[] =>
+  items.map((item) => (item.selected ? { ...item, selected: false } : item))
+
 export const encodeFlowToHash = (snapshot: FlowSnapshot): string => {
   const payload: SerializedFlow = {
     v: FLOW_STORAGE_VERSION,
-    nodes: sanitizeNodes(snapshot.nodes),
-    edges: snapshot.edges,
+    nodes: stripSelection(sanitizeNodes(snapshot.nodes)),
+    edges: stripSelection(snapshot.edges),
     viewport: snapshot.viewport,
   }
   return LZString.compressToEncodedURIComponent(JSON.stringify(payload))
@@ -56,9 +40,9 @@ export const decodeFlowFromHash = (encoded: string): FlowSnapshot | null => {
 }
 
 const extractFlowFromHashString = (hashString: string): FlowSnapshot | null => {
-  const hash = hashString.startsWith('#') ? hashString.slice(1) : hashString
-  if (!hash) return null
-  const params = new URLSearchParams(hash)
+  const normalized = normalizeHash(hashString)
+  if (!normalized) return null
+  const params = new URLSearchParams(normalized)
   const encoded = params.get(FLOW_HASH_KEY)
   if (!encoded) return null
   return decodeFlowFromHash(encoded)
@@ -88,9 +72,7 @@ export const buildShareUrl = (snapshot: FlowSnapshot): string => {
 export const clearFlowHash = () => {
   if (typeof window === 'undefined') return
   if (!window.location.hash) return
-  const rawHash = window.location.hash.startsWith('#') ? window.location.hash.slice(1) : window.location.hash
-  const normalizedHash = rawHash.replace(/\?/g, '&')
-  const hashParams = new URLSearchParams(normalizedHash)
+  const hashParams = new URLSearchParams(normalizeHash(window.location.hash))
   if (!hashParams.has(FLOW_HASH_KEY)) return
   hashParams.delete(FLOW_HASH_KEY)
   const searchParams = new URLSearchParams(window.location.search)

@@ -1,27 +1,16 @@
-import { Panel, useReactFlow } from '@xyflow/react'
+import { Panel } from '@xyflow/react'
 import { Share2, RotateCcw, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { useFlowStore } from '@/stores/flow-store'
-import { buildShareUrl, clearFlowHash } from '@/utils/flow/share'
+import { clearFlowHash } from '@/utils/flow/share'
 import { ExampleFlowsModal } from './example-flows-modal'
+import { ShareDialog } from './share-dialog'
 
 export const FlowToolbar = () => {
   const resetFlow = useFlowStore((s) => s.resetFlow)
-  const { getViewport } = useReactFlow()
   const [examplesOpen, setExamplesOpen] = useState(false)
-
-  const handleShare = async () => {
-    const { nodes, edges } = useFlowStore.getState()
-    const viewport = getViewport()
-    const url = buildShareUrl({ nodes, edges, viewport })
-    try {
-      await navigator.clipboard.writeText(url)
-      toast.success('Share link copied')
-    } catch {
-      toast.error('Failed to copy link')
-    }
-  }
+  const [shareOpen, setShareOpen] = useState(false)
 
   const handleReset = () => {
     resetFlow()
@@ -30,7 +19,7 @@ export const FlowToolbar = () => {
   }
 
   const buttonClass =
-    'flex items-center gap-1.5 rounded-md border border-border bg-[#141414] px-3 py-1.5 text-xs font-mono text-foreground hover:bg-[#1f1f1f] transition-colors cursor-pointer'
+    'flex items-center gap-1.5 rounded-md border border-border bg-sidebar px-3 py-1.5 text-xs font-mono text-foreground hover:bg-muted transition-colors cursor-pointer'
 
   return (
     <>
@@ -40,7 +29,7 @@ export const FlowToolbar = () => {
             <Sparkles className="h-3.5 w-3.5" />
             Examples
           </button>
-          <button type="button" onClick={handleShare} className={buttonClass}>
+          <button type="button" onClick={() => setShareOpen(true)} className={buttonClass}>
             <Share2 className="h-3.5 w-3.5" />
             Share
           </button>
@@ -51,6 +40,7 @@ export const FlowToolbar = () => {
         </div>
       </Panel>
       <ExampleFlowsModal open={examplesOpen} onOpenChange={setExamplesOpen} />
+      <ShareDialog open={shareOpen} onOpenChange={setShareOpen} />
     </>
   )
 }

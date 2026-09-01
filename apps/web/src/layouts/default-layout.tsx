@@ -9,7 +9,7 @@ const DefaultLayout = memo(() => {
   return (
     <Providers>
       <div className="relative">
-        <Header />
+        <Header showNodeMenu />
         <Outlet />
         <Toaster />
       </div>

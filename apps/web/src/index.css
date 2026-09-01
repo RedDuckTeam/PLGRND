@@ -1,8 +1,10 @@
 @import 'tailwindcss';
 
-:root {
+:root,
+[data-theme='dark'] {
   --background: #171717;
   --foreground: #e2e8f0;
+  --node-strip-foreground: #e2e8f0;
   --card: #171717;
   --card-foreground: #e2e8f0;
   --popover: #242424;
@@ -26,7 +28,7 @@
   --chart-3: #a78bfa;
   --chart-4: #fbbf24;
   --chart-5: #2dd4bf;
-  --sidebar: #121212;
+  --sidebar: #141414;
   --sidebar-foreground: #898989;
   --sidebar-primary: #006239;
   --sidebar-primary-foreground: #dde8e3;
@@ -37,7 +39,7 @@
   --font-sans: Outfit, sans-serif;
   --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
   --font-mono: 'Kode Mono', monospace;
-  --radius: 0.5rem;
+  --radius: 8px;
   --shadow-2xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.09);
   --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.09);
   --shadow-sm: 0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 1px 2px -1px hsl(0 0% 0% / 0.17);
@@ -48,6 +50,32 @@
   --shadow-2xl: 0px 1px 3px 0px hsl(0 0% 0% / 0.43);
   --tracking-normal: 0.025em;
   --spacing: 0.25rem;
+}
+
+[data-theme='light'] {
+  --background: #f4f4f5;
+  --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --popover: #ffffff;
+  --popover-foreground: #3f3f46;
+  --primary: #006239;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #171717;
+  --muted: #e9e9eb;
+  --muted-foreground: #6b7280;
+  --accent: #e4e4e7;
+  --accent-foreground: #171717;
+  --destructive: #b91c1c;
+  --destructive-foreground: #fef2f2;
+  --border: #d4d4d8;
+  --active-border: #a1a1aa;
+  --input: #d4d4d8;
+  --ring: #16a34a;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #71717a;
+  --sidebar-border: #e4e4e7;
 }
 
 @theme inline {
@@ -84,6 +112,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-active-border: var(--active-border);
+  --color-node-strip-foreground: var(--node-strip-foreground);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
@@ -312,4 +341,26 @@ body {
 }
 .react-flow__nodesselection-rect {
   border-radius: 8px;
+}
+
+.plgrnd-embed .react-flow {
+  --xy-background-color: var(--background);
+  --xy-controls-button-background-color: var(--card);
+  --xy-controls-button-background-color-hover-props: var(--muted);
+  --xy-controls-button-color-props: var(--foreground);
+  --xy-controls-button-color-hover-props: var(--foreground);
+  --xy-controls-button-border-color-props: var(--border);
+  --xy-minimap-background-color-props: var(--card);
+  --xy-minimap-mask-background-color-props: color-mix(in srgb, var(--background) 60%, transparent);
+  --xy-minimap-node-background-color-props: var(--muted-foreground);
+  --xy-edge-stroke: var(--muted-foreground);
+  --xy-edge-stroke-selected: var(--primary);
+}
+
+.plgrnd-embed--readonly .react-flow__node > * {
+  pointer-events: none;
+}
+
+.plgrnd-embed :where(input, textarea, button[role='combobox']) {
+  background-color: transparent;
 }

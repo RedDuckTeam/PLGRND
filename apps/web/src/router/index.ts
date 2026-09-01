@@ -16,9 +16,24 @@ function lazyWithRetry(dynamicImportFn: () => any) {
 
 export const routes = {
   root: '/',
+  embed: '/embed',
 } as const
 
 export const router = createBrowserRouter([
+  {
+    path: routes.embed,
+    Component: lazyWithRetry(() => import('@/layouts/embed-layout')),
+    children: [
+      {
+        index: true,
+        Component: lazyWithRetry(() => import('@/pages/embed')),
+      },
+      {
+        path: '*',
+        Component: lazyWithRetry(() => import('@/pages/embed')),
+      },
+    ],
+  },
   {
     path: routes.root,
     Component: lazyWithRetry(() => import('@/layouts/default-layout')),
