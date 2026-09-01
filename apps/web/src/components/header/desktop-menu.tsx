@@ -56,7 +56,7 @@ export function DesktopMenu({ onDrop }: DesktopMenuProps) {
               />
             </div>
             <NavigationMenuContent className="overflow-visible! p-0 border-none ">
-              <div className="grid grid-cols-1 gap-2 p-4 w-[200px] bg-background rounded-[8px] border border-border">
+              <div className="grid grid-cols-1 gap-2 p-4 w-[200px] bg-card rounded-[8px] border border-border">
                 {category.nodes.map((nodeType) => (
                   <div key={nodeType} className="relative">
                     <DraggableNode

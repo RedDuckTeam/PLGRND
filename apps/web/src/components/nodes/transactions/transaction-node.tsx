@@ -4,13 +4,23 @@ import type { ActionsFor, NodeTypeEnum } from '@/types/node'
 import { useNodeActions } from '@/hooks/flow/use-node-actions'
 import type { NodeProps } from '@xyflow/react'
 import { Check, Loader2, X } from 'lucide-react'
+import { toast } from 'sonner'
 import { useTransactionNode } from '@/hooks/nodes/use-transaction-node'
+import { useFlowMode } from '@/components/flow/flow-mode-context'
+import { useOpenInEditor } from '@/hooks/embed/use-open-in-editor'
 
 export const TransactionNode = (props: NodeProps<TransactionNodeType>) => {
   const { status, extraHandles, handleSend } = useTransactionNode(props.id)
+  const { embedded } = useFlowMode()
+  const openInEditor = useOpenInEditor()
 
   const actions = useNodeActions<ActionsFor<NodeTypeEnum.TRANSACTION>>(props.type, {
-    Send: handleSend,
+    Send: embedded
+      ? () => {
+          toast.info('Sending transactions is available in the full editor')
+          openInEditor()
+        }
+      : handleSend,
   })
 
   return (

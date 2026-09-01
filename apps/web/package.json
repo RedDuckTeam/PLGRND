@@ -19,6 +19,7 @@
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-navigation-menu": "^1.2.14",
     "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-tabs": "^1.1.21",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@solana/spl-token": "^0.4.14",
     "@solana/wallet-adapter-react": "^0.15.39",

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
+import { persist, createJSONStorage, type StateStorage } from 'zustand/middleware'
 import {
   applyNodeChanges,
   applyEdgeChanges,
@@ -10,9 +10,41 @@ import {
   type Viewport,
 } from '@xyflow/react'
 import { NodeTypeEnum } from '@/types/node'
+import { IS_EMBED, isEmbedPath } from '@/embed/embed-location'
 
 export const FLOW_STORAGE_KEY = 'sol-learn:flow'
 export const FLOW_STORAGE_VERSION = 3
+
+const createMemoryStorage = (): StateStorage => {
+  const store = new Map<string, string>()
+  return {
+    getItem: (name) => store.get(name) ?? null,
+    setItem: (name, value) => {
+      store.set(name, value)
+    },
+    removeItem: (name) => {
+      store.delete(name)
+    },
+  }
+}
+
+const guardedLocalStorage: StateStorage = {
+  getItem: (name) => window.localStorage.getItem(name),
+  setItem: (name, value) => {
+    if (isEmbedPath(window.location.pathname)) {
+      console.error('[plgrnd] blocked a localStorage write from an embed document')
+      return
+    }
+    window.localStorage.setItem(name, value)
+  },
+  removeItem: (name) => {
+    if (isEmbedPath(window.location.pathname)) {
+      console.error('[plgrnd] blocked a localStorage removal from an embed document')
+      return
+    }
+    window.localStorage.removeItem(name)
+  },
+}
 
 const isPlainObject = (value: unknown): value is Record<string, unknown> => {
   if (value === null || typeof value !== 'object') return false
@@ -92,7 +124,7 @@ interface FlowState extends FlowSnapshot {
 export const useFlowStore = create<FlowState>()(
   persist(
     (set) => ({
-      nodes: defaultNodes,
+      nodes: IS_EMBED ? [] : defaultNodes,
       edges: defaultEdges,
       viewport: undefined,
       onNodesChange: (changes) => set((s) => ({ nodes: applyNodeChanges(changes, s.nodes) })),
@@ -108,13 +140,14 @@ export const useFlowStore = create<FlowState>()(
     {
       name: FLOW_STORAGE_KEY,
       version: FLOW_STORAGE_VERSION,
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => (IS_EMBED ? createMemoryStorage() : guardedLocalStorage)),
+      skipHydration: IS_EMBED,
       partialize: (state) => ({
         nodes: sanitizeNodes(state.nodes),
         edges: state.edges,
         viewport: state.viewport,
       }),
-      migrate: (persisted, _version) => {
+      migrate: (persisted) => {
         const p = persisted as Partial<FlowSnapshot> | undefined
         if (!p) return p
         return {
