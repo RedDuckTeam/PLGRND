@@ -173,5 +173,6 @@ export const useTransactionNode = (nodeId: string) => {
     status,
     extraHandles,
     handleSend,
+    hasKeySigner: feePayerKeypair !== null,
   }
 }

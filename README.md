@@ -114,7 +114,7 @@ Unknown parameters are ignored. `id=` is reserved for future server-stored flows
 | Move, connect, add or delete nodes                       | ✖         | ✖            | ✔       |
 | Header with the node menu                                | ✖         | ✖            | ✔       |
 
-Wallet connection and transaction sending are never available inside the widget: the Wallet node and `Send` deep-link to the full editor with the current canvas state instead. Read-only RPC (balances, account info, transaction views) keeps working.
+Wallet connection is never available inside the widget: the Wallet node deep-links to the full editor with the current canvas state instead. `Send` works inside the widget when the transaction is signed by a private key supplied in the flow (for example a throwaway devnet key pasted into a Private key or Keypair node); when signing requires a connected wallet, `Send` deep-links to the full editor as well. Read-only RPC (balances, account info, transaction views) always works.
 
 ### Theming
 
