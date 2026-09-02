@@ -10,17 +10,18 @@ import { useFlowMode } from '@/components/flow/flow-mode-context'
 import { useOpenInEditor } from '@/hooks/embed/use-open-in-editor'
 
 export const TransactionNode = (props: NodeProps<TransactionNodeType>) => {
-  const { status, extraHandles, handleSend } = useTransactionNode(props.id)
+  const { status, extraHandles, handleSend, hasKeySigner } = useTransactionNode(props.id)
   const { embedded } = useFlowMode()
   const openInEditor = useOpenInEditor()
 
   const actions = useNodeActions<ActionsFor<NodeTypeEnum.TRANSACTION>>(props.type, {
-    Send: embedded
-      ? () => {
-          toast.info('Sending transactions is available in the full editor')
+    Send:
+      embedded && !hasKeySigner
+        ? () => {
+          toast.info('Sending with a connected wallet is available in the full editor')
           openInEditor()
         }
-      : handleSend,
+        : handleSend,
   })
 
   return (
