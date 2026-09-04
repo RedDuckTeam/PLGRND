@@ -169,7 +169,7 @@ yarn web:dev    # run the web app in development mode
 yarn web:build  # production build
 ```
 
-Optionally set `VITE_PUBLIC_SOLANA_RPC` to point the app at your own RPC endpoint.
+Optionally set `VITE_PUBLIC_SOLANA_RPC` to point the app at your own RPC endpoint, and `VITE_HELIUS_API_KEY` to route the nodes' RPC calls through Helius (see `apps/web/.env.example`).
 
 ## License
 
