@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CustomNode } from '../../ui/custom-node'
-import type { InstructionsNodeData, InstructionsNodeType } from '@/types/nodes/programs/instructions-node'
+import type {
+  InstructionKind,
+  InstructionsNodeData,
+  InstructionsNodeType,
+} from '@/types/nodes/programs/instructions-node'
 import { useTypedNodesData } from '@/hooks/flow/use-typed-nodes-data'
 import type { ActionsFor, NodeTypeEnum } from '@/types/node'
 import { useTypedReactFlow } from '@/hooks/flow/use-typed-react-flow'
@@ -10,8 +14,6 @@ import type { NodeProps } from '@xyflow/react'
 import { Position, useUpdateNodeInternals } from '@xyflow/react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { getInstructionById } from '@/constants/solana/instructions-config'
-
-type InstructionKind = 'systemTransfer' | 'computeUnitLimit' | 'computeUnitPrice' | 'splTransfer' | 'splCreateAta'
 
 export const InstructionsNode = (props: NodeProps<InstructionsNodeType>) => {
   const { updateNodeData } = useTypedReactFlow()
@@ -25,7 +27,7 @@ export const InstructionsNode = (props: NodeProps<InstructionsNodeType>) => {
     }
   }, [resolved])
 
-  const [selected, setSelected] = useState<InstructionKind>('systemTransfer')
+  const [selected, setSelected] = useState<InstructionKind>(props.data.instruction ?? 'systemTransfer')
 
   const extraHandles = useMemo(() => {
     const def = getInstructionById(selected)
@@ -46,6 +48,10 @@ export const InstructionsNode = (props: NodeProps<InstructionsNodeType>) => {
   useEffect(() => {
     updateNodeInternals(props.id)
   }, [extraHandles, props.id, updateNodeInternals])
+
+  useEffect(() => {
+    updateNodeData<InstructionsNodeData>(props.id, { instruction: selected })
+  }, [props.id, selected, updateNodeData])
 
   useEffect(() => {
     const run = async () => {

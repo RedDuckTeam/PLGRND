@@ -162,7 +162,8 @@ export const NODE_TOOLTIPS: Partial<Record<NodeType, React.ReactNode>> = {
   ),
   ATA: (
     <p>
-      Derive an <BoldText>Associated Token Account</BoldText> address from an owner wallet and token mint.
+      Derive an <BoldText>Associated Token Account</BoldText> address from an owner wallet and token mint, for the SPL
+      Token or Token-2022 program.
     </p>
   ),
   TOKEN_AMOUNT_TO_RAW: (
