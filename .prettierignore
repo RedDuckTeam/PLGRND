@@ -7,3 +7,10 @@ coverage
 *.log
 yarn.lock
 package-lock.json
+
+# Generated or vendored files
+apps/web/public/sdk
+packages/embed/fixtures/vendor
+packages/embed/fixtures/.build
+# packages/embed/build holds build plugins (source), not build output
+!packages/embed/build

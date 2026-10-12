@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SPA remount host</title>
+    <script src="/assets/host-probe.js"></script>
+    <script src="/dist/plgrnd-flow.iife.js"></script>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>SPA remount host</h1>
+    <nav>
+      <button id="nav-a" type="button">Page A</button>
+      <button id="nav-b" type="button">Page B</button>
+      <button id="nav-none" type="button">Empty page</button>
+    </nav>
+    <main id="outlet" data-flow-a="%%FLOW:P0%%" data-flow-b="%%FLOW:P6%%"></main>
+    <script src="/assets/spa-remount.js"></script>
+  </body>
+</html>

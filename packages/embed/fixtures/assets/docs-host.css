@@ -1,0 +1,22 @@
+/* Layout of mintlify-like.html. The last rule is an integrator rule that hides the element. */
+.docs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-bottom: 1px solid rgb(228 228 231 / 0.6);
+}
+.docs-logo {
+  font-weight: 700;
+}
+.docs-main {
+  padding: 24px;
+}
+.host-scroller {
+  max-height: 160px;
+  overflow: auto;
+}
+/* An integrator rule that must be able to hide the element. */
+plgrnd-flow.hide-me {
+  display: none;
+}

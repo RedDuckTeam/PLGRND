@@ -1,6 +1,5 @@
 import LZString from 'lz-string'
-import type { FlowSnapshot } from '@/stores/flow-store'
-import { FLOW_STORAGE_VERSION, sanitizeNodes } from '@/stores/flow-store'
+import { FLOW_STORAGE_VERSION, sanitizeNodes, type FlowSnapshot } from '@/stores/flow-snapshot'
 import { FLOW_HASH_KEY, isLegacyViewMode, normalizeHash, parseLocationParams } from '@/embed/embed-location'
 
 export { FLOW_HASH_KEY, parseLocationParams }

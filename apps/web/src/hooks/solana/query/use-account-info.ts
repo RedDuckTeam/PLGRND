@@ -1,7 +1,9 @@
+import { Buffer } from 'buffer'
 import { useQuery } from '@tanstack/react-query'
 import { PublicKey } from '@solana/web3.js'
 import type { Network } from '@/types/network'
-import { getSolanaConnection } from '@/constants/solana/connection'
+import { getSolanaConnection, type RpcUrls } from '@/constants/solana/connection'
+import { useRpcConfig } from '@/providers/rpc-urls-context'
 import { isExist, isValidPublicKey } from '@/utils/validation/validation.utils'
 
 export interface AccountInfoResult {
@@ -11,8 +13,12 @@ export interface AccountInfoResult {
   executable: boolean
 }
 
-export const fetchAccountInfo = async (address: string, network: Network): Promise<AccountInfoResult | null> => {
-  const connection = getSolanaConnection(network)
+export const fetchAccountInfo = async (
+  address: string,
+  network: Network,
+  urls: RpcUrls
+): Promise<AccountInfoResult | null> => {
+  const connection = getSolanaConnection(network, urls)
   const info = await connection.getAccountInfo(new PublicKey(address))
   if (!info) return null
   return {
@@ -24,11 +30,12 @@ export const fetchAccountInfo = async (address: string, network: Network): Promi
 }
 
 export const useAccountInfo = (address: string, network: Network | null, refreshKey: number) => {
+  const { urls } = useRpcConfig()
   return useQuery({
     queryKey: ['accountInfo', address, network, refreshKey],
     queryFn: async () => {
       if (!network) return null
-      return fetchAccountInfo(address, network)
+      return fetchAccountInfo(address, network, urls)
     },
     enabled: isValidPublicKey(address) && isExist(network),
   })

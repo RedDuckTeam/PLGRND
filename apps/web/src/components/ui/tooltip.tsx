@@ -4,6 +4,15 @@ import { Info } from 'lucide-react'
 import type { NodeType } from '@/types/node'
 import { getNodeTooltip } from '@/constants/node-tooltips'
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { useDialogMode } from '@/components/ui/dialog-mode'
+
+// Non-modal dialogs have no focus trap; focus moves to the close button explicitly, because
+// Radix's own autofocus compares document.activeElement, which never enters a shadow root.
+const focusCloseButton = (event: Event) => {
+  event.preventDefault()
+  const content = event.currentTarget as HTMLElement | null
+  content?.querySelector<HTMLElement>('[data-slot="dialog-close"]')?.focus()
+}
 
 export const TooltipProvider = TooltipPrimitive.Provider
 export const Tooltip = TooltipPrimitive.Root
@@ -24,8 +33,9 @@ interface BaseTooltipProps {
 
 export const BaseTooltip = ({ trigger, content, type }: BaseTooltipProps) => {
   const [open, setOpen] = React.useState(false)
+  const { modal } = useDialogMode()
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={modal}>
       <DialogTrigger asChild>
         {trigger ? (
           trigger
@@ -39,7 +49,7 @@ export const BaseTooltip = ({ trigger, content, type }: BaseTooltipProps) => {
           </button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-xl">
+      <DialogContent className="max-w-xl" onOpenAutoFocus={modal ? undefined : focusCloseButton}>
         <DialogTitle className="sr-only">Node info</DialogTitle>
         <div className="text-sm leading-5 space-y-2">{content ? content : getNodeTooltip(type as NodeType)}</div>
       </DialogContent>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lazy ESM host</title>
+    <script src="/assets/host-probe.js"></script>
+    <script type="module" src="/dist/esm/plgrnd-flow.js"></script>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Lazy ESM host</h1>
+    <p>
+      The page loads only the ESM entry. The runtime chunk is requested when the first element connects (AC-D2); the QA
+      harness inserts elements into <code>#outlet</code>.
+    </p>
+    <div id="outlet" data-flow="%%FLOW:P0%%"></div>
+  </body>
+</html>

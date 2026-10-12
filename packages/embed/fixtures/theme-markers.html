@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Theme markers host</title>
+    <script src="/assets/host-probe.js"></script>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+      }
+      /* MkDocs Material custom schemes: the widget falls back to the luminance of the body background. */
+      body[data-md-color-scheme='custom-dark'] {
+        background: #101014;
+        color: #e5e5e5;
+      }
+      body[data-md-color-scheme='custom-light'] {
+        background: #fafafa;
+      }
+      body[data-md-color-scheme='mystery'] {
+        background: #0b0b0b;
+        color: #e5e5e5;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Theme markers host</h1>
+    <p>
+      The QA harness toggles <code>html.dark</code>/<code>html.light</code>, <code>html[data-theme]</code> and
+      <code>body[data-md-color-scheme]</code> (<code>slate</code>, <code>default</code>, <code>custom-dark</code>,
+      <code>custom-light</code>, an unknown value on a dark background); with no marker the widget follows the OS.
+    </p>
+    <plgrnd-flow id="w-auto" theme="auto" flow="%%FLOW:P0%%" style="height: 360px"></plgrnd-flow>
+    <script src="/dist/plgrnd-flow.iife.js"></script>
+  </body>
+</html>

@@ -1,15 +1,14 @@
 import type { Network } from '@/types/network'
 import { clusterApiUrl, Connection } from '@solana/web3.js'
-import { env } from '@/env'
 
-const heliusUrl = (cluster: 'mainnet' | 'devnet') =>
-  env.VITE_HELIUS_API_KEY ? `https://${cluster}.helius-rpc.com/?api-key=${env.VITE_HELIUS_API_KEY}` : undefined
+export type RpcUrls = Record<Network, string>
 
-export const SOLANA_RPC_URL: Record<Network, string> = {
-  MAINNET: env.VITE_PUBLIC_SOLANA_RPC ?? heliusUrl('mainnet') ?? clusterApiUrl('mainnet-beta'),
-  DEVNET: heliusUrl('devnet') ?? clusterApiUrl('devnet'),
+/** Public cluster endpoints: the self-hosted widget's defaults (no API key anywhere). */
+export const PUBLIC_RPC_URLS: RpcUrls = {
+  MAINNET: clusterApiUrl('mainnet-beta'),
+  DEVNET: clusterApiUrl('devnet'),
 }
 
-export const getSolanaConnection = (network: Network) => {
-  return new Connection(SOLANA_RPC_URL[network])
+export const getSolanaConnection = (network: Network, urls: RpcUrls) => {
+  return new Connection(urls[network])
 }

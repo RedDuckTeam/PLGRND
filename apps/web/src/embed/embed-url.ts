@@ -28,9 +28,10 @@ export const buildEmbedUrl = (snapshot: FlowSnapshot, config: EmbedConfig, origi
   return `${base}${EMBED_PATH}${query ? `?${query}` : ''}#${FLOW_HASH_KEY}=${encodeFlowToHash(snapshot)}`
 }
 
-export const buildEditorUrl = (snapshot: FlowSnapshot, origin?: string): string => {
+export const buildEditorUrl = (snapshot: FlowSnapshot, origin?: string, ref?: string): string => {
   const base = origin ?? window.location.origin
-  return `${base}/#${FLOW_HASH_KEY}=${encodeFlowToHash(snapshot)}`
+  const query = ref ? `?ref=${encodeURIComponent(ref)}` : ''
+  return `${base}/${query}#${FLOW_HASH_KEY}=${encodeFlowToHash(snapshot)}`
 }
 
 export const IFRAME_SANDBOX = 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox'

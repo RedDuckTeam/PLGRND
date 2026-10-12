@@ -1,0 +1,122 @@
+/* Hostile host CSS: what docs generators and careless global rules do to embedded content. */
+
+/* Material for MkDocs: root font size 125% (rem-based widgets grow) */
+html {
+  font-size: 125%;
+}
+
+/* Global resets */
+* {
+  margin: 0;
+  line-height: 2;
+}
+button {
+  all: unset;
+  background: red;
+}
+a {
+  color: hotpink;
+}
+table {
+  border: 3px solid;
+}
+img {
+  filter: grayscale(1);
+}
+div {
+  padding: 2px;
+}
+svg {
+  fill: orange;
+  stroke: purple;
+}
+input,
+textarea,
+select {
+  font-size: 22px;
+  border: 4px dashed lime;
+  padding: 10px;
+}
+p {
+  margin-bottom: 1.5em;
+}
+
+/* Infima-like `.markdown` subset (Docusaurus) */
+.markdown {
+  --ifm-font-size-base: 18px;
+  font-size: var(--ifm-font-size-base);
+  word-wrap: break-word;
+}
+.markdown > * {
+  margin-bottom: 1.25rem;
+}
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.markdown div,
+.markdown span {
+  box-sizing: content-box;
+}
+
+/* Material-like `.md-typeset` subset (MkDocs) */
+.md-typeset {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  -webkit-print-color-adjust: exact;
+}
+.md-typeset code {
+  background: #f5f5f5;
+  border-radius: 0.1rem;
+  padding: 0 0.3em;
+}
+.md-typeset table:not([class]) {
+  font-size: 0.64rem;
+  border-collapse: separate;
+}
+
+/* Inherited-property attacks on the widget's ancestors */
+.attack {
+  color: hotpink;
+  font-size: 20px;
+  line-height: 3;
+  letter-spacing: 2px;
+  word-spacing: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: pre;
+  font-style: italic;
+  cursor: wait;
+  direction: rtl;
+  -webkit-text-fill-color: lime;
+  font-weight: 900;
+  text-shadow: 0 0 2px red;
+  visibility: visible;
+}
+.attack-inner {
+  font-family: 'Comic Sans MS', cursive;
+}
+
+/* Host rule that must be able to hide the element */
+plgrnd-flow.hide-me {
+  display: none;
+}
+
+.host-scroller {
+  height: 120px;
+  overflow: auto;
+  border: 1px solid #999;
+}
+.docs-header {
+  display: flex;
+  gap: 12px;
+  padding: 8px;
+}
+
+/* Keep the pinned 800px widget inside the viewport: under the rtl ancestor an overflow would extend to the
+   left, off-screen (host layout, not widget rendering). */
+.markdown.md-typeset.prose {
+  max-width: none;
+}

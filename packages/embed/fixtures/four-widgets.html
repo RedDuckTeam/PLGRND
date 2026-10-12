@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Four widgets (instance independence)</title>
+    <script src="/assets/host-probe.js"></script>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+        max-width: 960px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 data-sentinel="h1">Four widgets on one page</h1>
+    <p>Two widgets show the same flow, two show different ones; a fifth raises a toast at mount (invalid IDL).</p>
+    <h2 data-sentinel="h2">#1 and #2: Solana transfer</h2>
+    <plgrnd-flow id="w1" flow="%%FLOW:P3%%"></plgrnd-flow>
+    <plgrnd-flow id="w2" flow="%%FLOW:P3%%"></plgrnd-flow>
+    <h3 data-sentinel="h3">#3: string encoding</h3>
+    <plgrnd-flow id="w3" flow="%%FLOW:P6%%"></plgrnd-flow>
+    <h3>#4: hashing</h3>
+    <plgrnd-flow id="w4" flow="%%FLOW:P0%%"></plgrnd-flow>
+    <h3>#5: mount-time toast</h3>
+    <plgrnd-flow id="w5" flow="%%FLOW:P7%%"></plgrnd-flow>
+    <p><a href="#w1" data-sentinel="a">Back to top</a> <code data-sentinel="code">four-widgets.html</code></p>
+    <table data-sentinel="table">
+      <tr>
+        <td>cell</td>
+      </tr>
+    </table>
+    <button type="button" data-sentinel="button">Host button</button>
+    <script src="/dist/plgrnd-flow.iife.js"></script>
+  </body>
+</html>

@@ -1,5 +1,6 @@
 import { EMBED_DEFAULTS, parseEmbedConfig, type EmbedColorKey, type EmbedConfig } from '@/embed/embed-config'
 import { serializeEmbedConfig, type EmbedSnippetSize } from '@/embed/embed-url'
+import { SELF_HOSTED_FORMATS, type SelfHostedFormat } from '@/embed/self-hosted-snippet'
 
 const EMBED_BUILDER_STORAGE_KEY = 'sol-learn:embed-builder'
 
@@ -54,16 +55,27 @@ export const THEME_PICKER_DEFAULTS: Record<'dark' | 'light', Record<EmbedColorKe
   light: { bg: '#f4f4f5', surface: '#ffffff', fg: '#171717', border: '#d4d4d8', accent: '#006239' },
 }
 
+type EmbedVariant = 'hosted' | 'self-hosted'
+
+export const EMBED_VARIANTS: { id: EmbedVariant; label: string }[] = [
+  { id: 'hosted', label: 'Hosted iframe' },
+  { id: 'self-hosted', label: 'Self-hosted' },
+]
+
 export interface BuilderSettings {
   config: EmbedConfig
   sizeId: SizePresetId
   fixedHeight: number
+  variant: EmbedVariant
+  format: SelfHostedFormat
 }
 
 const DEFAULT_BUILDER_SETTINGS: BuilderSettings = {
   config: EMBED_DEFAULTS,
   sizeId: '16:9',
   fixedHeight: 480,
+  variant: 'hosted',
+  format: 'html',
 }
 
 const clampFixedHeight = (value: number): number =>
@@ -73,7 +85,13 @@ export const loadBuilderSettings = (): BuilderSettings => {
   try {
     const raw = window.localStorage.getItem(EMBED_BUILDER_STORAGE_KEY)
     if (!raw) return DEFAULT_BUILDER_SETTINGS
-    const parsed = JSON.parse(raw) as { query?: unknown; sizeId?: unknown; fixedHeight?: unknown }
+    const parsed = JSON.parse(raw) as {
+      query?: unknown
+      sizeId?: unknown
+      fixedHeight?: unknown
+      variant?: unknown
+      format?: unknown
+    }
     const query = typeof parsed.query === 'string' ? parsed.query : ''
     const { config } = parseEmbedConfig(new URLSearchParams(query))
     const sizeId = SIZE_PRESETS.some((preset) => preset.id === parsed.sizeId)
@@ -83,7 +101,14 @@ export const loadBuilderSettings = (): BuilderSettings => {
       typeof parsed.fixedHeight === 'number' && Number.isFinite(parsed.fixedHeight)
         ? clampFixedHeight(parsed.fixedHeight)
         : DEFAULT_BUILDER_SETTINGS.fixedHeight
-    return { config, sizeId, fixedHeight }
+    // Settings stored before the self-hosted variant existed have neither key.
+    const variant = EMBED_VARIANTS.some((option) => option.id === parsed.variant)
+      ? (parsed.variant as EmbedVariant)
+      : DEFAULT_BUILDER_SETTINGS.variant
+    const format = SELF_HOSTED_FORMATS.some((option) => option.id === parsed.format)
+      ? (parsed.format as SelfHostedFormat)
+      : DEFAULT_BUILDER_SETTINGS.format
+    return { config, sizeId, fixedHeight, variant, format }
   } catch {
     return DEFAULT_BUILDER_SETTINGS
   }
@@ -97,6 +122,8 @@ export const saveBuilderSettings = (settings: BuilderSettings): void => {
         query: serializeEmbedConfig(settings.config),
         sizeId: settings.sizeId,
         fixedHeight: settings.fixedHeight,
+        variant: settings.variant,
+        format: settings.format,
       })
     )
   } catch {

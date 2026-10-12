@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>React 18 host (UMD 18.3.1)</title>
+    <script src="/assets/host-probe.js"></script>
+    <script src="/vendor/react-18.3.1/react.production.min.js"></script>
+    <script src="/vendor/react-18.3.1/react-dom.production.min.js"></script>
+    <script src="/dist/plgrnd-flow.iife.js"></script>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>React 18 host</h1>
+    <p>
+      React 18.3.1 renders <code>&lt;plgrnd-flow&gt;</code> with string attributes; the buttons drive theme and accent.
+    </p>
+    <div id="root" data-flow="%%FLOW:P0%%"></div>
+    <script src="/assets/react18.js"></script>
+  </body>
+</html>

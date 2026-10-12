@@ -1,0 +1,46 @@
+/* The widget's runtime stylesheet: one constructable sheet per page, adopted into every widget's shadow root
+   after the shell sheet. build/shadow-css.ts (M6) rewrites the compiled output for the shadow root; the rules
+   below are M7. */
+@layer plgrnd-reset;
+@import 'tailwindcss' source(none);
+@source '../../../../apps/web/src';
+@source '..';
+@import '../../../../apps/web/src/theme.css';
+@import '@xyflow/react/dist/style.css';
+
+/* M7: the root starts from initial values (no inherited host typography), contains its fixed-position
+   descendants (dialogs stay inside the widget box) and is the size container for widget breakpoints.
+   Layered first, so Tailwind's theme/base layers and the unlayered app rules still apply on the root. */
+@layer plgrnd-reset {
+  .plgrnd-root {
+    all: initial;
+    display: block;
+    direction: ltr;
+    contain: layout;
+    container: plgrnd / inline-size;
+    contain-intrinsic-inline-size: 300px;
+    isolation: isolate;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-size: medium;
+  }
+}
+
+/* The app's `body` rule, applied on the widget root instead. */
+.plgrnd-root {
+  letter-spacing: var(--tracking-normal);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+.plgrnd-root[data-theme='dark'] {
+  color-scheme: dark;
+}
+.plgrnd-root[data-theme='light'] {
+  color-scheme: light;
+}
+.plgrnd-mount {
+  width: 100%;
+  height: 100%;
+}

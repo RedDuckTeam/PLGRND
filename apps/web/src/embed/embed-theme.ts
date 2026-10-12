@@ -5,10 +5,10 @@ export type ResolvedTheme = 'dark' | 'light'
 export const resolveTheme = (theme: EmbedTheme, prefersDark: boolean): ResolvedTheme =>
   theme === 'auto' ? (prefersDark ? 'dark' : 'light') : theme
 
-export const applyThemeToDocument = (resolved: ResolvedTheme, config: EmbedConfig): void => {
-  const root = document.documentElement
-  root.dataset.theme = resolved
-  const style = root.style
+/** Writes the theme tokens onto `target`: the document element (hosted) or a widget root (self-hosted). */
+export const applyThemeTokens = (target: HTMLElement, resolved: ResolvedTheme, config: EmbedConfig): void => {
+  target.dataset.theme = resolved
+  const style = target.style
   for (const key of Object.keys(COLOR_TOKEN_VARS) as EmbedColorKey[]) {
     const value = config[key]
     for (const cssVar of COLOR_TOKEN_VARS[key]) {
@@ -22,6 +22,9 @@ export const applyThemeToDocument = (resolved: ResolvedTheme, config: EmbedConfi
   else style.removeProperty('--font-mono')
   style.setProperty('--radius', `${config.radius}px`)
 }
+
+export const applyThemeToDocument = (resolved: ResolvedTheme, config: EmbedConfig): void =>
+  applyThemeTokens(document.documentElement, resolved, config)
 
 export const parseThemeMessage = (data: unknown): EmbedTheme | null => {
   if (typeof data !== 'object' || data === null) return null

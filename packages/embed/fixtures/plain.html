@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Plain host</title>
+    <script src="/assets/host-probe.js"></script>
+    <script src="/assets/buffer-guard.js"></script>
+    <style>
+      body {
+        font-family: Georgia, serif;
+        margin: 24px;
+      }
+      .box-800 {
+        width: 800px;
+      }
+      .box-375 {
+        width: 375px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 data-sentinel="h1">Plain host</h1>
+    <p>
+      No host styling besides the user-agent defaults. <a href="#w1" data-sentinel="a">Reference</a> rendering for the
+      <code data-sentinel="code">aggressive-css.html</code> comparison.
+    </p>
+    <h2 data-sentinel="h2">Pinned widget</h2>
+    <plgrnd-flow
+      id="w1"
+      flow="%%FLOW:P3%%"
+      minimap="1"
+      font="Arial, sans-serif"
+      font-mono="Courier New, monospace"
+      style="width: 800px; height: 450px"
+    ></plgrnd-flow>
+    <h3 data-sentinel="h3">Bare elements</h3>
+    <div class="box-800"><plgrnd-flow id="w-800" flow="%%FLOW:P0%%"></plgrnd-flow></div>
+    <div class="box-375"><plgrnd-flow id="w-375" flow="%%FLOW:P0%%"></plgrnd-flow></div>
+    <div style="display: flex"><plgrnd-flow id="w-flex" flow="%%FLOW:P0%%"></plgrnd-flow></div>
+    <div style="display: inline-block"><plgrnd-flow id="w-inline" flow="%%FLOW:P0%%"></plgrnd-flow></div>
+    <plgrnd-flow id="w-h560" flow="%%FLOW:P0%%" style="height: 560px"></plgrnd-flow>
+    <plgrnd-flow id="w-hidden" flow="%%FLOW:P0%%" hidden></plgrnd-flow>
+    <table data-sentinel="table">
+      <tr>
+        <td>cell</td>
+      </tr>
+    </table>
+    <button type="button" data-sentinel="button">Host button</button>
+    <script src="/dist/plgrnd-flow.iife.js"></script>
+  </body>
+</html>

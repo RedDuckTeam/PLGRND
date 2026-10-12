@@ -1,0 +1,4 @@
+{
+  "description": "Versions of @plgrnd/embed published to npm. CONTRIBUTING §12 step 7 adds each version after `npm publish`; apps/web/vite.config.ts reads this file for the Share dialog npm line.",
+  "npmPublished": ["1.0.0", "1.0.1"]
+}

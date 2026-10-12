@@ -12,7 +12,8 @@
     "format:web": "yarn workspace web format"
   },
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "devDependencies": {
     "prettier": "^3.6.2"
