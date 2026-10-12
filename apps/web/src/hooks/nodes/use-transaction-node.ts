@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Keypair, Transaction } from '@solana/web3.js'
 import { Position, useUpdateNodeInternals } from '@xyflow/react'
 import { useWallet } from '@solana/wallet-adapter-react'
@@ -8,7 +8,14 @@ import type { WalletSignerValue } from '@/types/nodes/wallet/wallet-node'
 import { useTypedNodesData } from '@/hooks/flow/use-typed-nodes-data'
 import { useTypedReactFlow } from '@/hooks/flow/use-typed-react-flow'
 import { getSolanaConnection } from '@/constants/solana/connection'
-import { createKeypairFromPrivateKey, getRequiredSigners, truncatePubkey } from '@/utils/solana/transaction.utils'
+import { useRpcConfig } from '@/providers/rpc-urls-context'
+import {
+  confirmSignature,
+  createKeypairFromPrivateKey,
+  getRequiredSigners,
+  isAbortError,
+  truncatePubkey,
+} from '@/utils/solana/transaction.utils'
 
 const isWalletMarker = (value: unknown): value is WalletSignerValue =>
   typeof value === 'object' && value !== null && (value as { kind?: unknown }).kind === 'wallet'
@@ -17,6 +24,10 @@ export const useTransactionNode = (nodeId: string) => {
   const { updateNodeData } = useTypedReactFlow()
   const updateNodeInternals = useUpdateNodeInternals()
   const [status, setStatus] = useState<TransactionStatus>('idle')
+  const { urls, confirmMode } = useRpcConfig()
+  // Aborts a pending confirmation when the node unmounts (a widget removed mid-Send).
+  const sendAbortRef = useRef<AbortController | null>(null)
+  useEffect(() => () => sendAbortRef.current?.abort(), [])
 
   const wallet = useWallet()
 
@@ -124,11 +135,15 @@ export const useTransactionNode = (nodeId: string) => {
       setStatus('pending')
       updateNodeData<TransactionNodeData>(nodeId, { status: 'pending' })
 
-      const connection = getSolanaConnection(inputs.network)
+      const connection = getSolanaConnection(inputs.network, urls)
       const tx = inputs.transaction
+      const controller = new AbortController()
+      sendAbortRef.current?.abort()
+      sendAbortRef.current = controller
 
       tx.feePayer = feePayerPublicKey
-      tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
+      const latest = await connection.getLatestBlockhash()
+      tx.recentBlockhash = latest.blockhash
 
       let raw: Buffer | Uint8Array
 
@@ -148,11 +163,12 @@ export const useTransactionNode = (nodeId: string) => {
       }
 
       const sig = await connection.sendRawTransaction(raw, { skipPreflight: false })
-      await connection.confirmTransaction({ signature: sig, ...(await connection.getLatestBlockhash()) }, 'confirmed')
+      await confirmSignature(connection, sig, latest, confirmMode, controller.signal)
 
       updateNodeData<TransactionNodeData>(nodeId, { signature: sig, status: 'success' })
       setStatus('success')
     } catch (e) {
+      if (isAbortError(e)) return
       console.error(e)
       updateNodeData<TransactionNodeData>(nodeId, { status: 'failed' })
       setStatus('failed')
@@ -167,6 +183,8 @@ export const useTransactionNode = (nodeId: string) => {
     nodeId,
     updateNodeData,
     collectAdditionalSigners,
+    urls,
+    confirmMode,
   ])
 
   return {

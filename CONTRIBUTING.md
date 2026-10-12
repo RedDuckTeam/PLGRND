@@ -198,7 +198,7 @@ A missing entry in 4, 6 or 7 does not fail at that line. `TargetFieldsForEnum` i
 
 ### 5.2 `data` must be JSON-plain
 
-`data` is persisted to `localStorage` and encoded into share URLs. On persist, `sanitizeForPersist` (`stores/flow-store.ts`) keeps primitives, arrays and plain objects and **drops class instances** (`PublicKey`, `Keypair`, `Transaction`, `Buffer`, `BN`, …). Store strings/numbers/booleans/plain objects; recompute derived values in the component. A new node starts with `data: {}` — tolerate missing fields.
+`data` is persisted to `localStorage` and encoded into share URLs. On persist, `sanitizeForPersist` (`stores/flow-snapshot.ts`) keeps primitives, arrays and plain objects and **drops class instances** (`PublicKey`, `Keypair`, `Transaction`, `Buffer`, `BN`, …). Store strings/numbers/booleans/plain objects; recompute derived values in the component. A new node starts with `data: {}` — tolerate missing fields.
 
 ### 5.3 Embed modes
 
@@ -206,7 +206,25 @@ Flows are embedded on third-party sites (`/embed`). `useFlowMode()` from `compon
 
 - `CustomNode` already hides actions in `readonly` and disables selection and double-click-to-Display outside `editor`.
 - Your node must disable its own inputs/buttons when `mode === 'readonly'`.
-- When `embedded`, never connect a wallet or send a transaction — deep-link to the editor instead (see `components/nodes/wallet/wallet-node.tsx`, `components/nodes/transactions/transaction-node.tsx`). Read-only RPC is fine.
+- When `embedded`, never connect a wallet. Send only with a key signer in the flow; otherwise deep-link to the editor (see `components/nodes/wallet/wallet-node.tsx`, `components/nodes/transactions/transaction-node.tsx`). Read-only RPC is fine.
+
+**Self-hosted embedding.** `packages/embed` builds the same nodes into `<plgrnd-flow>`. That widget runs inside a shadow root on someone else's page, next to their scripts and styles, so every node also follows these rules:
+
+- **DOM access.**
+  - No `document` or `window` queries for your own DOM (`document.querySelector`, `getElementById`, `document.activeElement`). Use refs, React events or the React Flow instance; if you need the root, use `element.getRootNode()`.
+  - No `document`-wide or `window`-wide listeners.
+- **Navigation.** No `location`, `history` or router access.
+- **UI seams.**
+  - Radix dialogs go only through `components/ui/dialog.tsx`, which provides the portal container and the dialog mode.
+  - Selects go through `components/ui/select.tsx`; the self-hosted build swaps it for a native select.
+  - Toasts go through `sonner`'s `toast`; the self-hosted build routes them into the widget.
+- **Checks after a node or dependency change.**
+  1. Run `yarn workspace @plgrnd/embed build && yarn workspace @plgrnd/embed verify`.
+  2. If the global-access register reports drift, run `node packages/embed/scripts/global-access-register.mjs --write`.
+  3. Review every new or changed entry in `packages/embed/build/global-access-register.json`. Classify each one as `safe`, `mitigated:Mx`, `unreachable-in-S-N` or `accepted:<reason>` (`Mx` is a mitigation id from the comments in `packages/embed/build` and `src/shims`; `S-N` is the self-hosted build). An `accepted:` entry is a host-visible effect and needs a maintainer decision.
+- **Bumps of `@radix-ui/*`, `@xyflow/*`, `@tanstack/react-query` or `react-dom`.**
+  - Re-run the module-singleton inventory. List the module-level state (Sets, Maps, counters, registries) in the bundled files of the bumped packages (`packages/embed/dist/module-list.json`). Then confirm that each item is per-widget, safe to share between widgets, or mitigated.
+  - `@radix-ui/react-dismissable-layer` and `@radix-ui/react-dialog` are patched at exact versions (`packages/embed/build/patch-layer-scope.ts`, `patch-dialog-warnings.ts`). The build fails until the patches are re-ported.
 
 ### 5.4 Naming
 
@@ -286,3 +304,25 @@ Set `VITE_PUBLIC_SOLANA_RPC` to your RPC endpoint (see `apps/web/src/env.ts`). K
 ## 11. Not covered (yet)
 
 A runtime plugin API, a node generator (`yarn node:new`) and single-file co-located node definitions are future work.
+
+## 12. Releasing `@plgrnd/embed`
+
+For maintainers. The site (`apps/web`) and the package ship from this repository. Routine site deploys never need an embed build: `release-check` only verifies the version folders that are already committed.
+
+0. **Release gate.**
+   - Ownership of the `@plgrnd` npm org must be confirmed. This blocks only step 7.
+   - Steps 1-6 and the site deploy can go ahead before that.
+   - Until step 7 is done, the GitHub Release and the Share dialog show the npm channel as "pending".
+1. Bump `version` in `packages/embed/package.json`. Use semver, and add new attributes only in minor versions.
+2. Run `yarn workspace @plgrnd/embed build` and then `yarn workspace @plgrnd/embed verify`.
+3. Run `yarn workspace @plgrnd/embed pack:check`. It checks that `npm pack --dry-run` lists exactly the planned files.
+4. Copy `packages/embed/dist/sdk/<v>/` to `apps/web/public/sdk/<v>/`. Never overwrite an existing version folder. Add a `/sdk/<v>/*` rule with the one-year `immutable` `Cache-Control` to `apps/web/public/_headers`; never a broader `/sdk/*` rule, because Cloudflare would also apply it to the SPA fallback at paths that do not exist yet. Then run `node packages/embed/scripts/release-check.mjs --release`, which checks both.
+5. Update the README section "Self-hosted embedding": the version in file names and snippets, and the sizes from `packages/embed/dist/size-report.md`.
+6. Commit, and tag the commit `embed-v<v>`.
+7. Run `npm publish --access public` in `packages/embed`. Then add `<v>` to `npmPublished` in `packages/embed/release-state.json` and commit that change.
+8. Run `gh release create embed-v<v>`. Attach the IIFE, the two ESM files, `SHA256SUMS.txt`, `SRI.txt`, `THIRD_PARTY_LICENSES.txt` and `size-report.md`.
+9. Push to `main`. Cloudflare builds and deploys the site; the build bakes `public/sdk/<v>/` and both release flags into `dist`, and runs `release-check` first, so a mismatched `/sdk` folder or a bad `/sdk` cache rule fails the deploy.
+10. Smoke-check the release:
+    - `https://plgrnd.io/sdk/<v>/plgrnd-flow-<v>.js` returns 200, as `text/javascript`, and its SHA-256 matches `SHA256SUMS.txt`. The SPA fallback answers mistyped paths with HTML and 200, so check all three.
+    - `curl -sI https://plgrnd.io/sdk/<next version>/x.js` returns the SPA's HTML without the one-year `immutable` header, so a version requested before its release is not cached.
+    - The Share dialog shows the download links and the npm line.

@@ -51,5 +51,3 @@ export const isEmbedFromLocation = (loc?: Loc): boolean => {
   const resolved = resolveLoc(loc)
   return isEmbedPath(resolved.pathname) || isLegacyViewMode(resolved)
 }
-
-export const IS_EMBED = isEmbedFromLocation()

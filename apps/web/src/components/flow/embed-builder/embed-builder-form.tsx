@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { cn } from '@/lib/utils'
 import {
   parseFontFamily,
   parseRadius,
@@ -18,6 +17,7 @@ import {
   THEME_PICKER_DEFAULTS,
   type BuilderSettings,
 } from './constants'
+import { labelClass, rowClass, segmentClass } from './styles'
 
 interface EmbedBuilderFormProps {
   settings: BuilderSettings
@@ -26,17 +26,6 @@ interface EmbedBuilderFormProps {
 
 const MODES: EmbedMode[] = ['readonly', 'interactive', 'editor']
 const THEMES: EmbedTheme[] = ['dark', 'light', 'auto']
-
-const rowClass = 'flex flex-col gap-1.5'
-const labelClass = 'font-mono text-[11px] uppercase text-muted-foreground'
-
-const segmentClass = (active: boolean) =>
-  cn(
-    'cursor-pointer rounded-md border px-2.5 py-1 font-mono text-[11px] capitalize transition-colors',
-    active
-      ? 'border-primary bg-muted text-foreground'
-      : 'border-border bg-transparent text-muted-foreground hover:text-foreground'
-  )
 
 const matchFontPresetId = (value: string | undefined): string =>
   FONT_PRESETS.find((preset) => preset.value === value)?.id ?? CUSTOM_FONT_ID

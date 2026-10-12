@@ -1,10 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
+import { cn } from '@/lib/utils'
 import type { FlowSnapshot } from '@/stores/flow-store'
 import { buildEmbedSnippet, buildEmbedUrl } from '@/embed/embed-url'
 import { EmbedBuilderForm } from './embed-builder-form'
 import { EmbedPreview } from './embed-preview'
 import { EmbedSnippet } from './embed-snippet'
-import { loadBuilderSettings, resolveSnippetSize, saveBuilderSettings, type BuilderSettings } from './constants'
+import { SelfHostedPanel } from './self-hosted-panel'
+import {
+  EMBED_VARIANTS,
+  loadBuilderSettings,
+  resolveSnippetSize,
+  saveBuilderSettings,
+  type BuilderSettings,
+} from './constants'
+import { labelClass, rowClass, segmentClass } from './styles'
 
 interface EmbedBuilderProps {
   snapshot: FlowSnapshot
@@ -30,7 +39,33 @@ export const EmbedBuilder = ({ snapshot }: EmbedBuilderProps) => {
         <EmbedPreview url={url} size={size} />
         <EmbedBuilderForm settings={settings} onChange={setSettings} />
       </div>
-      <EmbedSnippet snippet={snippet} url={url} />
+      <div className={rowClass}>
+        <span className={labelClass}>Embed as</span>
+        <div className="flex gap-1.5">
+          {EMBED_VARIANTS.map(({ id, label }) => (
+            <button
+              key={id}
+              type="button"
+              aria-pressed={settings.variant === id}
+              onClick={() => setSettings((current) => ({ ...current, variant: id }))}
+              className={cn(segmentClass(settings.variant === id), 'normal-case')}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+      {settings.variant === 'hosted' ? (
+        <EmbedSnippet snippet={snippet} url={url} />
+      ) : (
+        <SelfHostedPanel
+          snapshot={snapshot}
+          config={settings.config}
+          size={size}
+          format={settings.format}
+          onFormatChange={(format) => setSettings((current) => ({ ...current, format }))}
+        />
+      )}
     </div>
   )
 }

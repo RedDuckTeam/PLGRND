@@ -7,10 +7,10 @@ const uiAmountCompatibleTargetTypes = new Set(['uiAmount', 'number'])
 const decimalsCompatibleTargetTypes = new Set(['decimals', 'number'])
 const walletCompatibleTargetTypes = new Set(['wallet', 'privateKey'])
 
-const getHandleMaxConnections = (handleId?: string | null) => {
+const getHandleMaxConnections = (handleId: string | null | undefined, root: ParentNode) => {
   if (!handleId) return undefined
 
-  const handleEl = document.querySelector(`[data-id="${handleId}"]`) as HTMLElement | null
+  const handleEl = root.querySelector(`[data-id="${handleId}"]`) as HTMLElement | null
   const raw = handleEl?.getAttribute('data-max-connections')
   if (!raw) return undefined
 
@@ -18,8 +18,8 @@ const getHandleMaxConnections = (handleId?: string | null) => {
   return Number.isFinite(maxConnections) ? maxConnections : undefined
 }
 
-export const canConnectToTargetHandle = (targetHandle: string | null | undefined, edges: Edge[]) => {
-  const maxConnections = getHandleMaxConnections(targetHandle)
+export const canConnectToTargetHandle = (targetHandle: string | null | undefined, edges: Edge[], root: ParentNode) => {
+  const maxConnections = getHandleMaxConnections(targetHandle, root)
   if (maxConnections === undefined) return true
 
   const currentConnections = edges.filter((edge) => edge.targetHandle === targetHandle).length

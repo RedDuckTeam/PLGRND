@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Parity: element vs hosted iframe</title>
+    <script src="/assets/host-probe.js"></script>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+      }
+      .pair {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+        margin-bottom: 32px;
+      }
+      .cell {
+        width: 800px;
+        height: 450px;
+        position: relative;
+        flex: none;
+      }
+      .cell iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Element vs hosted iframe</h1>
+    <p>
+      Same flow and options, explicit fonts on both sides (the defaults differ by design). The iframes come from
+      http://127.0.0.1:4173 (the hosted app under <code>vite preview</code>).
+    </p>
+    <h2>Dark</h2>
+    <div class="pair">
+      <div class="cell">
+        <plgrnd-flow
+          id="el-dark"
+          flow="%%FLOW:P0%%"
+          theme="dark"
+          font="Arial, sans-serif"
+          font-mono="Courier New, monospace"
+          style="width: 800px; height: 450px"
+        ></plgrnd-flow>
+      </div>
+      <div class="cell">
+        <iframe
+          id="if-dark"
+          src="http://127.0.0.1:4173/embed?theme=dark&font=Arial%2C%20sans-serif&fontMono=Courier%20New%2C%20monospace#flow=%%FLOW:P0%%"
+          title="PLGRND interactive flow"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          allow="clipboard-write"
+        ></iframe>
+      </div>
+    </div>
+    <h2>Light</h2>
+    <div class="pair">
+      <div class="cell">
+        <plgrnd-flow
+          id="el-light"
+          flow="%%FLOW:P0%%"
+          theme="light"
+          font="Arial, sans-serif"
+          font-mono="Courier New, monospace"
+          style="width: 800px; height: 450px"
+        ></plgrnd-flow>
+      </div>
+      <div class="cell">
+        <iframe
+          id="if-light"
+          src="http://127.0.0.1:4173/embed?theme=light&font=Arial%2C%20sans-serif&fontMono=Courier%20New%2C%20monospace#flow=%%FLOW:P0%%"
+          title="PLGRND interactive flow"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          allow="clipboard-write"
+        ></iframe>
+      </div>
+    </div>
+    <script src="/dist/plgrnd-flow.iife.js"></script>
+  </body>
+</html>

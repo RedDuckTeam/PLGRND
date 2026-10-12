@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src https://api.mainnet-beta.solana.com https://api.devnet.solana.com; base-uri 'none'; form-action 'none'"
+    />
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Strict CSP host</title>
+    <script src="/assets/host-probe.js"></script>
+    <link rel="stylesheet" href="/assets/strict-csp.css" />
+  </head>
+  <body>
+    <h1>Strict CSP host</h1>
+    <p>
+      <code>script-src 'self'</code>, <code>style-src 'self'</code> without <code>'unsafe-inline'</code>,
+      <code>connect-src</code> limited to the public RPC origins over <code>https:</code>, no <code>wss:</code>. Add
+      <code>?csp=strict-dynamic|tt|no-unsafe-inline-style</code> for the header variants.
+    </p>
+    <h2>Balance check (P2)</h2>
+    <plgrnd-flow id="w-p2" flow="%%FLOW:P2%%"></plgrnd-flow>
+    <h2>Program execution (P4)</h2>
+    <plgrnd-flow id="w-p4" flow="%%FLOW:P4%%"></plgrnd-flow>
+    <h2>Key-signer Send (P5)</h2>
+    <!-- The QA harness sets this widget's flow from a throwaway devnet key kept outside the repository. -->
+    <plgrnd-flow id="w-send"></plgrnd-flow>
+    <script src="/dist/plgrnd-flow.iife.js"></script>
+  </body>
+</html>

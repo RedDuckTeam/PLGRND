@@ -8,8 +8,12 @@ interface Props {
 
 export const Copy = ({ data, className }: Props) => {
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(data)
-    toast.success('Copied')
+    try {
+      await navigator.clipboard.writeText(data)
+      toast.success('Copied')
+    } catch {
+      toast.error('Failed to copy')
+    }
   }
 
   return (

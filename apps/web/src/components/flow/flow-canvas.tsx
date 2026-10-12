@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, type PropsWithChildren } from 'react'
+import { useCallback, useEffect, useMemo, useRef, type PropsWithChildren } from 'react'
 import {
   ReactFlow,
   addEdge,
@@ -10,10 +10,10 @@ import {
 } from '@xyflow/react'
 import { nodeMap } from '@/utils/node/node-map'
 import { useFlowStore } from '@/stores/flow-store'
-import { IS_EMBED } from '@/embed/embed-location'
 import type { EmbedMode } from '@/embed/embed-config'
 import { areHandleTypesCompatible, canConnectToTargetHandle } from '@/utils/flow/connection.utils'
 import { FlowModeContext } from '@/components/flow/flow-mode-context'
+import { FLOW_PANE_CLICK, FlowPaneEventsContext } from '@/components/flow/flow-pane-events'
 
 const EDGE_OPTIONS_LOCKED = { selectable: false }
 
@@ -21,9 +21,33 @@ interface FlowCanvasProps extends PropsWithChildren {
   mode: EmbedMode
   embedded: boolean
   colorMode?: 'dark' | 'light'
+  /** React Flow instance id; distinct per canvas when several share a page. */
+  flowId?: string
+  /**
+   * Self-hosted widget on a third-party page: no React Flow key listeners on the host window/document,
+   * and store callbacks that React Flow invokes outside React's dispatch are contained.
+   */
+  selfHosted?: boolean
 }
 
-export const FlowCanvas = ({ mode, embedded, colorMode = 'dark', children }: FlowCanvasProps) => {
+const containErrors =
+  <A extends unknown[]>(where: string, fn: (...args: A) => void) =>
+  (...args: A): void => {
+    try {
+      fn(...args)
+    } catch (error) {
+      console.error(`[plgrnd] ${where} failed`, error)
+    }
+  }
+
+export const FlowCanvas = ({
+  mode,
+  embedded,
+  colorMode = 'dark',
+  flowId,
+  selfHosted = false,
+  children,
+}: FlowCanvasProps) => {
   const nodes = useFlowStore((s) => s.nodes)
   const edges = useFlowStore((s) => s.edges)
   const viewport = useFlowStore((s) => s.viewport)
@@ -33,50 +57,53 @@ export const FlowCanvas = ({ mode, embedded, colorMode = 'dark', children }: Flo
   const setEdges = useFlowStore((s) => s.setEdges)
   const setViewport = useFlowStore((s) => s.setViewport)
 
+  const flowRef = useRef<HTMLDivElement>(null)
+  const paneEvents = useMemo(() => new EventTarget(), [])
   const editable = mode === 'editor'
-
-  if (import.meta.env.DEV && embedded !== IS_EMBED) {
-    console.error('[plgrnd] FlowCanvas embedded prop disagrees with IS_EMBED')
-  }
 
   const flowMode = useMemo(() => ({ mode, embedded }), [mode, embedded])
 
+  // Handle lookups stay inside this canvas's own tree (document, or a widget's shadow root).
+  const queryRoot = useCallback((): ParentNode => (flowRef.current?.getRootNode() ?? document) as ParentNode, [])
+
   const onConnect = useCallback(
     (params: Connection) => {
+      const root = queryRoot()
       setEdges((edgesSnapshot) => {
-        if (!canConnectToTargetHandle(params.targetHandle, edgesSnapshot)) return edgesSnapshot
+        if (!canConnectToTargetHandle(params.targetHandle, edgesSnapshot, root)) return edgesSnapshot
         return addEdge(params, edgesSnapshot)
       })
-      const all = Array.from(document.querySelectorAll('[data-handle-type]')) as HTMLElement[]
+      const all = Array.from(root.querySelectorAll('[data-handle-type]')) as HTMLElement[]
       for (const el of all) el.classList.remove('handle--dim', 'handle--highlight')
-      document.body.removeAttribute('data-connecting-type')
     },
-    [setEdges]
+    [setEdges, queryRoot]
   )
   const isValidConnection: IsValidConnection = useCallback(
     (edge) => {
       if (!('sourceHandle' in edge) || !('targetHandle' in edge)) return true
       const c = edge as Connection
-      if (!canConnectToTargetHandle(c.targetHandle, edges)) return false
+      const root = queryRoot()
+      if (!canConnectToTargetHandle(c.targetHandle, edges, root)) return false
 
-      const sourceEl = document.querySelector(`[data-id="${c.sourceHandle}"]`) as HTMLElement | null
-      const targetEl = document.querySelector(`[data-id="${c.targetHandle}"]`) as HTMLElement | null
+      const sourceEl = root.querySelector(`[data-id="${c.sourceHandle}"]`) as HTMLElement | null
+      const targetEl = root.querySelector(`[data-id="${c.targetHandle}"]`) as HTMLElement | null
       const srcType = sourceEl?.getAttribute('data-type')
       const tgtType = targetEl?.getAttribute('data-type')
       return areHandleTypesCompatible(srcType, tgtType)
     },
-    [edges]
+    [edges, queryRoot]
   )
   const onConnectStart = useCallback(
     (_: unknown, params: { handleId: string | null; nodeId: string | null; handleType: string | null }) => {
       if (!params?.handleId) return
-      const sourceEl = document.querySelector(`[data-id="${params.handleId}"]`) as HTMLElement | null
+      const root = queryRoot()
+      const sourceEl = root.querySelector(`[data-id="${params.handleId}"]`) as HTMLElement | null
       const srcType = sourceEl?.getAttribute('data-type')
-      const allTargets = Array.from(document.querySelectorAll('[data-handle-type="target"]')) as HTMLElement[]
+      const allTargets = Array.from(root.querySelectorAll('[data-handle-type="target"]')) as HTMLElement[]
       for (const el of allTargets) {
         const targetHandle = el.getAttribute('data-id')
         const tgtType = el.getAttribute('data-type')
-        const hasAvailableSlot = canConnectToTargetHandle(targetHandle, edges)
+        const hasAvailableSlot = canConnectToTargetHandle(targetHandle, edges, root)
         const isCompatible = areHandleTypesCompatible(srcType, tgtType)
 
         if (hasAvailableSlot && isCompatible) {
@@ -87,18 +114,33 @@ export const FlowCanvas = ({ mode, embedded, colorMode = 'dark', children }: Flo
         }
       }
     },
-    [edges]
+    [edges, queryRoot]
   )
   const onConnectEnd = useCallback(() => {
-    const all = Array.from(document.querySelectorAll('[data-handle-type]')) as HTMLElement[]
+    const all = Array.from(queryRoot().querySelectorAll('[data-handle-type]')) as HTMLElement[]
     for (const el of all) el.classList.remove('handle--dim', 'handle--highlight')
-  }, [])
+  }, [queryRoot])
 
   const onPaneClick = useCallback(() => {
-    window.dispatchEvent(new Event('flow-pane-click'))
-  }, [])
+    paneEvents.dispatchEvent(new Event(FLOW_PANE_CLICK))
+  }, [paneEvents])
 
   const onViewportChange = useCallback((vp: Viewport) => setViewport(vp), [setViewport])
+
+  // React Flow calls these from its ResizeObserver and d3-zoom handlers, outside React's dispatch.
+  // On a self-hosted page an exception there would surface on the host window, so it is contained.
+  const handleNodesChange = useMemo(
+    () => (selfHosted ? containErrors('onNodesChange', onNodesChange) : onNodesChange),
+    [selfHosted, onNodesChange]
+  )
+  const handleEdgesChange = useMemo(
+    () => (selfHosted ? containErrors('onEdgesChange', onEdgesChange) : onEdgesChange),
+    [selfHosted, onEdgesChange]
+  )
+  const handleViewportChange = useMemo(
+    () => (selfHosted ? containErrors('onViewportChange', onViewportChange) : onViewportChange),
+    [selfHosted, onViewportChange]
+  )
 
   useEffect(() => {
     if (!editable) return
@@ -120,43 +162,49 @@ export const FlowCanvas = ({ mode, embedded, colorMode = 'dark', children }: Flo
 
   return (
     <FlowModeContext.Provider value={flowMode}>
-      <ReactFlow
-        colorMode={colorMode}
-        nodes={nodes}
-        edges={edges}
-        nodeTypes={nodeMap}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onConnectStart={onConnectStart}
-        onConnectEnd={onConnectEnd}
-        onPaneClick={onPaneClick}
-        onViewportChange={onViewportChange}
-        isValidConnection={isValidConnection}
-        nodesDraggable={editable}
-        nodesConnectable={editable}
-        elementsSelectable={mode !== 'readonly'}
-        nodesFocusable={editable}
-        edgesFocusable={editable}
-        deleteKeyCode={editable ? undefined : null}
-        selectionKeyCode={editable ? undefined : null}
-        multiSelectionKeyCode={editable ? undefined : null}
-        defaultEdgeOptions={editable ? undefined : EDGE_OPTIONS_LOCKED}
-        preventScrolling={!embedded}
-        zoomOnScroll={!embedded}
-        zoomOnDoubleClick={!embedded}
-        minZoom={embedded ? 0.1 : 0.5}
-        panOnScroll={false}
-        zoomOnPinch={true}
-        defaultViewport={embedded ? undefined : viewport}
-        fitView={embedded ? false : !viewport}
-        selectionOnDrag={false}
-        selectionMode={SelectionMode.Full}
-        panOnDrag={true}
-        className="h-full w-full"
-      >
-        {children}
-      </ReactFlow>
+      <FlowPaneEventsContext.Provider value={paneEvents}>
+        <ReactFlow
+          ref={flowRef}
+          id={flowId}
+          colorMode={colorMode}
+          nodes={nodes}
+          edges={edges}
+          nodeTypes={nodeMap}
+          onNodesChange={handleNodesChange}
+          onEdgesChange={handleEdgesChange}
+          onConnect={onConnect}
+          onConnectStart={onConnectStart}
+          onConnectEnd={onConnectEnd}
+          onPaneClick={onPaneClick}
+          onViewportChange={handleViewportChange}
+          isValidConnection={isValidConnection}
+          nodesDraggable={editable}
+          nodesConnectable={editable}
+          elementsSelectable={mode !== 'readonly'}
+          nodesFocusable={editable}
+          edgesFocusable={editable}
+          deleteKeyCode={editable ? undefined : null}
+          selectionKeyCode={editable ? undefined : null}
+          multiSelectionKeyCode={editable ? undefined : null}
+          panActivationKeyCode={selfHosted ? null : undefined}
+          zoomActivationKeyCode={selfHosted ? null : undefined}
+          defaultEdgeOptions={editable ? undefined : EDGE_OPTIONS_LOCKED}
+          preventScrolling={!embedded}
+          zoomOnScroll={!embedded}
+          zoomOnDoubleClick={!embedded}
+          minZoom={embedded ? 0.1 : 0.5}
+          panOnScroll={false}
+          zoomOnPinch={true}
+          defaultViewport={embedded ? undefined : viewport}
+          fitView={embedded ? false : !viewport}
+          selectionOnDrag={false}
+          selectionMode={SelectionMode.Full}
+          panOnDrag={true}
+          className="h-full w-full"
+        >
+          {children}
+        </ReactFlow>
+      </FlowPaneEventsContext.Provider>
     </FlowModeContext.Provider>
   )
 }

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.mainnet-beta.solana.com https://api.devnet.solana.com"
+    />
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mintlify-like host (Tailwind v3 typography, strict CSP)</title>
+    <script src="/assets/host-probe.js"></script>
+    <link rel="stylesheet" href="/vendor/tailwind-v3-typography.css" />
+    <link rel="stylesheet" href="/assets/docs-host.css" />
+    <script src="/assets/theme-toggle.js" defer></script>
+    <script src="/assets/mintlify-inject.js" defer></script>
+  </head>
+  <body class="bg-white text-zinc-700 antialiased dark:bg-zinc-950 dark:text-zinc-300">
+    <header class="docs-header">
+      <span class="docs-logo">Docs</span>
+      <button id="theme-toggle" type="button" class="rounded-md border px-3 py-1 text-sm" data-sentinel="button">
+        Toggle theme
+      </button>
+    </header>
+    <main class="docs-main">
+      <article class="prose prose-zinc max-w-3xl dark:prose-invert">
+        <h1 data-sentinel="h1">Program derived addresses</h1>
+        <p>
+          A PDA is derived from seeds and a program id. Read the
+          <a href="#seeds" data-sentinel="a">section on seeds</a> before you continue, and call
+          <code data-sentinel="code">findProgramAddressSync</code> to derive one.
+        </p>
+        <h2 data-sentinel="h2" id="seeds">Transfer SOL</h2>
+        <plgrnd-flow id="w1" flow="%%FLOW:P3%%" theme="auto"></plgrnd-flow>
+        <p>The same flow, a second time on the page:</p>
+        <plgrnd-flow id="w2" flow="%%FLOW:P3%%" theme="auto"></plgrnd-flow>
+        <h3 data-sentinel="h3">Encode a string</h3>
+        <plgrnd-flow id="w3" flow="%%FLOW:P6%%" theme="auto"></plgrnd-flow>
+        <table data-sentinel="table">
+          <thead>
+            <tr>
+              <th>Seed</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>"counter"</td>
+              <td>bytes</td>
+            </tr>
+          </tbody>
+        </table>
+        <h2>Hashing</h2>
+        <plgrnd-flow id="w4" flow="%%FLOW:P0%%" theme="auto"></plgrnd-flow>
+        <pre
+          id="host-scroller"
+          class="host-scroller"
+          tabindex="0"
+        ><code>// A scrollable code block, focusable like Mintlify's.
+const seeds = [Buffer.from('counter'), authority.toBuffer()]
+const [pda, bump] = PublicKey.findProgramAddressSync(seeds, programId)
+// Space, PageDown and ArrowDown scroll this block when it has focus.
+// line 5
+// line 6
+// line 7
+// line 8
+// line 9
+// line 10
+// line 11
+// line 12
+// line 13
+// line 14
+// line 15
+// line 16
+// line 17
+// line 18
+// line 19
+// line 20
+// line 21
+// line 22
+// line 23
+// line 24
+// line 25
+// line 26
+// line 27
+// line 28
+// line 29
+// line 30
+// line 31
+// line 32
+// line 33
+// line 34
+// line 35
+// line 36
+// line 37
+// line 38
+// line 39
+// line 40
+// line 41
+// line 42
+// line 43
+// line 44</code></pre>
+        <p>End of the article.</p>
+      </article>
+    </main>
+  </body>
+</html>

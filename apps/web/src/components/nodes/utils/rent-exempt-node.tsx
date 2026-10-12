@@ -9,11 +9,13 @@ import type { NodeTypeEnum, TargetFieldsForEnum } from '@/types/node'
 import type { RentExemptNodeData, RentExemptNodeType } from '@/types/nodes/utils/rent-exempt-node'
 import type { Network } from '@/types/network'
 import { getSolanaConnection } from '@/constants/solana/connection'
+import { useRpcConfig } from '@/providers/rpc-urls-context'
 import { toFiniteNumber } from '@/utils/node/logic/logic-node.utils'
 import { UtilsLabelValue, UtilsNodeContent } from './utils-node-content'
 
 export const RentExemptNode = (props: NodeProps<RentExemptNodeType>) => {
   const { updateNodeData } = useTypedReactFlow()
+  const { urls } = useRpcConfig()
   const resolved = useTypedNodesData<TargetFieldsForEnum<NodeTypeEnum.RENT_EXEMPT>>(props.id)
 
   const space = useMemo(() => {
@@ -28,7 +30,7 @@ export const RentExemptNode = (props: NodeProps<RentExemptNodeType>) => {
     queryKey: ['rentExempt', network, space],
     queryFn: async () => {
       if (!network || space === undefined) return undefined
-      return getSolanaConnection(network).getMinimumBalanceForRentExemption(space)
+      return getSolanaConnection(network, urls).getMinimumBalanceForRentExemption(space)
     },
     enabled: Boolean(network) && space !== undefined,
   })

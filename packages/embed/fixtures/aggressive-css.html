@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aggressive docs CSS host</title>
+    <script src="/assets/host-probe.js"></script>
+    <!--HOST-TW4-->
+    <link rel="stylesheet" href="/vendor/tailwind-v3-typography.css" />
+    <link rel="stylesheet" href="/assets/aggressive.css" />
+    <script src="/assets/aggressive.js" defer></script>
+  </head>
+  <body>
+    <header class="docs-header">
+      <input id="host-search" type="search" placeholder="Search docs ( / )" />
+      <button type="button" data-sentinel="button">Host button</button>
+    </header>
+    <div class="markdown md-typeset prose">
+      <h1 data-sentinel="h1">Aggressive host styles</h1>
+      <p>
+        Infima <code data-sentinel="code">.markdown</code>, Material <code>.md-typeset</code> and Tailwind v3
+        <a href="#w1" data-sentinel="a">prose</a> rules all apply around the widget, together with global resets and
+        inherited-property attacks on its ancestors.
+      </p>
+      <h2 data-sentinel="h2">Widget under attack</h2>
+      <div class="attack">
+        <div class="attack-inner">
+          <plgrnd-flow
+            id="w1"
+            flow="%%FLOW:P3%%"
+            minimap="1"
+            font="Arial, sans-serif"
+            font-mono="Courier New, monospace"
+            style="width: 800px; height: 450px"
+          ></plgrnd-flow>
+        </div>
+      </div>
+      <h3 data-sentinel="h3">Shrink-to-fit parents</h3>
+      <div style="display: flex">
+        <plgrnd-flow id="w-flex" flow="%%FLOW:P0%%"></plgrnd-flow>
+      </div>
+      <div style="display: inline-block">
+        <plgrnd-flow id="w-inline" flow="%%FLOW:P0%%"></plgrnd-flow>
+      </div>
+      <table data-sentinel="table">
+        <tr>
+          <th>Key</th>
+          <th>Host action</th>
+        </tr>
+        <tr>
+          <td>/</td>
+          <td>focus search</td>
+        </tr>
+      </table>
+      <div id="host-scroller" tabindex="0" class="host-scroller">
+        <p>Scrollable host region.</p>
+        <p style="height: 1200px">Space, PageDown and ArrowDown scroll this box when it has focus.</p>
+      </div>
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20'/%3E" alt="" />
+    </div>
+    <script src="/dist/plgrnd-flow.iife.js"></script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+# Released @plgrnd/embed versions never change: cache each released version folder for a year.
+# One rule per version (CONTRIBUTING §12 step 4). These rules also apply to the SPA fallback, so a /sdk/* rule
+# would cache index.html for a year at paths that do not exist yet, such as the next version.
+/sdk/1.0.1/*
+  Cache-Control: public, max-age=31536000, immutable

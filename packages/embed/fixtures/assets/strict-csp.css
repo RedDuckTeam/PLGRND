@@ -1,0 +1,6 @@
+/* strict-csp.html styles live in a file: the page's CSP has no 'unsafe-inline' for styles. */
+body {
+  font-family: system-ui, sans-serif;
+  margin: 24px;
+  max-width: 900px;
+}

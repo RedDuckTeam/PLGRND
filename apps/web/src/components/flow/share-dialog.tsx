@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { Copy } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useFlowStore, type FlowSnapshot } from '@/stores/flow-store'
+import type { FlowSnapshot } from '@/stores/flow-store'
 import { buildShareUrl } from '@/utils/flow/share'
 import { EmbedBuilder } from './embed-builder/embed-builder'
 
@@ -14,14 +14,13 @@ interface ShareDialogProps {
 }
 
 export const ShareDialog = ({ open, onOpenChange }: ShareDialogProps) => {
-  const { getViewport } = useReactFlow()
+  const { getNodes, getEdges, getViewport } = useReactFlow()
   const [snapshot, setSnapshot] = useState<FlowSnapshot | null>(null)
 
   useEffect(() => {
     if (!open) return
-    const { nodes, edges } = useFlowStore.getState()
-    setSnapshot({ nodes, edges, viewport: getViewport() })
-  }, [open, getViewport])
+    setSnapshot({ nodes: getNodes(), edges: getEdges(), viewport: getViewport() })
+  }, [open, getNodes, getEdges, getViewport])
 
   const shareUrl = snapshot ? buildShareUrl(snapshot) : ''
 

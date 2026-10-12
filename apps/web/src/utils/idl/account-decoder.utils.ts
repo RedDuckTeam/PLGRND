@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer'
 import { PublicKey } from '@solana/web3.js'
 import { sha256 } from 'js-sha256'
 import bs58 from 'bs58'

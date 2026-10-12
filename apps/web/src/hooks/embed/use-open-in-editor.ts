@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
 import { useReactFlow } from '@xyflow/react'
 import { toast } from 'sonner'
-import { useFlowStore } from '@/stores/flow-store'
 import { buildEditorUrl } from '@/embed/embed-url'
+import { useEmbedHost } from '@/embed/embed-host-context'
 
 export const useOpenInEditor = () => {
-  const { getViewport } = useReactFlow()
+  const { getNodes, getEdges, getViewport } = useReactFlow()
+  const { editorOrigin, linkRef } = useEmbedHost()
 
   return useCallback(() => {
-    const { nodes, edges } = useFlowStore.getState()
-    const url = buildEditorUrl({ nodes, edges, viewport: getViewport() })
+    const url = buildEditorUrl({ nodes: getNodes(), edges: getEdges(), viewport: getViewport() }, editorOrigin, linkRef)
     const win = window.open(url, '_blank')
     if (win) {
       win.opener = null
@@ -24,5 +24,5 @@ export const useOpenInEditor = () => {
         },
       },
     })
-  }, [getViewport])
+  }, [getNodes, getEdges, getViewport, editorOrigin, linkRef])
 }

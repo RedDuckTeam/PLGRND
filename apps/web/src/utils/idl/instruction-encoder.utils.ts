@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer'
 import { PublicKey } from '@solana/web3.js'
 import type { IdlInstruction } from '@/types/nodes/programs/idl-node'
 import { sha256 } from 'js-sha256'

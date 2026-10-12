@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>plgrnd-flow fixtures</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>&lt;plgrnd-flow&gt; fixtures</h1>
+    <p>Served by <code>yarn workspace @plgrnd/embed fixtures</code>; the widget files come from <code>/dist/</code>.</p>
+    <ul>
+      <li>
+        <a href="/plain.html">plain.html</a>: reference host, attribute matrix, bare-element sizing, <code>hidden</code>
+      </li>
+      <li>
+        <a href="/aggressive-css.html">aggressive-css.html</a> (<a href="/aggressive-css.html?host=tw4">?host=tw4</a>):
+        resets, inherited-property attacks, <code>rtl</code>, 125% root font size, host shortcuts
+      </li>
+      <li>
+        <a href="/mintlify-like.html">mintlify-like.html</a> (<a href="/mintlify-like.html?widgets=0">?widgets=0</a>):
+        Tailwind v3 typography, strict CSP meta, post-load <code>async=false</code> injection
+      </li>
+      <li><a href="/four-iframes.html">four-iframes.html</a>: hosted iframe reference for the cost comparison</li>
+    </ul>
+    <p>
+      CSP variants for any page: <code>?csp=strict-dynamic</code>, <code>?csp=tt</code>,
+      <code>?csp=no-unsafe-inline-style</code>.
+    </p>
+  </body>
+</html>

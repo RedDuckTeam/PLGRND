@@ -1,18 +1,9 @@
-import { toast } from 'sonner'
 import { Copy, Link as LinkIcon } from 'lucide-react'
+import { copyText } from './copy-text'
 
 interface EmbedSnippetProps {
   snippet: string
-  url: string
-}
-
-const copyText = async (text: string, message: string) => {
-  try {
-    await navigator.clipboard.writeText(text)
-    toast.success(message)
-  } catch {
-    toast.error('Failed to copy')
-  }
+  url?: string
 }
 
 export const EmbedSnippet = ({ snippet, url }: EmbedSnippetProps) => (
@@ -34,14 +25,16 @@ export const EmbedSnippet = ({ snippet, url }: EmbedSnippetProps) => (
         <Copy className="h-3.5 w-3.5" />
         Copy snippet
       </button>
-      <button
-        type="button"
-        onClick={() => void copyText(url, 'Embed URL copied')}
-        className="flex cursor-pointer items-center gap-1.5 rounded-md border border-border bg-card px-3 py-1.5 font-mono text-xs text-foreground transition-colors hover:bg-muted"
-      >
-        <LinkIcon className="h-3.5 w-3.5" />
-        Copy URL
-      </button>
+      {url !== undefined && (
+        <button
+          type="button"
+          onClick={() => void copyText(url, 'Embed URL copied')}
+          className="flex cursor-pointer items-center gap-1.5 rounded-md border border-border bg-card px-3 py-1.5 font-mono text-xs text-foreground transition-colors hover:bg-muted"
+        >
+          <LinkIcon className="h-3.5 w-3.5" />
+          Copy URL
+        </button>
+      )}
     </div>
   </div>
 )

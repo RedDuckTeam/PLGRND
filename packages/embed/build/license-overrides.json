@@ -1,0 +1,45 @@
+{
+  "description": "Bundled packages published without a licence file. Each entry names a package from the same repository, under the same licence, whose licence file supplies the text; scripts/third-party-licenses.mjs checks that both declare `license`. A bundled package missing from this list and without a licence file fails the build.",
+  "packages": {
+    "@radix-ui/react-compose-refs": {
+      "license": "MIT",
+      "textFrom": "@radix-ui/react-dialog",
+      "reason": "radix-ui/primitives package published without LICENSE"
+    },
+    "@radix-ui/react-context": {
+      "license": "MIT",
+      "textFrom": "@radix-ui/react-dialog",
+      "reason": "radix-ui/primitives package published without LICENSE"
+    },
+    "@radix-ui/react-id": {
+      "license": "MIT",
+      "textFrom": "@radix-ui/react-dialog",
+      "reason": "radix-ui/primitives package published without LICENSE"
+    },
+    "@radix-ui/react-use-callback-ref": {
+      "license": "MIT",
+      "textFrom": "@radix-ui/react-dialog",
+      "reason": "radix-ui/primitives package published without LICENSE"
+    },
+    "@radix-ui/react-use-escape-keydown": {
+      "license": "MIT",
+      "textFrom": "@radix-ui/react-dialog",
+      "reason": "radix-ui/primitives package published without LICENSE"
+    },
+    "@radix-ui/react-use-layout-effect": {
+      "license": "MIT",
+      "textFrom": "@radix-ui/react-dialog",
+      "reason": "radix-ui/primitives package published without LICENSE"
+    },
+    "@radix-ui/react-use-size": {
+      "license": "MIT",
+      "textFrom": "@radix-ui/react-dialog",
+      "reason": "radix-ui/primitives package published without LICENSE"
+    },
+    "bs58": {
+      "license": "MIT",
+      "textFrom": "bs58",
+      "reason": "bs58 4.0.1 (nested under @solana/web3.js and borsh) has no LICENSE; the hoisted bs58 of the same cryptocoinjs/bs58 repository ships one"
+    }
+  }
+}
