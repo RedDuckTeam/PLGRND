@@ -1,0 +1,22 @@
+import { Gotchas } from '@/app/components/guide/gotchas'
+import { SnippetTabs } from '@/app/components/guide/snippet-tabs'
+import { OpenInPlgrndButton } from '@/app/components/previews/open-in-plgrnd'
+
+export const metadata = {
+  title: 'Open in PLGRND',
+  description:
+    'Link to a flow in the PLGRND editor with a plain URL that needs no script, no iframe and no build step, so it works on any docs host.',
+  alternates: { canonical: '/integrate/open-in-plgrnd' },
+}
+
+# Open in PLGRND
+
+The zero-integration option: a plain link that opens the flow in the PLGRND editor. It needs no script, no iframe and no build step, so it works on any host, including ones that only allow links. It also pairs well as a fallback under an embed, for readers whose host blocks it.
+
+<OpenInPlgrndButton />
+
+<SnippetTabs method="open-in-plgrnd" />
+
+The `ref` value is only a tag. The editor never reads it, so it shows up in plgrnd.io request logs and nowhere else. Use your own tag in place of `plgrnd-docs`, or drop `?ref=...` entirely.
+
+<Gotchas method="open-in-plgrnd" />

@@ -1,0 +1,93 @@
+import { Gotchas } from '@/app/components/guide/gotchas'
+import { SnippetTabs } from '@/app/components/guide/snippet-tabs'
+import { SelfHostedPreview } from '@/app/components/previews/self-hosted-preview'
+
+export const metadata = {
+  title: 'Self-hosted widget',
+  description:
+    'Render a PLGRND flow directly in your page with <plgrnd-flow>: no iframe, nothing loaded from plgrnd.io, Subresource Integrity for the classic script.',
+  alternates: { canonical: '/integrate/self-hosted' },
+}
+
+# Self-hosted widget
+
+`<plgrnd-flow>` renders the same widget directly in your page, without an iframe. You serve the file yourself, from your own site or bundle. At runtime the widget loads no Google Fonts, no analytics, no remote CSS and nothing from plgrnd.io. Its only requests go to the Solana RPC endpoints, and it writes no cookies and no storage. Shadow DOM keeps your site's CSS out of the widget, and the widget's CSS out of your site.
+
+The widget ships as the npm package `@plgrnd/embed` and as versioned downloads under `https://plgrnd.io/sdk/<version>/`. Download the files once and serve them yourself. The classic script `plgrnd-flow-1.0.1.js` holds everything in one file, and `SRI.txt` in the same folder lists its `sha384-…` value for `<script integrity>`. The ESM folder `plgrnd-flow-1.0.1/` holds a 7 kB entry that loads the runtime the first time an element connects.
+
+<SelfHostedPreview className="my-6" caption="No iframe: the element renders in this page, from this site's own bundle." />
+
+## Snippets
+
+To get the snippet for your own flow, open **Share → Embed → Self-hosted** in the editor and pick HTML, MDX, Mintlify or Markdoc. The snippet carries the same flow payload and options as the iframe snippet. Load the widget once per page, then paste one element per flow.
+
+<SnippetTabs method="self-hosted" />
+
+## Attributes
+
+<div className="my-6 overflow-x-auto">
+  <table className="w-full border-collapse text-left text-sm [&_th]:border-b [&_th]:border-border [&_th]:px-3 [&_th]:py-2 [&_th]:font-semibold [&_td]:border-b [&_td]:border-border [&_td]:px-3 [&_td]:py-2 [&_td]:align-top">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Values</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>`flow`</td>
+        <td>The payload from the snippet</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>`theme`</td>
+        <td>`dark` · `light` · `auto`</td>
+        <td>`dark`</td>
+      </tr>
+      <tr>
+        <td>`bg`, `surface`, `fg`, `border`, `accent`</td>
+        <td>Hex, with or without `#`</td>
+        <td>From the theme</td>
+      </tr>
+      <tr>
+        <td>`radius`</td>
+        <td>`0`–`24` (px)</td>
+        <td>`8`</td>
+      </tr>
+      <tr>
+        <td>`font`, `font-mono`</td>
+        <td>A font-family string</td>
+        <td>Your page's font · the system monospace stack</td>
+      </tr>
+      <tr>
+        <td>`controls`, `minimap`, `toolbar`</td>
+        <td>`1` · `0` · `true` · `false`</td>
+        <td>`1` · `0` · `1`</td>
+      </tr>
+      <tr>
+        <td>`mode`</td>
+        <td>`readonly` · `interactive`</td>
+        <td>`interactive` (`editor` falls back to `interactive`)</td>
+      </tr>
+      <tr>
+        <td>`rpc-mainnet`, `rpc-devnet`</td>
+        <td>`http:` or `https:` JSON-RPC URL</td>
+        <td>The public cluster endpoints</td>
+      </tr>
+      <tr>
+        <td>`link-ref` (also `ref` in plain HTML)</td>
+        <td>`[A-Za-z0-9._-]{1,64}`</td>
+        <td>— (added as `?ref=` to the plgrnd.io links)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+- Invalid values fall back to the defaults, silently.
+- Every attribute also exists as a camelCase property, such as `fontMono`, `rpcDevnet` or `linkRef`. Properties do not reflect to attributes, and the last write wins.
+- The element fires `plgrnd:ready` after each successful (re)initialization. The event bubbles, is composed, and carries `detail.version`.
+- `theme="auto"` follows your site's own toggle, live: `body[data-md-color-scheme]` (MkDocs Material), then `html[data-theme]` (Docusaurus), then a `dark` or `light` class on `<html>` (Mintlify, next-themes, Fumadocs), then `prefers-color-scheme`.
+- The RPC defaults are rate-limited public endpoints, so production docs should pass their own. A key you put in an attribute is visible in your page source, so restrict it by referrer.
+
+<Gotchas method="self-hosted" />

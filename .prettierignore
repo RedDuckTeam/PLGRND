@@ -14,3 +14,9 @@ packages/embed/fixtures/vendor
 packages/embed/fixtures/.build
 # packages/embed/build holds build plugins (source), not build output
 !packages/embed/build
+
+apps/landing/.next
+apps/landing/out
+apps/landing/.verify
+apps/landing/next-env.d.ts
+apps/landing/**/*.mdx
