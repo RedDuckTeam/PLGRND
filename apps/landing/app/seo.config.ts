@@ -5,6 +5,9 @@ const SITE_NAME = 'PLGRND Docs'
 const SITE_DESCRIPTION =
   'Embed live, runnable Solana flows from PLGRND in your docs: a hosted iframe, the self-hosted plgrnd-flow web component, a React wrapper, an Open in PLGRND link or a native port.'
 
+const HOME_DESCRIPTION =
+  'PLGRND is a visual playground for Solana: build flows by dragging nodes, run them against a live cluster and embed any flow on your site as an interactive widget.'
+
 const IMAGE_PATH = '/logo.png'
 
 export const metadata: Metadata = {
@@ -61,6 +64,8 @@ export const metadata: Metadata = {
 }
 
 export const homeMetadata: Metadata = {
+  description: HOME_DESCRIPTION,
   alternates: { canonical: '/' },
-  openGraph: { ...metadata.openGraph, url: '/' },
+  openGraph: { ...metadata.openGraph, url: '/', description: HOME_DESCRIPTION },
+  twitter: { ...metadata.twitter, description: HOME_DESCRIPTION },
 }

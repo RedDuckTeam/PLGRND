@@ -27,14 +27,16 @@ export function Main() {
         <div className="flex flex-col justify-center overflow-hidden px-4 pt-[10vh] pb-16 sm:px-6 sm:pt-[18vh] xl:px-12">
           <p className="relative z-20 mb-5 inline-flex w-max items-center gap-2 rounded-sm border border-foreground/15 bg-background/60 px-3 py-1.5 text-xs uppercase tracking-widest text-muted-foreground backdrop-blur-sm sm:text-sm">
             <span aria-hidden className="size-1.5 bg-primary" />
-            PLGRND / integration guide
+            PLGRND / visual Solana playground
           </p>
           <h1 id="hero-title" className="relative z-20 text-[28px] font-bold sm:text-4xl xl:text-7xl">
-            A visual <GradientText text="Solana" gradient={SOLANA_GRADIENT} /> <br className="max-sm:hidden" />
-            playground for your docs
+            Build <GradientText text="Solana" gradient={SOLANA_GRADIENT} /> flows <br className="max-sm:hidden" />
+            by dragging nodes
           </h1>
           <div className="relative mt-2 h-32 w-full sm:w-1/2 xl:mt-5 xl:h-40">
-            <p className="absolute top-4 z-50 lg:text-lg xl:text-[22px]">Drag nodes. Wire them. Embed the flow.</p>
+            <p className="absolute top-4 z-50 lg:text-lg xl:text-[22px]">
+              Wire keypairs, PDAs, instructions and transactions, then run them against a live cluster.
+            </p>
             <div className="absolute inset-x-0 top-0 h-[2px] w-full bg-linear-to-r from-transparent via-primary-2 to-transparent blur-sm" />
             <div className="absolute inset-x-0 top-0 h-px w-full bg-linear-to-r from-transparent via-primary-2 to-transparent" />
             <div className="absolute inset-x-10 top-0 h-[5px] w-1/2 bg-linear-to-r from-transparent via-primary to-transparent blur-sm sm:inset-x-40" />
