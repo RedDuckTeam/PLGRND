@@ -30,7 +30,7 @@ const targets = (value) => (typeof value === 'string' ? [value] : Object.values(
 for (const target of [...targets(manifest.exports), manifest.types]) {
   if (!files.includes(target.replace(/^\.\//, ''))) problems.push(`export target not packed: ${target}`)
 }
-if (manifest.private !== false) problems.push('package.json must set "private": false')
+if (manifest.private === true) problems.push('package.json must not set "private": true')
 if ('sideEffects' in manifest)
   problems.push('package.json must not declare sideEffects (the entry registers the element)')
 

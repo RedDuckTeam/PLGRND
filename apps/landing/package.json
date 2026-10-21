@@ -1,0 +1,54 @@
+{
+  "name": "landing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "typecheck": "next typegen && tsc --noEmit",
+    "lint": "eslint .",
+    "verify": "node --experimental-strip-types --import ./scripts/register-editor-hook.mjs scripts/verify.ts",
+    "browser-check": "node --experimental-strip-types scripts/browser-check.mjs",
+    "deploy": "yarn build && wrangler deploy",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@mdx-js/loader": "^3",
+    "@mdx-js/react": "^3",
+    "@next/mdx": "15.5.28",
+    "@plgrnd/embed": "https://registry.npmjs.org/@plgrnd/embed/-/embed-1.0.1.tgz",
+    "@solana/kit": "^8.4.0",
+    "@tsparticles/engine": "^3.9.1",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.9.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.544.0",
+    "motion": "^12.23.24",
+    "next": "15.5.28",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "shiki": "^3.23.0",
+    "simplex-noise": "^4.0.3",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@tailwindcss/postcss": "4.1.15",
+    "@types/mdx": "^2.0.13",
+    "@types/node": "^24.9.0",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "eslint": "^9.36.0",
+    "eslint-config-next": "15.5.28",
+    "lz-string": "^1.5.0",
+    "playwright": "^1.64.1",
+    "tailwindcss": "^4.1.13",
+    "typescript": "5.8.3",
+    "vue": "^3.5.44",
+    "wrangler": "^4.44.0"
+  }
+}

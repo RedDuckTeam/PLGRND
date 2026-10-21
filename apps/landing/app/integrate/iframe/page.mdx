@@ -1,0 +1,140 @@
+import { Gotchas } from '@/app/components/guide/gotchas'
+import { SnippetTabs } from '@/app/components/guide/snippet-tabs'
+import { ReadyIndicator } from '@/app/components/plgrnd/ready-indicator'
+import { IFRAME_PREVIEW_SRC } from '@/app/lib/guide/iframe'
+import { IFRAME_ALLOW, IFRAME_SANDBOX } from '@/app/lib/plgrnd'
+
+export const metadata = {
+  title: 'Hosted iframe',
+  description:
+    'Embed any PLGRND flow as an interactive widget with an iframe pointed at plgrnd.io/embed. No JavaScript on the host page.',
+  alternates: { canonical: '/integrate/iframe' },
+}
+
+# Hosted iframe
+
+Any PLGRND flow can be embedded on another site as an interactive widget: an `<iframe>` pointed at `https://plgrnd.io/embed`, with no JavaScript required on the host page. The flow itself stays in the `#flow=` hash, and display options travel in the query string.
+
+Embeds are stateless. Visitor edits live only inside the iframe, and reloading it (or pressing **Reset**) restores the authored flow.
+
+<ReadyIndicator className="my-8">
+  <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-border">
+    <iframe
+      src={IFRAME_PREVIEW_SRC}
+      title="PLGRND PDA seeds example"
+      loading="lazy"
+      sandbox={IFRAME_SANDBOX}
+      allow={IFRAME_ALLOW}
+      className="absolute inset-0 h-full w-full border-0"
+    />
+  </div>
+</ReadyIndicator>
+
+The preview above is served by plgrnd.io with `accent=14f195` to match this site. Pan, zoom and edit the inputs: every node wired to an input updates.
+
+## Snippets
+
+Each tab embeds the same flow at 16:9 with `theme=auto`. The HTML / Markdown tab is the format that the editor's **Share → Embed** builder copies; the Mintlify and MDX tabs are the same markup written as JSX.
+
+<SnippetTabs method="iframe" />
+
+## URL parameters
+
+Options travel in the query string; the flow stays in the `#flow=` hash. Default values are left out of generated URLs, colours are hex without `#`, and invalid values fall back to their defaults instead of breaking the widget. Unknown parameters, `ref` included, are ignored.
+
+<div className="my-6 overflow-x-auto">
+  <table className="w-full border-collapse text-left text-sm [&_th]:border-b [&_th]:border-border [&_th]:px-3 [&_th]:py-2 [&_th]:font-semibold [&_td]:border-b [&_td]:border-border [&_td]:px-3 [&_td]:py-2 [&_td]:align-top">
+    <thead>
+      <tr>
+        <th>Parameter</th>
+        <th>Values</th>
+        <th>Default</th>
+        <th>Effect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>`mode`</td>
+        <td>`readonly`, `interactive`, `editor` (iframe only)</td>
+        <td>`interactive`</td>
+        <td>Interaction level</td>
+      </tr>
+      <tr>
+        <td>`theme`</td>
+        <td>`dark`, `light`, `auto`</td>
+        <td>`dark`</td>
+        <td>Palette preset; `auto` follows the visitor's OS setting</td>
+      </tr>
+      <tr>
+        <td>`bg`</td>
+        <td>hex without `#` (3, 4, 6 or 8 digits)</td>
+        <td>from theme</td>
+        <td>Canvas background</td>
+      </tr>
+      <tr>
+        <td>`surface`</td>
+        <td>hex</td>
+        <td>from theme</td>
+        <td>Node bodies, panels, popovers</td>
+      </tr>
+      <tr>
+        <td>`fg`</td>
+        <td>hex</td>
+        <td>from theme</td>
+        <td>Text</td>
+      </tr>
+      <tr>
+        <td>`border`</td>
+        <td>hex</td>
+        <td>from theme</td>
+        <td>Borders and input outlines</td>
+      </tr>
+      <tr>
+        <td>`accent`</td>
+        <td>hex</td>
+        <td>from theme</td>
+        <td>Highlights and focus ring</td>
+      </tr>
+      <tr>
+        <td>`radius`</td>
+        <td>integer `0` to `24`</td>
+        <td>`8`</td>
+        <td>Corner radius in px</td>
+      </tr>
+      <tr>
+        <td>`font`</td>
+        <td>font-family string: letters, digits, spaces, `,`, quotes and `-`, up to 100 characters</td>
+        <td>PLGRND default</td>
+        <td>UI font</td>
+      </tr>
+      <tr>
+        <td>`fontMono`</td>
+        <td>same rules as `font`</td>
+        <td>PLGRND default</td>
+        <td>Monospace font</td>
+      </tr>
+      <tr>
+        <td>`controls`</td>
+        <td>`1` or `0`</td>
+        <td>`1`</td>
+        <td>Zoom and fit controls</td>
+      </tr>
+      <tr>
+        <td>`minimap`</td>
+        <td>`1` or `0`</td>
+        <td>`0`</td>
+        <td>MiniMap</td>
+      </tr>
+      <tr>
+        <td>`toolbar`</td>
+        <td>`1` or `0`</td>
+        <td>`1`</td>
+        <td>"Open in PLGRND" and "Reset" buttons</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+`mode=editor` is iframe-only: it adds moving, connecting, adding and deleting nodes, plus the header with the node menu. `readonly` allows only pan and zoom, and `interactive` also lets readers edit values inside nodes. The self-hosted `<plgrnd-flow>` element treats `editor` as `interactive`.
+
+<Gotchas method="iframe" />

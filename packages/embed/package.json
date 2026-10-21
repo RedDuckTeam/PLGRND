@@ -1,7 +1,6 @@
 {
   "name": "@plgrnd/embed",
   "version": "1.0.1",
-  "private": false,
   "description": "Self-hosted <plgrnd-flow> custom element: interactive PLGRND flows for documentation sites.",
   "homepage": "https://plgrnd.io",
   "keywords": [
