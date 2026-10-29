@@ -65,7 +65,12 @@ export const menuConfig: MenuCategory[] = [
     id: 'transactions',
     label: 'Transactions',
     color: '#2a5f2b',
-    nodes: [NodeTypeEnum.TRANSACTION_BUILDER, NodeTypeEnum.TRANSACTION, NodeTypeEnum.TRANSACTION_VIEW],
+    nodes: [
+      NodeTypeEnum.TRANSACTION_BUILDER,
+      NodeTypeEnum.TRANSACTION,
+      NodeTypeEnum.TRANSACTION_VIEW,
+      NodeTypeEnum.TX_TRACE,
+    ],
   },
   {
     id: 'network',
@@ -82,6 +87,7 @@ export const menuConfig: MenuCategory[] = [
       NodeTypeEnum.PROGRAM_INSTRUCTIONS,
       NodeTypeEnum.PROGRAM_ACCOUNT,
       NodeTypeEnum.INSTRUCTIONS,
+      NodeTypeEnum.RAW_INSTRUCTION,
       NodeTypeEnum.PDA,
     ],
   },

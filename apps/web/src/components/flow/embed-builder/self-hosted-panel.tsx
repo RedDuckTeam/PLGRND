@@ -10,7 +10,8 @@ import {
   SELF_HOSTED_FORMATS,
   type SelfHostedFormat,
 } from '@/embed/self-hosted-snippet'
-import type { FlowSnapshot } from '@/stores/flow-snapshot'
+import { sanitizeNodes, type FlowSnapshot } from '@/stores/flow-snapshot'
+import { requiresV4 } from '@/utils/flow/requires-v4'
 import { copyText } from './copy-text'
 import { EmbedSnippet } from './embed-snippet'
 import { labelClass, noteClass, rowClass, segmentClass } from './styles'
@@ -18,6 +19,11 @@ import { labelClass, noteClass, rowClass, segmentClass } from './styles'
 const VERSION = __PLGRND_EMBED_VERSION__
 const SDK_URL = `${PLGRND_ORIGIN}/sdk/${VERSION}`
 const GUIDE_URL = 'https://github.com/RedDuckTeam/PLGRND#self-hosted-embedding'
+// Version-4 flows (non-legacy IDLs, IDLs loaded by reference) are readable from @plgrnd/embed 1.1 on.
+const SDK_READS_V4 = (() => {
+  const [major, minor] = VERSION.split('.').map(Number)
+  return major > 1 || (major === 1 && minor >= 1)
+})()
 
 const DOWNLOADS = [
   `plgrnd-flow-${VERSION}.js`,
@@ -65,6 +71,10 @@ export const SelfHostedPanel = ({ snapshot, config, size, format, onFormatChange
     () => buildSelfHostedSnippet(snapshot, config, size, format),
     [snapshot, config, size, format]
   )
+  const needsNewerSdk = useMemo(
+    () => !SDK_READS_V4 && requiresV4({ nodes: sanitizeNodes(snapshot.nodes), edges: snapshot.edges }),
+    [snapshot]
+  )
 
   return (
     <div className="flex flex-col gap-3">
@@ -92,7 +102,13 @@ export const SelfHostedPanel = ({ snapshot, config, size, format, onFormatChange
         </div>
       )}
 
-      <EmbedSnippet snippet={snippet} />
+      {needsNewerSdk ? (
+        <p className={noteClass}>
+          This flow needs @plgrnd/embed 1.1 or later, which is not released yet. Use the iframe embed for now.
+        </p>
+      ) : (
+        <EmbedSnippet snippet={snippet} />
+      )}
 
       {config.mode === 'editor' && (
         <p className={noteClass}>

@@ -64,6 +64,13 @@ function installedDir(name) {
 }
 
 function overrideText(manifest, override) {
+  // A package dedicated to the public domain has no licence text to copy; the override quotes its statement instead.
+  if (override.statement) {
+    if (licenseId(manifest) !== override.license) {
+      throw new Error(`[third-party-licenses] override for ${manifest.name}: expected ${override.license}`)
+    }
+    return { text: override.statement, note: `No licence file in this package (${override.reason}).` }
+  }
   const sourceDir = installedDir(override.textFrom)
   const source = readManifest(sourceDir)
   const file = licenseFile(sourceDir)
@@ -110,6 +117,22 @@ export function writeThirdPartyLicenses({ dist, version }) {
   const sorted = [...entries.values()].sort(
     (a, b) => a.name.localeCompare(b.name) || a.version.localeCompare(b.version)
   )
+  // Vendored data files (not npm packages) that bring their own notice and licence.
+  const nativeIdls = path.join(PACKAGE_ROOT, '../../apps/web/src/constants/programs/native')
+  if (
+    renderedModuleFiles(path.join(dist, 'module-list.json')).some((f) =>
+      f.replace(/\\/g, '/').includes('/constants/programs/native/')
+    )
+  ) {
+    const read = (file) => fs.readFileSync(path.join(nativeIdls, file), 'utf8').replace(/\r\n/g, '\n').trim()
+    sorted.push({
+      name: 'solana-program native IDLs',
+      version: '2026-10-28',
+      license: 'Apache-2.0',
+      note: read('NOTICE'),
+      text: read('LICENSE'),
+    })
+  }
   const out = [
     `Third-party software bundled in @plgrnd/embed ${version}`,
     '',

@@ -15,6 +15,8 @@ export { FLOW_STORAGE_KEY, FLOW_STORAGE_VERSION, sanitizeNodes } from './flow-sn
 export type { FlowSnapshot } from './flow-snapshot'
 
 export interface FlowState extends FlowSnapshot {
+  /** Bumped whenever the whole flow is replaced; the editor then fits a flow that comes without a viewport. */
+  generation: number
   onNodesChange: (changes: NodeChange[]) => void
   onEdgesChange: (changes: EdgeChange[]) => void
   setNodes: (updater: Node[] | ((nodes: Node[]) => Node[])) => void
@@ -35,13 +37,26 @@ export const flowStateCreator =
     nodes: initial.nodes,
     edges: initial.edges,
     viewport: initial.viewport,
+    generation: 0,
     onNodesChange: (changes) => set((s) => ({ nodes: applyNodeChanges(changes, s.nodes) })),
     onEdgesChange: (changes) => set((s) => ({ edges: applyEdgeChanges(changes, s.edges) })),
     setNodes: (updater) => set((s) => ({ nodes: typeof updater === 'function' ? updater(s.nodes) : updater })),
     setEdges: (updater) => set((s) => ({ edges: typeof updater === 'function' ? updater(s.edges) : updater })),
     setViewport: (viewport) => set({ viewport }),
-    replaceFlow: (snapshot) => set({ nodes: snapshot.nodes, edges: snapshot.edges, viewport: snapshot.viewport }),
-    resetFlow: () => set({ nodes: initial.nodes, edges: initial.edges, viewport: initial.viewport }),
+    replaceFlow: (snapshot) =>
+      set((s) => ({
+        nodes: snapshot.nodes,
+        edges: snapshot.edges,
+        viewport: snapshot.viewport,
+        generation: s.generation + 1,
+      })),
+    resetFlow: () =>
+      set((s) => ({
+        nodes: initial.nodes,
+        edges: initial.edges,
+        viewport: initial.viewport,
+        generation: s.generation + 1,
+      })),
   })
 
 /** An in-memory flow store, owned by `/embed` and by each self-hosted widget (the editor persists its own). */

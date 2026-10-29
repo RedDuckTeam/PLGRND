@@ -1,0 +1,10 @@
+Native program IDLs (system.json, token.json, token-2022.json, associated-token.json, compute-budget.json, memo.json)
+
+These Codama IDLs are the work of the Solana Program Library authors, published at
+https://github.com/solana-program/{system,token,token-2022,associated-token-account,compute-budget,memo}
+under the Apache License, Version 2.0 (the LICENSE file in this directory), and on chain by the Solana
+Foundation as Program Metadata accounts under the authority fndnu15PLXELbLsTqrfbiweBvsBj2o12RoVfkeCCbX2.
+
+They were copied from those Program Metadata accounts on mainnet on 2026-10-28
+(apps/web/scripts/vendor-native-idls.capture.ts).
+Modification: every `docs` field was removed.

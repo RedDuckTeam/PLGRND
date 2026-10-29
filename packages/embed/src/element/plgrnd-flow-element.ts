@@ -6,6 +6,8 @@ import { plgrndHref } from './links'
 /** Observed attributes (AC-A1); `ref` is the plain-HTML alias of `link-ref`. */
 export const ATTRIBUTES = [
   'flow',
+  'tx',
+  'cluster',
   'theme',
   'bg',
   'surface',
@@ -28,6 +30,8 @@ export const ATTRIBUTES = [
 /** camelCase properties and the attribute each one shares a value with. Properties do not reflect. */
 export const PROPERTIES: Record<string, (typeof ATTRIBUTES)[number]> = {
   flow: 'flow',
+  tx: 'tx',
+  cluster: 'cluster',
   theme: 'theme',
   bg: 'bg',
   surface: 'surface',

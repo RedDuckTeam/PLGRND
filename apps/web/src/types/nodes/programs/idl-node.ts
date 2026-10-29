@@ -1,69 +1,45 @@
 import type { Node } from '@xyflow/react'
 import type { NodeTypeEnum } from '../../node'
+import type { Network } from '@/types/network'
+import type { IdlFormat } from '@/utils/idl/format'
+import type { ProgramIdl } from '@/utils/idl/model/program-idl'
+import type { IdlSource } from '@/utils/idl/sources/resolve'
 
-// Anchor IDL types
-export type IdlType =
-  | 'bool'
-  | 'u8'
-  | 'i8'
-  | 'u16'
-  | 'i16'
-  | 'u32'
-  | 'i32'
-  | 'f32'
-  | 'u64'
-  | 'i64'
-  | 'f64'
-  | 'u128'
-  | 'i128'
-  | 'bytes'
-  | 'string'
-  | 'publicKey'
-  | { vec: IdlType }
-  | { option: IdlType }
-  | { defined: string }
-  | { array: [IdlType, number] }
-
-export type IdlField = {
-  name: string
-  type: IdlType
+/** Where a loaded IDL came from; persisted instead of the IDL itself and used to reload it. */
+export type IdlRef = {
+  programId: string
+  network: Network
+  source: IdlSource
+  format: IdlFormat
+  contentHash: string
 }
 
-export type IdlAccountItem = {
-  name: string
-  isMut: boolean
-  isSigner: boolean
-}
-
-export type IdlInstruction = {
-  name: string
-  accounts: IdlAccountItem[]
-  args: IdlField[]
-}
-
-export type IdlAccount = {
-  name: string
-  type: {
-    kind: 'struct'
-    fields: IdlField[]
-  }
-}
-
-export type Idl = {
-  version: string
-  name: string
-  instructions: IdlInstruction[]
-  accounts?: IdlAccount[]
-  types?: IdlAccount[]
-  metadata?: {
-    address?: string
-  }
+/** What the node shows about the IDL in use (runtime only). */
+export type IdlNodeStatus = {
+  /** `paste`, or `load:<network>:<programId>`: what this status was computed for. */
+  key: string
+  /** `source · format` */
+  badge?: string
+  warnings?: string[]
+  error?: string
+  /** Why each IDL source failed, when none had the IDL. */
+  failures?: string[]
+  /** The reference of the loaded IDL when it differs from the saved one. */
+  loaded?: IdlRef
 }
 
 export type IdlNodeData = {
+  /** A pasted IDL in any format (legacy Anchor, Anchor >= 0.30, Codama, Shank). */
   idlJson?: string
-  idl?: Idl | null
+  /** The normalized IDL (runtime only). Old snapshots may hold a legacy IDL object here, which consumers ignore. */
+  idl?: ProgramIdl | null
   programId?: string
+  /** Inline network while the Network handle is unconnected (default MAINNET). */
+  network?: Network
+  /** Load the IDL by program id. Set on new nodes; nodes from older flows load only after "Load from chain". */
+  autoLoad?: boolean
+  ref?: IdlRef
+  status?: IdlNodeStatus
 }
 
 export type IdlNodeType = Node<IdlNodeData, NodeTypeEnum.IDL>

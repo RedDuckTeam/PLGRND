@@ -22,6 +22,8 @@ const NODE_TOOLTIP_LINKS: Partial<Record<NodeType, string>> = {
   IDL: 'https://solana.com/docs/programs/anchor/idl',
   PROGRAM_INSTRUCTIONS: 'https://solana.com/docs/core/cpi',
   PROGRAM_ACCOUNT: 'https://solana.com/docs/programs/anchor/idl#accounts',
+  RAW_INSTRUCTION: 'https://solana.com/docs/core/transactions#instruction',
+  TX_TRACE: 'https://solana.com/docs/rpc/http/gettransaction',
   WALLET: 'https://docs.solana.com/wallet-guide',
   TOKEN_AMOUNT_TO_RAW: 'https://solana.com/docs/tokens/basics',
   RAW_TO_TOKEN_AMOUNT: 'https://solana.com/docs/tokens/basics',
@@ -250,6 +252,30 @@ export const NODE_TOOLTIPS: Partial<Record<NodeType, React.ReactNode>> = {
       <p>Interact with custom programs using their IDL.</p>
       <p>
         Once an IDL is connected, this node dynamically generates inputs for any instruction defined in that program.
+      </p>
+    </>
+  ),
+  TX_TRACE: (
+    <>
+      <p>
+        Shows what a transaction did: status and error, fee, compute units, SOL and token balance changes, the CPI
+        tree and logs.
+      </p>
+      <p>
+        Give it a <BoldText>signature</BoldText> (e.g. from TRANSACTION) and a network, or a serialized transaction to
+        simulate.
+      </p>
+    </>
+  ),
+  RAW_INSTRUCTION: (
+    <>
+      <p>
+        Adds an instruction from its raw parts: a <BoldText>program id</BoldText>, ordered accounts with signer and
+        writable flags, and the data bytes as hex.
+      </p>
+      <p>
+        Use it for programs without an IDL. Connect an IDL that recognizes the instruction to convert it into PROGRAM
+        INSTRUCTIONS with named accounts and arguments.
       </p>
     </>
   ),

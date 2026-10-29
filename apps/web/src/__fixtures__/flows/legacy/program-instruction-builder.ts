@@ -1,6 +1,7 @@
+// Frozen copy of the pre-rework IDL builder (formerly utils/idl), kept only so the baseline capture stays reproducible.
 import { Transaction, TransactionInstruction, PublicKey, SystemProgram, SYSVAR_RENT_PUBKEY } from '@solana/web3.js'
-import type { IdlInstruction } from '@/types/nodes/programs/idl-node'
-import { encodeInstructionData } from './instruction-encoder.utils'
+import type { IdlInstruction } from './idl-types'
+import { encodeInstructionData } from './instruction-encoder'
 
 const getCommonProgramId = (accountName: string): PublicKey | null => {
   const normalized = accountName.toLowerCase().replace(/[_\s]/g, '')

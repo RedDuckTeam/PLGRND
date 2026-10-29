@@ -1,10 +1,12 @@
 import { parseEmbedConfig, type EmbedConfig } from '@/embed/embed-config'
 import { PUBLIC_RPC_URLS, type RpcUrls } from '@/constants/solana/connection'
+import { parseCluster } from '@/embed/embed-location'
+import type { Network } from '@/types/network'
 import type { RawAttributes } from '../types/runtime-api'
 
-// AC-A1: the element's attributes mirror the iframe's query parameters (minus editor mode), plus the
-// self-hosted-only rpc-* and link-ref. Parsing never throws: invalid values fall back to the defaults and
-// are reported as ignored (a dev-only warning, G0-7).
+// AC-A1: the element's attributes mirror the iframe's query parameters (minus editor mode, `tx` and `cluster`
+// included), plus the self-hosted-only rpc-* and link-ref. Parsing never throws: invalid values fall back to the
+// defaults and are reported as ignored (a dev-only warning, G0-7).
 
 const CONFIG_ATTRIBUTES = new Set([
   'theme',
@@ -29,6 +31,10 @@ const LINK_REF_RE = /^[A-Za-z0-9._-]{1,64}$/
 
 export interface WidgetAttributes {
   flow?: string
+  /** A transaction signature or serialized transaction to import; unset when `flow` is set (`flow` wins). */
+  tx?: string
+  /** Where to look up `tx`; unset: a signature is searched on mainnet, then devnet. */
+  cluster?: Network
   config: EmbedConfig
   /** Attribute names whose values were invalid (or unsupported, like mode="editor"). */
   ignored: string[]
@@ -76,5 +82,9 @@ export function parseWidgetAttributes(raw: RawAttributes): WidgetAttributes {
     else ignored.push(refAttribute)
   }
 
-  return { flow: raw.flow, config, ignored, rpcUrls, linkRef }
+  const cluster = parseCluster(raw.cluster)
+  if (raw.cluster !== undefined && !cluster) ignored.push('cluster')
+  const tx = raw.flow ? undefined : raw.tx?.trim() || undefined
+
+  return { flow: raw.flow, tx, cluster, config, ignored, rpcUrls, linkRef }
 }

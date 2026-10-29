@@ -14,3 +14,6 @@ packages/embed/fixtures/vendor
 packages/embed/fixtures/.build
 # packages/embed/build holds build plugins (source), not build output
 !packages/embed/build
+apps/web/src/constants/programs/native
+apps/web/src/__fixtures__/flows/*.json
+apps/web/scripts/.v3shape-input.json

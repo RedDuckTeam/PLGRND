@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { PublicKey } from '@solana/web3.js'
 import { isExist, isValidPublicKey } from '@/utils/validation/validation.utils'
 import { formatUnits } from '@/utils/format/format.utils'
-import { getSolanaConnection, type RpcUrls } from '@/constants/solana/connection'
+import { getSolanaConnection, isPublicMainnetBlocked, type RpcUrls } from '@/constants/solana/connection'
 import { useRpcConfig } from '@/providers/rpc-urls-context'
 
 export const getSolanaBalance = async (pubkey: string, network: Network, urls: RpcUrls) => {
@@ -16,6 +16,8 @@ export const getSolanaBalance = async (pubkey: string, network: Network, urls: R
 
     return { rawBalance: balance.toString(), uiBalance: parsedBalance.toString() }
   } catch (error) {
+    // Left to the query, so the self-hosted widget can say why mainnet reads fail.
+    if (isPublicMainnetBlocked(error)) throw error
     console.error('Error getting Solana balance:', error)
     return { rawBalance: '0', uiBalance: '0' }
   }

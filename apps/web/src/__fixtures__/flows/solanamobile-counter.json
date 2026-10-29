@@ -1,0 +1,284 @@
+{
+  "v": 3,
+  "nodes": [
+    {
+      "id": "c1",
+      "type": "COMMENT",
+      "position": {
+        "x": 0,
+        "y": -150
+      },
+      "data": {
+        "text": "Steps 1 and 2 as nodes\nPDA: \"counter\" + program id. Discriminator: first 8 bytes of sha256(\"global:increment\"). Instruction data: discriminator + amount as u64 = 16 bytes."
+      }
+    },
+    {
+      "id": "t0",
+      "type": "TEXT",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "data": {
+        "text": "ADraQ2ENAbVoVZhvH5SPxWPsF2hH5YmFcgx61TafHuwu"
+      }
+    },
+    {
+      "id": "t1",
+      "type": "TEXT",
+      "position": {
+        "x": 0,
+        "y": 62
+      },
+      "data": {
+        "text": "counter"
+      }
+    },
+    {
+      "id": "p1",
+      "type": "PDA",
+      "position": {
+        "x": 340,
+        "y": 20
+      },
+      "data": {}
+    },
+    {
+      "id": "d1",
+      "type": "DISPLAY",
+      "position": {
+        "x": 520,
+        "y": 10
+      },
+      "data": {
+        "text": ""
+      }
+    },
+    {
+      "id": "d2",
+      "type": "DISPLAY",
+      "position": {
+        "x": 520,
+        "y": 56
+      },
+      "data": {
+        "text": ""
+      }
+    },
+    {
+      "id": "t2",
+      "type": "TEXT",
+      "position": {
+        "x": 0,
+        "y": 150
+      },
+      "data": {
+        "text": "global:increment"
+      }
+    },
+    {
+      "id": "n16",
+      "type": "NUMBER",
+      "position": {
+        "x": 0,
+        "y": 212
+      },
+      "data": {
+        "number": 16
+      }
+    },
+    {
+      "id": "h1",
+      "type": "HASH",
+      "position": {
+        "x": 340,
+        "y": 140
+      },
+      "data": {}
+    },
+    {
+      "id": "s1",
+      "type": "STRING_SUBSTRING",
+      "position": {
+        "x": 520,
+        "y": 130
+      },
+      "data": {}
+    },
+    {
+      "id": "d3",
+      "type": "DISPLAY",
+      "position": {
+        "x": 520,
+        "y": 196
+      },
+      "data": {
+        "text": ""
+      }
+    },
+    {
+      "id": "idl",
+      "type": "IDL",
+      "position": {
+        "x": 0,
+        "y": 290
+      },
+      "data": {
+        "idlJson": "{\n  \"version\": \"0.1.0\",\n  \"name\": \"basic_counter\",\n  \"instructions\": [\n    {\n      \"name\": \"initialize\",\n      \"accounts\": [\n        {\n          \"name\": \"counter\",\n          \"isMut\": true,\n          \"isSigner\": false\n        },\n        {\n          \"name\": \"payer\",\n          \"isMut\": true,\n          \"isSigner\": true\n        },\n        {\n          \"name\": \"systemProgram\",\n          \"isMut\": false,\n          \"isSigner\": false\n        }\n      ],\n      \"args\": []\n    },\n    {\n      \"name\": \"increment\",\n      \"accounts\": [\n        {\n          \"name\": \"counter\",\n          \"isMut\": true,\n          \"isSigner\": false\n        }\n      ],\n      \"args\": [\n        {\n          \"name\": \"amount\",\n          \"type\": \"u64\"\n        }\n      ]\n    }\n  ],\n  \"accounts\": [\n    {\n      \"name\": \"Counter\",\n      \"type\": {\n        \"kind\": \"struct\",\n        \"fields\": [\n          {\n            \"name\": \"count\",\n            \"type\": \"u64\"\n          },\n          {\n            \"name\": \"bump\",\n            \"type\": \"u8\"\n          }\n        ]\n      }\n    }\n  ],\n  \"metadata\": {\n    \"address\": \"ADraQ2ENAbVoVZhvH5SPxWPsF2hH5YmFcgx61TafHuwu\"\n  }\n}"
+      }
+    },
+    {
+      "id": "b1",
+      "type": "TRANSACTION_BUILDER",
+      "position": {
+        "x": 390,
+        "y": 290
+      },
+      "data": {}
+    },
+    {
+      "id": "n1",
+      "type": "NUMBER",
+      "position": {
+        "x": 390,
+        "y": 336
+      },
+      "data": {
+        "number": 1
+      }
+    },
+    {
+      "id": "pi",
+      "type": "PROGRAM_INSTRUCTIONS",
+      "position": {
+        "x": 520,
+        "y": 290
+      },
+      "data": {
+        "selectedInstruction": "increment"
+      }
+    },
+    {
+      "id": "d4",
+      "type": "DISPLAY",
+      "position": {
+        "x": 520,
+        "y": 506
+      },
+      "data": {
+        "text": ""
+      }
+    },
+    {
+      "id": "cf",
+      "type": "COMMENT",
+      "position": {
+        "x": 340,
+        "y": 750
+      },
+      "data": {
+        "text": "The display shows the increment instruction: program id, the counter account (writable) and 16 bytes of data."
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "xy-edge__t0-text-right-p1-programId-left",
+      "source": "t0",
+      "sourceHandle": "t0-text-right",
+      "target": "p1",
+      "targetHandle": "p1-programId-left"
+    },
+    {
+      "id": "xy-edge__t1-text-right-p1-seed#0-left",
+      "source": "t1",
+      "sourceHandle": "t1-text-right",
+      "target": "p1",
+      "targetHandle": "p1-seed#0-left"
+    },
+    {
+      "id": "xy-edge__p1-pda-right-d1-input-left",
+      "source": "p1",
+      "sourceHandle": "p1-pda-right",
+      "target": "d1",
+      "targetHandle": "d1-input-left"
+    },
+    {
+      "id": "xy-edge__p1-bump-right-d2-input-left",
+      "source": "p1",
+      "sourceHandle": "p1-bump-right",
+      "target": "d2",
+      "targetHandle": "d2-input-left"
+    },
+    {
+      "id": "xy-edge__t2-text-right-h1-input-left",
+      "source": "t2",
+      "sourceHandle": "t2-text-right",
+      "target": "h1",
+      "targetHandle": "h1-input-left"
+    },
+    {
+      "id": "xy-edge__h1-hash-right-s1-text-left",
+      "source": "h1",
+      "sourceHandle": "h1-hash-right",
+      "target": "s1",
+      "targetHandle": "s1-text-left"
+    },
+    {
+      "id": "xy-edge__n16-number-right-s1-length-left",
+      "source": "n16",
+      "sourceHandle": "n16-number-right",
+      "target": "s1",
+      "targetHandle": "s1-length-left"
+    },
+    {
+      "id": "xy-edge__s1-text-right-d3-input-left",
+      "source": "s1",
+      "sourceHandle": "s1-text-right",
+      "target": "d3",
+      "targetHandle": "d3-input-left"
+    },
+    {
+      "id": "xy-edge__idl-idl-right-pi-idl-left",
+      "source": "idl",
+      "sourceHandle": "idl-idl-right",
+      "target": "pi",
+      "targetHandle": "pi-idl-left"
+    },
+    {
+      "id": "xy-edge__idl-programId-right-pi-programId-left",
+      "source": "idl",
+      "sourceHandle": "idl-programId-right",
+      "target": "pi",
+      "targetHandle": "pi-programId-left"
+    },
+    {
+      "id": "xy-edge__b1-transaction-right-pi-transactionIn-left",
+      "source": "b1",
+      "sourceHandle": "b1-transaction-right",
+      "target": "pi",
+      "targetHandle": "pi-transactionIn-left"
+    },
+    {
+      "id": "xy-edge__p1-pda-right-pi-account_counter-left",
+      "source": "p1",
+      "sourceHandle": "p1-pda-right",
+      "target": "pi",
+      "targetHandle": "pi-account_counter-left"
+    },
+    {
+      "id": "xy-edge__n1-number-right-pi-arg_amount-left",
+      "source": "n1",
+      "sourceHandle": "n1-number-right",
+      "target": "pi",
+      "targetHandle": "pi-arg_amount-left"
+    },
+    {
+      "id": "xy-edge__pi-transactionOut-right-d4-input-left",
+      "source": "pi",
+      "sourceHandle": "pi-transactionOut-right",
+      "target": "d4",
+      "targetHandle": "d4-input-left"
+    }
+  ]
+}

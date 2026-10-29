@@ -54,6 +54,8 @@ export enum NodeTypeEnum {
   STRING_REPLACE = 'STRING_REPLACE',
   STRING_ENCODE = 'STRING_ENCODE',
   STRING_DECODE = 'STRING_DECODE',
+  RAW_INSTRUCTION = 'RAW_INSTRUCTION',
+  TX_TRACE = 'TX_TRACE',
 }
 
 export type NodeType = keyof typeof NodeTypeEnum

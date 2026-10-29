@@ -31,6 +31,7 @@ import { TransactionNode } from '@/components/nodes/transactions/transaction-nod
 import { IdlNode } from '@/components/nodes/programs/idl-node'
 import { ProgramInstructionsNode } from '@/components/nodes/programs/program-instructions-node'
 import { ProgramAccountNode } from '@/components/nodes/programs/program-account-node'
+import { RawInstructionNode } from '@/components/nodes/programs/raw-instruction-node'
 import { WalletNode } from '@/components/nodes/wallet/wallet-node'
 import { CommentNode } from '@/components/nodes/input/comment-node'
 import { StringCombineNode } from '@/components/nodes/string/string-combine-node'
@@ -41,6 +42,7 @@ import { StringSearchNode } from '@/components/nodes/string/string-search-node'
 import { StringReplaceNode } from '@/components/nodes/string/string-replace-node'
 import { StringEncodeNode } from '@/components/nodes/utils/string-encode-node'
 import { StringDecodeNode } from '@/components/nodes/utils/string-decode-node'
+import { TxTraceNode } from '@/components/nodes/transactions/tx-trace-node'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const nodeMap: Record<NodeType, React.ComponentType<any>> = {
@@ -97,4 +99,6 @@ export const nodeMap: Record<NodeType, React.ComponentType<any>> = {
   [NodeTypeEnum.STRING_REPLACE]: StringReplaceNode,
   [NodeTypeEnum.STRING_ENCODE]: StringEncodeNode,
   [NodeTypeEnum.STRING_DECODE]: StringDecodeNode,
+  [NodeTypeEnum.RAW_INSTRUCTION]: RawInstructionNode,
+  [NodeTypeEnum.TX_TRACE]: TxTraceNode,
 }

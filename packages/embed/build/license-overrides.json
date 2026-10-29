@@ -1,5 +1,5 @@
 {
-  "description": "Bundled packages published without a licence file. Each entry names a package from the same repository, under the same licence, whose licence file supplies the text; scripts/third-party-licenses.mjs checks that both declare `license`. A bundled package missing from this list and without a licence file fails the build.",
+  "description": "Bundled packages published without a licence file. Each entry names a package from the same repository, under the same licence, whose licence file supplies the text, or quotes the package's own `statement` when it is dedicated to the public domain; scripts/third-party-licenses.mjs checks that both declare `license`. A bundled package missing from this list and without a licence file fails the build.",
   "packages": {
     "@radix-ui/react-compose-refs": {
       "license": "MIT",
@@ -40,6 +40,11 @@
       "license": "MIT",
       "textFrom": "bs58",
       "reason": "bs58 4.0.1 (nested under @solana/web3.js and borsh) has no LICENSE; the hoisted bs58 of the same cryptocoinjs/bs58 repository ships one"
+    },
+    "jsonify": {
+      "license": "Public Domain",
+      "statement": "jsonify (https://github.com/ljharb/jsonify), by Douglas Crockford: \"public domain\" (README, section \"license\"; package.json \"license\": \"Public Domain\").",
+      "reason": "Crockford's JSON parser/stringifier, dedicated to the public domain; bundled through json-stable-stringify, a dependency of @codama/visitors-core"
     }
   }
 }

@@ -1,0 +1,25 @@
+{
+  "closures": {
+    "editor": {
+      "roots": ["src/layouts/default-layout.tsx", "src/pages/home.tsx"],
+      "baselineGzip": 564500,
+      "maxGzip": 589500
+    },
+    "embed": {
+      "roots": ["src/layouts/embed-layout.tsx", "src/pages/embed.tsx"],
+      "baselineGzip": 495300,
+      "maxGzip": 520300
+    }
+  },
+  "chunks": {
+    "codama": {
+      "maxGzip": 120000
+    },
+    "tx-import": {
+      "maxGzip": 40000
+    },
+    "idl-native-*": {
+      "maxGzip": 35000
+    }
+  }
+}

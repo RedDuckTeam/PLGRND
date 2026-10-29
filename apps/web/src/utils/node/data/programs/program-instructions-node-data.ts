@@ -34,4 +34,5 @@ export const programInstructionsNodeConfig = {
     },
   ],
   actions: [],
+  transient: ['idl', 'transactionOut', 'error'],
 } as const satisfies NodeConfig

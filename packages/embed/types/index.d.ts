@@ -9,6 +9,16 @@ type Flag = '1' | '0' | 'true' | 'false'
 export interface PlgrndFlowAttributes {
   /** The flow payload: the same lz-string value as the hosted embed's `#flow=`. */
   flow?: string
+  /**
+   * A transaction to show as a flow (since 1.1.0): a signature, or a serialized transaction in base64 or base58.
+   * It is imported over the RPC endpoints; `flow` wins when both are set.
+   */
+  tx?: string
+  /**
+   * The cluster of `tx` (since 1.1.0). Unset: a signature is looked up on mainnet, then devnet; a serialized
+   * transaction is simulated on mainnet.
+   */
+  cluster?: 'mainnet' | 'devnet'
   /** `dark` (default), `light`, or `auto` (follows the host page's theme markers, then the OS). */
   theme?: 'dark' | 'light' | 'auto'
   /** Colours, hex with or without `#`. */
@@ -36,6 +46,8 @@ export interface PlgrndFlowAttributes {
 
 export interface PlgrndFlowElement extends HTMLElement {
   flow: string | null
+  tx: string | null
+  cluster: string | null
   theme: string | null
   bg: string | null
   surface: string | null

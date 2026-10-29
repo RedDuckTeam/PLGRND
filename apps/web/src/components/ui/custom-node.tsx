@@ -9,7 +9,7 @@ import {
   useNodeConnections,
   type NodeProps,
 } from '@xyflow/react'
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren, ReactNode } from 'react'
 import { getNodeConfig } from '@/utils/node/node-config-registry'
 import type { NodeActionConfig } from '@/types/node-action'
 import { generateNodeId } from '@/utils/crypto/crypto.utils'
@@ -21,6 +21,10 @@ interface Props extends PropsWithChildren, NodeProps {
   className?: string
   actions?: NodeActionConfig[]
   extraHandles?: HandleConfig[]
+  /** Controls after a target handle's label, e.g. an inline value while no edge feeds the input. */
+  renderInline?: (handle: HandleConfig, connected: boolean) => ReactNode
+  /** Label column width (px) in rows with inline content, so the fields line up; 0 leaves the label out. */
+  inlineLabelWidth?: number
 }
 
 const handleSpacing = 12
@@ -35,6 +39,8 @@ export const CustomNode = ({
   positionAbsoluteX,
   positionAbsoluteY,
   extraHandles,
+  renderInline,
+  inlineLabelWidth = 80,
 }: Props) => {
   const { setNodes, setEdges } = useReactFlow()
   const { mode } = useFlowMode()
@@ -121,6 +127,7 @@ export const CustomNode = ({
             handle.type === 'source'
               ? (sourceConnections ?? []).some((c) => c.sourceHandle === handleId)
               : (targetConnections ?? []).some((c) => c.targetHandle === handleId)
+          const inline = handle.type === 'target' ? renderInline?.(handle, isConnected) : null
           return (
             <Handle
               key={handleId}
@@ -143,12 +150,20 @@ export const CustomNode = ({
               <div
                 className={cn(
                   'absolute text-[7px] whitespace-nowrap top-1/2 translate-y-[-50%] leading-[8px]',
-                  handle.type === 'target' ? 'left-1.5' : 'right-1.5'
+                  handle.type === 'target' ? 'left-1.5' : 'right-1.5',
+                  inline ? 'flex items-center gap-1' : undefined
                 )}
               >
-                {handle.label?.includes('\n')
-                  ? handle.label.split('\n').map((line, i) => <div key={i}>{line}</div>)
-                  : handle.label}
+                {inline
+                  ? inlineLabelWidth > 0 && (
+                      <span className="shrink-0 truncate" style={{ width: inlineLabelWidth }} title={handle.label}>
+                        {handle.label}
+                      </span>
+                    )
+                  : handle.label?.includes('\n')
+                    ? handle.label.split('\n').map((line, i) => <div key={i}>{line}</div>)
+                    : handle.label}
+                {inline}
               </div>
             </Handle>
           )
@@ -164,9 +179,11 @@ export const CustomNode = ({
             return (
               <button
                 onClick={action.onClick}
+                disabled={action.disabled}
                 key={id + '-' + action.label + '-' + action.position}
                 className={cn(
                   'absolute cursor-pointer group top-1/2 flex transition-all active:scale-90 items-center gap-0.5 translate-y-[-50%]',
+                  'disabled:cursor-not-allowed disabled:opacity-40 disabled:active:scale-100',
                   action.position === Position.Left ? 'left-0 -translate-x-1' : 'right-0 translate-x-1 flex-row-reverse'
                 )}
                 style={{ marginTop: offsetFromCenter }}

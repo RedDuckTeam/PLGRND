@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Keypair, Transaction } from '@solana/web3.js'
+import { Keypair, PublicKey, Transaction } from '@solana/web3.js'
 import { Position, useUpdateNodeInternals } from '@xyflow/react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import type { Network } from '@/types/network'
@@ -9,6 +9,7 @@ import { useTypedNodesData } from '@/hooks/flow/use-typed-nodes-data'
 import { useTypedReactFlow } from '@/hooks/flow/use-typed-react-flow'
 import { getSolanaConnection } from '@/constants/solana/connection'
 import { useRpcConfig } from '@/providers/rpc-urls-context'
+import { useDraftSend, useTransactionDraft } from './use-transaction-draft'
 import {
   confirmSignature,
   createKeypairFromPrivateKey,
@@ -32,6 +33,9 @@ export const useTransactionNode = (nodeId: string) => {
   const wallet = useWallet()
 
   const resolved = useTypedNodesData<'privateKey' | 'network' | 'transaction'>(nodeId)
+  // Chains whose TX_BUILDER carries draft meta (imported, v0) are compiled and sent by useDraftSend.
+  const txDraft = useTransactionDraft(nodeId)
+  const { draft } = txDraft
 
   const inputs = useMemo(() => {
     const rawSigner = resolved.privateKey?.value
@@ -61,11 +65,20 @@ export const useTransactionNode = (nodeId: string) => {
   }, [inputs.transaction])
 
   const additionalSigners = useMemo(() => {
+    if (draft) {
+      // Every signer the instructions or the draft's fee payer ask for, except the main input's.
+      const primary = feePayerPublicKey?.toBase58()
+      const signers = new Set([
+        ...(draft.feePayer ? [draft.feePayer] : []),
+        ...requiredSigners.map((s) => s.toBase58()),
+      ])
+      return [...signers].filter((s) => s !== primary).map((s) => new PublicKey(s))
+    }
     if (!feePayerPublicKey) return []
     if (requiredSigners.length <= 1) return []
 
     return requiredSigners.filter((signer) => signer.toBase58() !== feePayerPublicKey.toBase58())
-  }, [feePayerPublicKey, requiredSigners])
+  }, [draft, feePayerPublicKey, requiredSigners])
 
   const extraHandles = useMemo(() => {
     const handles: {
@@ -121,6 +134,59 @@ export const useTransactionNode = (nodeId: string) => {
 
     return signers
   }, [additionalSigners, resolved])
+
+  // Draft path: keys connected to signer_i that match the signer they stand for.
+  const draftSignerKeypairs = useMemo(() => {
+    if (!draft) return []
+    const resolvedMap = resolved as unknown as Record<string, { value: unknown } | undefined>
+    return additionalSigners.flatMap((signer, i) => {
+      const value = resolvedMap[`signer_${i}`]?.value
+      const keypair = typeof value === 'string' ? createKeypairFromPrivateKey(value) : null
+      return keypair?.publicKey.equals(signer) ? [keypair] : []
+    })
+  }, [additionalSigners, draft, resolved])
+
+  const {
+    status: draftStatus,
+    sendError: draftSendError,
+    send: sendDraft,
+    fail: failDraft,
+  } = useDraftSend(
+    nodeId,
+    txDraft,
+    {
+      network: inputs.network,
+      primary: feePayerPublicKey,
+      primaryKeypair: feePayerKeypair,
+      useWalletPath: inputs.useWalletPath,
+      signerKeypairs: draftSignerKeypairs,
+    },
+    inputs.transaction
+  )
+
+  const handleDraftSend = useCallback(async () => {
+    if (!inputs.network || !inputs.transaction) return
+    try {
+      setStatus('pending')
+      updateNodeData<TransactionNodeData>(nodeId, { status: 'pending' })
+      const connection = getSolanaConnection(inputs.network, urls)
+      const controller = new AbortController()
+      sendAbortRef.current?.abort()
+      sendAbortRef.current = controller
+
+      const { signature, latest } = await sendDraft(connection)
+      await confirmSignature(connection, signature, latest, confirmMode, controller.signal)
+
+      updateNodeData<TransactionNodeData>(nodeId, { signature, status: 'success' })
+      setStatus('success')
+    } catch (e) {
+      if (isAbortError(e)) return
+      console.error(e)
+      failDraft(e)
+      updateNodeData<TransactionNodeData>(nodeId, { status: 'failed' })
+      setStatus('failed')
+    }
+  }, [inputs.network, inputs.transaction, nodeId, updateNodeData, urls, sendDraft, failDraft, confirmMode])
 
   const handleSend = useCallback(async () => {
     if (!inputs.network || !inputs.transaction) return
@@ -190,7 +256,12 @@ export const useTransactionNode = (nodeId: string) => {
   return {
     status,
     extraHandles,
-    handleSend,
+    handleSend: draft ? handleDraftSend : handleSend,
     hasKeySigner: feePayerKeypair !== null,
+    // Nothing to send: no transaction connected, or the connected chain failed to build (an instruction error).
+    hasTransaction: inputs.transaction !== null,
+    upstreamError: resolved.transaction?.value === null,
+    /** Draft path only: the debounced "matches original" check, missing signers and the last Send error. */
+    draft: draft ? { ...(draftStatus ?? { missingSigners: [] }), sendError: draftSendError } : null,
   }
 }

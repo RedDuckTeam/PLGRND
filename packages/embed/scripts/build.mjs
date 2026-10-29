@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url'
 import { build } from 'vite'
 import { transform } from 'esbuild'
 import { assembleIife } from './assemble-iife.mjs'
-import { writeSizeReport } from './size-report.mjs'
+import { tripwireFails, writeSizeReport } from './size-report.mjs'
 import { writeThirdPartyLicenses } from './third-party-licenses.mjs'
 
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
@@ -90,4 +90,9 @@ console.log(
     `ESM entry ${(gzip('esm/plgrnd-flow.js') / 1000).toFixed(1)} kB gzip + runtime ${(gzip('esm/plgrnd-flow-runtime.js') / 1000).toFixed(1)} kB gzip, ` +
     `${licensed.length} third-party packages`
 )
-if (tripped) console.warn('[build] the IIFE exceeds the 500 kB gzip tripwire; see dist/size-report.md')
+if (tripped && tripwireFails(version)) {
+  console.error('[build] the IIFE exceeds the 500 kB gzip budget; see dist/size-report.md')
+  process.exitCode = 1
+} else if (tripped) {
+  console.warn('[build] the IIFE exceeds the 500 kB gzip tripwire; see dist/size-report.md')
+}

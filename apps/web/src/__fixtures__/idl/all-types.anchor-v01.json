@@ -1,0 +1,374 @@
+{
+  "address": "HsRnuVDtp1mgUH1HPvgUch7wTSFez8xjus9y5sETQX4F",
+  "metadata": {
+    "name": "all_types",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Self-authored PLGRND test fixture (MIT). Not a deployed program."
+  },
+  "docs": ["Self-authored PLGRND test fixture (MIT). Not a deployed program."],
+  "instructions": [
+    {
+      "name": "initialize",
+      "docs": ["Takes one argument of every supported type."],
+      "discriminator": [175, 175, 109, 31, 13, 152, 155, 237],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [115, 116, 97, 116, 101]
+              },
+              {
+                "kind": "account",
+                "path": "payer"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "optional": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "value_u8",
+          "type": "u8"
+        },
+        {
+          "name": "value_i8",
+          "type": "i8"
+        },
+        {
+          "name": "value_u16",
+          "type": "u16"
+        },
+        {
+          "name": "value_i16",
+          "type": "i16"
+        },
+        {
+          "name": "value_u32",
+          "type": "u32"
+        },
+        {
+          "name": "value_i32",
+          "type": "i32"
+        },
+        {
+          "name": "value_u64",
+          "type": "u64"
+        },
+        {
+          "name": "value_i64",
+          "type": "i64"
+        },
+        {
+          "name": "value_u128",
+          "type": "u128"
+        },
+        {
+          "name": "value_i128",
+          "type": "i128"
+        },
+        {
+          "name": "value_f32",
+          "type": "f32"
+        },
+        {
+          "name": "value_f64",
+          "type": "f64"
+        },
+        {
+          "name": "value_bool",
+          "type": "bool"
+        },
+        {
+          "name": "value_string",
+          "type": "string"
+        },
+        {
+          "name": "value_bytes",
+          "type": "bytes"
+        },
+        {
+          "name": "value_pubkey",
+          "type": "pubkey"
+        },
+        {
+          "name": "fixed_array",
+          "type": {
+            "array": ["u16", 4]
+          }
+        },
+        {
+          "name": "matrix",
+          "type": {
+            "array": [
+              {
+                "array": ["u8", 2]
+              },
+              2
+            ]
+          }
+        },
+        {
+          "name": "list",
+          "type": {
+            "vec": "u32"
+          }
+        },
+        {
+          "name": "maybe",
+          "type": {
+            "option": "u64"
+          }
+        },
+        {
+          "name": "nested",
+          "type": {
+            "option": {
+              "vec": {
+                "defined": {
+                  "name": "Point"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "pair",
+          "type": {
+            "defined": {
+              "name": "Pair"
+            }
+          }
+        },
+        {
+          "name": "flavor",
+          "type": {
+            "defined": {
+              "name": "Kind"
+            }
+          }
+        },
+        {
+          "name": "action",
+          "type": {
+            "defined": {
+              "name": "Action"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "set_authority",
+      "docs": ["Multi-word name; vault seed uses a nested account path."],
+      "discriminator": [133, 250, 37, 21, 110, 163, 26, 121],
+      "accounts": [
+        {
+          "name": "state",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": ["state"]
+        },
+        {
+          "name": "vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [118, 97, 117, 108, 116]
+              },
+              {
+                "kind": "account",
+                "path": "state.authority",
+                "account": "State"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "new_authority",
+          "type": {
+            "option": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ping",
+      "docs": ["Custom one-byte discriminator."],
+      "discriminator": [7],
+      "accounts": [
+        {
+          "name": "signer",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "nonce",
+          "type": "u32"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "State",
+      "discriminator": [216, 146, 107, 94, 104, 75, 182, 177]
+    }
+  ],
+  "events": [
+    {
+      "name": "AuthorityChanged",
+      "discriminator": [31, 19, 174, 152, 4, 82, 215, 226]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Unauthorized",
+      "msg": "Signer is not the authority"
+    }
+  ],
+  "types": [
+    {
+      "name": "Action",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Idle"
+          },
+          {
+            "name": "Move",
+            "fields": [
+              {
+                "name": "dx",
+                "type": "i64"
+              },
+              {
+                "name": "dy",
+                "type": "i64"
+              }
+            ]
+          },
+          {
+            "name": "Say",
+            "fields": ["string", "u8"]
+          }
+        ]
+      }
+    },
+    {
+      "name": "AuthorityChanged",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "old_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_authority",
+            "type": {
+              "option": "pubkey"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Kind",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Alpha"
+          },
+          {
+            "name": "Beta"
+          },
+          {
+            "name": "Gamma"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Pair",
+      "docs": ["Tuple struct."],
+      "type": {
+        "kind": "struct",
+        "fields": ["u8", "string"]
+      }
+    },
+    {
+      "name": "Point",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "x",
+            "type": "i32"
+          },
+          {
+            "name": "y",
+            "type": "i32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "State",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "counter",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "points",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "Point"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

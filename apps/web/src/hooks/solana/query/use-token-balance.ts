@@ -1,7 +1,7 @@
 import type { Network } from '@/types/network'
 import { useQuery } from '@tanstack/react-query'
 import { isExist, isValidPublicKey } from '@/utils/validation/validation.utils'
-import { getSolanaConnection, type RpcUrls } from '@/constants/solana/connection'
+import { getSolanaConnection, isPublicMainnetBlocked, type RpcUrls } from '@/constants/solana/connection'
 import { useRpcConfig } from '@/providers/rpc-urls-context'
 import { getATA } from '@/utils/solana/solana.utils'
 
@@ -14,6 +14,8 @@ export const getTokenBalance = async (pubkey: string, network: Network, token: s
 
     return { rawBalance: balance.value.amount.toString(), uiBalance: balance.value.uiAmountString }
   } catch (error) {
+    // Left to the query, so the self-hosted widget can say why mainnet reads fail.
+    if (isPublicMainnetBlocked(error)) throw error
     console.error('Error getting token balance:', error)
     return { rawBalance: '0', uiBalance: '0' }
   }

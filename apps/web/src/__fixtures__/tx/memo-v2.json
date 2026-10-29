@@ -1,0 +1,71 @@
+{
+  "name": "memo-v2",
+  "network": "mainnet",
+  "input": {
+    "kind": "signature",
+    "value": "5MbKBh4ri5RycZQoydhQPhg5foymfwA3WCiW1Vwzjtzd5zpeE4aw6xskB4LpRjK78FkUh1MUEf2VNMZgriWwRJRu"
+  },
+  "version": "legacy",
+  "capturedAt": "2026-10-28T14:02:42.024Z",
+  "slot": 462502826,
+  "blockTime": 1793196152,
+  "wire": "AQACBHEQ1/sEws/Yy/tcnCyIyFoN1gqNJ2S/+PNXNA+Sym8Q8Yfsh9H3Rcs6AzhKJqae2gyi0aoPQeQkFjd+kf9bXTEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVKU1qZKSEGTSTocWDaOHx8NbXdvJK7geQfqEBBBUSN/ooDXLdEuDblONZKaFbMXa+8oBDg2sakGQ/fa+vv548CAgIAAQwCAAAAnRQAAAAAAAADAF91c2VydHgtNGVqNWNoVm82MlVTa05LYkpOWDNCUjJDRms3bzVBdERoVmE1WjlyMkJnR3o2ZHRNa1JBTFFqSkVESzZRS0ZFNTY4OENQendZYUFkWDRZSHg3REJRaGN2ZQ==",
+  "signatures": ["5MbKBh4ri5RycZQoydhQPhg5foymfwA3WCiW1Vwzjtzd5zpeE4aw6xskB4LpRjK78FkUh1MUEf2VNMZgriWwRJRu"],
+  "meta": {
+    "computeUnitsConsumed": 35390,
+    "costUnits": 36760,
+    "err": null,
+    "fee": 5000,
+    "innerInstructions": [],
+    "loadedAddresses": {
+      "readonly": [],
+      "writable": []
+    },
+    "logMessages": [
+      "Program 11111111111111111111111111111111 invoke [1]",
+      "Program 11111111111111111111111111111111 success",
+      "Program MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr invoke [1]",
+      "Program log: Memo (len 95): \"usertx-4ej5chVo62USkNKbJNX3BR2CFk7o5AtDhVa5Z9r2BgGz6dtMkRALQjJEDK6QKFE5688CPzwYaAdX4YHx7DBQhcve\"",
+      "Program MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr consumed 35240 of 202850 compute units",
+      "Program MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr success"
+    ],
+    "postBalances": [20333463426, 728230, 1, 523015235],
+    "postTokenBalances": [],
+    "preBalances": [20333473703, 722953, 1, 523015235],
+    "preTokenBalances": [],
+    "rewards": [],
+    "status": {
+      "Ok": null
+    }
+  },
+  "altAccounts": {},
+  "programs": ["11111111111111111111111111111111", "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"],
+  "accounts": {
+    "2ypWVnvjZsraGzL18SHoqnZ637uEHC73KhqiE6nfyaCV": "2ypWVnvjZsraGzL18SHoqnZ637uEHC73KhqiE6nfyaCV.b64",
+    "GfHaqYKLLoNVfxZhfpWNAAWnHo1QScvtfdpeFFiBpm7G": "GfHaqYKLLoNVfxZhfpWNAAWnHo1QScvtfdpeFFiBpm7G.b64",
+    "A9PYaLSvF7VrdTVLaQ1JVGcWXSjzNJSprtPSBvUbQbWX": "A9PYaLSvF7VrdTVLaQ1JVGcWXSjzNJSprtPSBvUbQbWX.b64"
+  },
+  "accountMeta": {
+    "2ypWVnvjZsraGzL18SHoqnZ637uEHC73KhqiE6nfyaCV": {
+      "program": "11111111111111111111111111111111",
+      "kind": "pmp-foundation",
+      "owner": "ProgM6JCCvbYkfKqJYHePx4xxSUSqJp7rh8Lyv7nk7S",
+      "lamports": 22327680,
+      "size": 3080
+    },
+    "GfHaqYKLLoNVfxZhfpWNAAWnHo1QScvtfdpeFFiBpm7G": {
+      "program": "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
+      "kind": "pmp-foundation",
+      "owner": "ProgM6JCCvbYkfKqJYHePx4xxSUSqJp7rh8Lyv7nk7S",
+      "lamports": 4920720,
+      "size": 579
+    },
+    "A9PYaLSvF7VrdTVLaQ1JVGcWXSjzNJSprtPSBvUbQbWX": {
+      "program": "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
+      "kind": "anchor-idl",
+      "owner": "11111111111111111111111111111111",
+      "lamports": 2000000,
+      "size": 0
+    }
+  }
+}

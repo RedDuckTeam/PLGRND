@@ -1,0 +1,255 @@
+{
+  "v": 3,
+  "nodes": [
+    {
+      "id": "c1",
+      "type": "COMMENT",
+      "position": {
+        "x": 0,
+        "y": -130
+      },
+      "data": {
+        "text": "Legacy and v0 messages: the setters as instructions\nLimit 50,000 and price 10,000 micro-lamports become two Compute Budget instructions; priority fee = limit × price."
+      }
+    },
+    {
+      "id": "b1",
+      "type": "TRANSACTION_BUILDER",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "data": {}
+    },
+    {
+      "id": "n1",
+      "type": "NUMBER",
+      "position": {
+        "x": 0,
+        "y": 50
+      },
+      "data": {
+        "number": 50000
+      }
+    },
+    {
+      "id": "n2",
+      "type": "NUMBER",
+      "position": {
+        "x": 0,
+        "y": 120
+      },
+      "data": {
+        "number": 10000
+      }
+    },
+    {
+      "id": "i1",
+      "type": "INSTRUCTIONS",
+      "position": {
+        "x": 140,
+        "y": 0
+      },
+      "data": {
+        "instruction": "computeUnitLimit"
+      }
+    },
+    {
+      "id": "i2",
+      "type": "INSTRUCTIONS",
+      "position": {
+        "x": 140,
+        "y": 90
+      },
+      "data": {
+        "instruction": "computeUnitPrice"
+      }
+    },
+    {
+      "id": "d1",
+      "type": "DISPLAY",
+      "position": {
+        "x": 480,
+        "y": 0
+      },
+      "data": {
+        "text": ""
+      }
+    },
+    {
+      "id": "n3",
+      "type": "NUMBER",
+      "position": {
+        "x": 0,
+        "y": 200
+      },
+      "data": {
+        "number": 1000000
+      }
+    },
+    {
+      "id": "n4",
+      "type": "NUMBER",
+      "position": {
+        "x": 0,
+        "y": 270
+      },
+      "data": {
+        "number": 9
+      }
+    },
+    {
+      "id": "m1",
+      "type": "MULTIPLY",
+      "position": {
+        "x": 140,
+        "y": 190
+      },
+      "data": {}
+    },
+    {
+      "id": "dv1",
+      "type": "DIVIDE",
+      "position": {
+        "x": 280,
+        "y": 210
+      },
+      "data": {}
+    },
+    {
+      "id": "d2",
+      "type": "DISPLAY",
+      "position": {
+        "x": 480,
+        "y": 240
+      },
+      "data": {
+        "text": ""
+      }
+    },
+    {
+      "id": "r1",
+      "type": "RAW_TO_TOKEN_AMOUNT",
+      "position": {
+        "x": 250,
+        "y": 280
+      },
+      "data": {}
+    },
+    {
+      "id": "d3",
+      "type": "DISPLAY",
+      "position": {
+        "x": 480,
+        "y": 290
+      },
+      "data": {
+        "text": ""
+      }
+    },
+    {
+      "id": "cf",
+      "type": "COMMENT",
+      "position": {
+        "x": 330,
+        "y": 370
+      },
+      "data": {
+        "text": "Right: the two instructions, data in hex. Bottom right: the priority fee in lamports, then in SOL (9 decimals)."
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "xy-edge__b1-transaction-right-i1-transactionIn-left",
+      "source": "b1",
+      "sourceHandle": "b1-transaction-right",
+      "target": "i1",
+      "targetHandle": "i1-transactionIn-left"
+    },
+    {
+      "id": "xy-edge__n1-number-right-i1-computeUnits-left",
+      "source": "n1",
+      "sourceHandle": "n1-number-right",
+      "target": "i1",
+      "targetHandle": "i1-computeUnits-left"
+    },
+    {
+      "id": "xy-edge__i1-transactionOut-right-i2-transactionIn-left",
+      "source": "i1",
+      "sourceHandle": "i1-transactionOut-right",
+      "target": "i2",
+      "targetHandle": "i2-transactionIn-left"
+    },
+    {
+      "id": "xy-edge__n2-number-right-i2-microLamports-left",
+      "source": "n2",
+      "sourceHandle": "n2-number-right",
+      "target": "i2",
+      "targetHandle": "i2-microLamports-left"
+    },
+    {
+      "id": "xy-edge__i2-transactionOut-right-d1-input-left",
+      "source": "i2",
+      "sourceHandle": "i2-transactionOut-right",
+      "target": "d1",
+      "targetHandle": "d1-input-left"
+    },
+    {
+      "id": "xy-edge__n1-number-right-m1-a-left",
+      "source": "n1",
+      "sourceHandle": "n1-number-right",
+      "target": "m1",
+      "targetHandle": "m1-a-left"
+    },
+    {
+      "id": "xy-edge__n2-number-right-m1-b-left",
+      "source": "n2",
+      "sourceHandle": "n2-number-right",
+      "target": "m1",
+      "targetHandle": "m1-b-left"
+    },
+    {
+      "id": "xy-edge__m1-result-right-dv1-a-left",
+      "source": "m1",
+      "sourceHandle": "m1-result-right",
+      "target": "dv1",
+      "targetHandle": "dv1-a-left"
+    },
+    {
+      "id": "xy-edge__n3-number-right-dv1-b-left",
+      "source": "n3",
+      "sourceHandle": "n3-number-right",
+      "target": "dv1",
+      "targetHandle": "dv1-b-left"
+    },
+    {
+      "id": "xy-edge__dv1-result-right-d2-input-left",
+      "source": "dv1",
+      "sourceHandle": "dv1-result-right",
+      "target": "d2",
+      "targetHandle": "d2-input-left"
+    },
+    {
+      "id": "xy-edge__dv1-result-right-r1-rawAmount-left",
+      "source": "dv1",
+      "sourceHandle": "dv1-result-right",
+      "target": "r1",
+      "targetHandle": "r1-rawAmount-left"
+    },
+    {
+      "id": "xy-edge__n4-number-right-r1-decimals-left",
+      "source": "n4",
+      "sourceHandle": "n4-number-right",
+      "target": "r1",
+      "targetHandle": "r1-decimals-left"
+    },
+    {
+      "id": "xy-edge__r1-amount-right-d3-input-left",
+      "source": "r1",
+      "sourceHandle": "r1-amount-right",
+      "target": "d3",
+      "targetHandle": "d3-input-left"
+    }
+  ]
+}

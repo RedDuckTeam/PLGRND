@@ -6,10 +6,10 @@ import type {
   InstructionsNodeType,
 } from '@/types/nodes/programs/instructions-node'
 import { useTypedNodesData } from '@/hooks/flow/use-typed-nodes-data'
-import type { ActionsFor, NodeTypeEnum } from '@/types/node'
+import { NodeTypeEnum, type ActionsFor } from '@/types/node'
 import { useTypedReactFlow } from '@/hooks/flow/use-typed-react-flow'
 import { useNodeActions } from '@/hooks/flow/use-node-actions'
-import { Transaction } from '@solana/web3.js'
+import { useNodeCompute } from '@/hooks/flow/use-node-compute'
 import type { NodeProps } from '@xyflow/react'
 import { Position, useUpdateNodeInternals } from '@xyflow/react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -20,12 +20,6 @@ export const InstructionsNode = (props: NodeProps<InstructionsNodeType>) => {
   const updateNodeInternals = useUpdateNodeInternals()
 
   const resolved = useTypedNodesData<'transactionIn'>(props.id)
-
-  const { transactionIn } = useMemo(() => {
-    return {
-      transactionIn: (resolved.transactionIn?.value as Transaction | null) ?? null,
-    }
-  }, [resolved])
 
   const [selected, setSelected] = useState<InstructionKind>(props.data.instruction ?? 'systemTransfer')
 
@@ -53,26 +47,7 @@ export const InstructionsNode = (props: NodeProps<InstructionsNodeType>) => {
     updateNodeData<InstructionsNodeData>(props.id, { instruction: selected })
   }, [props.id, selected, updateNodeData])
 
-  useEffect(() => {
-    const run = async () => {
-      const base = transactionIn ?? new Transaction()
-      const ixs = [...base.instructions]
-      const def = getInstructionById(selected)
-      if (def) {
-        const inputs: Record<string, unknown> = {}
-        const resolvedMap = resolved as unknown as Record<string, { value: unknown }>
-        for (const f of def.fields) {
-          inputs[f.key] = resolvedMap[f.key]?.value
-        }
-        const built = await def.build(base, inputs)
-        ixs.push(...built)
-      }
-      const out = new Transaction()
-      if (ixs.length > 0) out.add(...ixs)
-      updateNodeData<InstructionsNodeData>(props.id, { transactionOut: out })
-    }
-    run().catch(() => undefined)
-  }, [props.id, transactionIn, resolved, selected, updateNodeData])
+  useNodeCompute(NodeTypeEnum.INSTRUCTIONS, props.id, { instruction: selected }, resolved)
 
   const actions = useNodeActions<ActionsFor<NodeTypeEnum.INSTRUCTIONS>>(props.type, {})
 

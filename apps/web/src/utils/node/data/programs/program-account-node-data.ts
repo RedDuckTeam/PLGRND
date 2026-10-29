@@ -10,4 +10,5 @@ export const programAccountNodeConfig = {
     { position: Position.Left, type: 'target', dataField: 'address', label: 'Address', dataType: 'publicKey' },
   ],
   actions: [{ position: Position.Right, label: 'Refresh' }],
+  transient: ['idl', 'decoded', 'error', 'field_*'],
 } as const satisfies NodeConfig
