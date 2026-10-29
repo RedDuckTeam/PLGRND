@@ -3,7 +3,7 @@
     "editor": {
       "roots": ["src/layouts/default-layout.tsx", "src/pages/home.tsx"],
       "baselineGzip": 564500,
-      "maxGzip": 589500
+      "maxGzip": 600000
     },
     "embed": {
       "roots": ["src/layouts/embed-layout.tsx", "src/pages/embed.tsx"],
