@@ -1,0 +1,34 @@
+import { Gotchas } from '@/app/components/guide/gotchas'
+import { SnippetTabs } from '@/app/components/guide/snippet-tabs'
+import { PdaSeedsFlow } from '@/app/components/previews/pda-seeds-widget-lazy'
+
+export const metadata = {
+  title: 'Native port',
+  description:
+    "Re-implement a PLGRND flow's logic in your own components with @solana/kit when your docs host allows neither iframes nor third-party scripts.",
+  alternates: { canonical: '/integrate/native-port' },
+}
+
+# Native port
+
+Port the flow into your own components when your docs host allows neither iframes nor third-party scripts, so neither the [hosted iframe](/integrate/iframe) nor the [self-hosted widget](/integrate/self-hosted) is an option. You rebuild what the flow computes with `@solana/kit`, in your own framework and styles. Nothing loads from plgrnd.io.
+
+The trade-off: the port is your code, not a dependency. You write it, test it and maintain it, and fixes to PLGRND never reach it.
+
+Below is the PDA seeds flow from Anchor's PDA docs, ported to React. All four examples derive their address in your browser; edit any input and the PDA changes. Nothing is sent over the network.
+
+<PdaSeedsFlow />
+
+Example based on a [PLGRND](https://plgrnd.io) flow.
+
+<SnippetTabs method="native-port" />
+
+## How to port a flow
+
+1. Open the flow in PLGRND and list its nodes: the inputs (TEXT, KEYPAIR) and what they feed (PDA).
+2. Map every node to a `@solana/kit` call: a PDA node is `getProgramDerivedAddress`, a KEYPAIR node is `generateKeyPair` plus `getAddressFromPublicKey`. Encode text seeds as UTF-8 bytes and public keys with `getAddressEncoder`.
+3. Validate inputs the way the flow does: `isAddress` for program ids and public keys, at most 32 bytes per seed.
+4. Compare the port's outputs with the flow's for the same inputs, for example `seeds = []` gives bump 253.
+5. Render the port on the client only, and put the credit line directly below it.
+
+<Gotchas method="native-port" />

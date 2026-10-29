@@ -8,9 +8,13 @@
     "web:dev": "yarn workspace web dev",
     "web:build": "yarn workspace web build",
     "web:test": "yarn workspace web test",
+    "landing:dev": "yarn workspace landing dev",
+    "landing:build": "yarn workspace landing build",
+    "landing:deploy": "yarn workspace landing deploy",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "format:web": "yarn workspace web format"
+    "format:web": "yarn workspace web format",
+    "format:landing": "yarn workspace landing format"
   },
   "workspaces": [
     "apps/*",
