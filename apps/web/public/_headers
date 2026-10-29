@@ -3,3 +3,5 @@
 # would cache index.html for a year at paths that do not exist yet, such as the next version.
 /sdk/1.0.1/*
   Cache-Control: public, max-age=31536000, immutable
+/sdk/1.1.0/*
+  Cache-Control: public, max-age=31536000, immutable

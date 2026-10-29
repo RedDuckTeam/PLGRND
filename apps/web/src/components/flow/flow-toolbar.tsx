@@ -1,5 +1,5 @@
 import { Panel } from '@xyflow/react'
-import { Share2, RotateCcw, Sparkles } from 'lucide-react'
+import { Import, Share2, RotateCcw, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { useFlowStore } from '@/stores/flow-store'
@@ -7,7 +7,12 @@ import { clearFlowHash } from '@/utils/flow/share'
 import { ExampleFlowsModal } from './example-flows-modal'
 import { ShareDialog } from './share-dialog'
 
-export const FlowToolbar = () => {
+interface FlowToolbarProps {
+  /** Opens the transaction import dialog, which the page owns. */
+  onImport: () => void
+}
+
+export const FlowToolbar = ({ onImport }: FlowToolbarProps) => {
   const resetFlow = useFlowStore((s) => s.resetFlow)
   const [examplesOpen, setExamplesOpen] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
@@ -28,6 +33,10 @@ export const FlowToolbar = () => {
           <button type="button" onClick={() => setExamplesOpen(true)} className={buttonClass}>
             <Sparkles className="h-3.5 w-3.5" />
             Examples
+          </button>
+          <button type="button" onClick={onImport} className={buttonClass}>
+            <Import className="h-3.5 w-3.5" />
+            Import tx
           </button>
           <button type="button" onClick={() => setShareOpen(true)} className={buttonClass}>
             <Share2 className="h-3.5 w-3.5" />

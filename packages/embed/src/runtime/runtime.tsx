@@ -7,9 +7,13 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import { PortalContainerContext } from '@/components/ui/portal-container'
 import { DialogModeContext, type DialogMode, type DialogOutsideEvent } from '@/components/ui/dialog-mode'
 import { EmbedCanvas } from '@/components/embed/embed-canvas'
-import { EmbedHostContext, useEmbedHost, type EmbedHost } from '@/embed/embed-host-context'
-import { buildPlgrndHref, PLGRND_ORIGIN } from '@/embed/plgrnd-links'
-import type { RpcUrls } from '@/constants/solana/connection'
+import { EmbedError } from '@/components/embed/embed-error'
+import { TxImportView } from '@/components/embed/tx-import-view'
+import type { LinkedTx } from '@/embed/embed-location'
+import { EmbedHostContext, type EmbedHost } from '@/embed/embed-host-context'
+import { PLGRND_ORIGIN } from '@/embed/plgrnd-links'
+import { isPublicMainnetBlocked, type RpcUrls } from '@/constants/solana/connection'
+import type { Network } from '@/types/network'
 import { RpcConfigContext, type RpcConfig } from '@/providers/rpc-urls-context'
 import { InertWalletProviders } from '@/providers/inert-wallet-providers'
 import { createFlowStore, FlowStoreProvider } from '@/stores/flow-store'
@@ -41,42 +45,35 @@ const FLOW_ERRORS: Record<Exclude<FlowPayload['kind'], 'ok'>, string> = {
   newer: 'This flow needs a newer PLGRND widget',
 }
 
-function FlowErrorState({ kind, onRetry }: { kind: keyof typeof FLOW_ERRORS; onRetry: () => void }) {
-  const { linkRef } = useEmbedHost()
-  return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-background text-foreground">
-      <p className="font-mono text-sm">{FLOW_ERRORS[kind]}</p>
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={onRetry}
-          className="cursor-pointer rounded-md border border-border bg-card px-3 py-1.5 font-mono text-xs text-foreground transition-colors hover:bg-muted"
-        >
-          Retry
-        </button>
-        <a
-          href={buildPlgrndHref('', linkRef)}
-          target="_blank"
-          rel="noopener"
-          className="text-xs text-muted-foreground underline transition-colors hover:text-foreground"
-        >
-          plgrnd.io
-        </a>
-      </div>
-    </div>
-  )
-}
-
 interface FlowViewProps {
   flow?: string
+  tx?: string
+  cluster?: Network
   flowId: string
   onReady: () => void
   onRetry: () => void
 }
 
-function FlowView({ flow, flowId, onReady, onRetry }: FlowViewProps) {
+function FlowView({ flow, tx, cluster, flowId, onReady, onRetry }: FlowViewProps) {
   const payload: FlowPayload = useMemo(() => inspectFlowPayload(flow), [flow])
-  if (payload.kind !== 'ok') return <FlowErrorState kind={payload.kind} onRetry={onRetry} />
+  // Kept while tx and cluster stay the same, so a change of any other attribute does not import again.
+  const linked = useMemo<LinkedTx | null>(() => (tx ? { input: tx, network: cluster } : null), [tx, cluster])
+  if (linked) {
+    return (
+      <TxImportView linked={linked} onRetry={onRetry}>
+        {(result) => (
+          <EmbedCanvas
+            snapshot={result.snapshot}
+            snapshotKey={linked.input}
+            onReady={onReady}
+            selfHosted
+            flowId={flowId}
+          />
+        )}
+      </TxImportView>
+    )
+  }
+  if (payload.kind !== 'ok') return <EmbedError title={FLOW_ERRORS[payload.kind]} onRetry={onRetry} />
   return (
     <EmbedCanvas snapshot={payload.snapshot} snapshotKey={flow ?? ''} onReady={onReady} selfHosted flowId={flowId} />
   )
@@ -102,7 +99,7 @@ interface WidgetProps {
   queryClient: QueryClient
   embedStore: EmbedStore
   attributes: WidgetAttributes
-  /** Bumped on every `flow` change: the canvas is rebuilt, never re-initialized in place. */
+  /** Bumped on every `flow`, `tx` or `cluster` change: the canvas is rebuilt, never re-initialized in place. */
   flowRevision: number
   flowId: string
   onReady: () => void
@@ -111,7 +108,7 @@ interface WidgetProps {
 const sameUrls = (a: RpcUrls, b: RpcUrls) => a.MAINNET === b.MAINNET && a.DEVNET === b.DEVNET
 
 function Widget({ host, portal, queryClient, embedStore, attributes, flowRevision, flowId, onReady }: WidgetProps) {
-  const { flow, rpcUrls, linkRef } = attributes
+  const { flow, tx, cluster, rpcUrls, linkRef } = attributes
   // Retry remounts the flow view, which re-reads the payload.
   const [attempt, setAttempt] = useState(0)
   const [dialogMode] = useState<DialogMode>(() => ({ modal: false, onInteractOutside: crossWidgetRule(host) }))
@@ -121,9 +118,10 @@ function Widget({ host, portal, queryClient, embedStore, attributes, flowRevisio
     layersWithOutsidePointerEventsDisabled: new Set<HTMLElement>(),
     branches: new Set<HTMLElement>(),
   }))
-  // Public endpoints unless rpc-* says otherwise; Send confirms over HTTPS (no wss: needed in the host CSP).
-  const [rpc, setRpc] = useState<RpcConfig>(() => ({ urls: rpcUrls, confirmMode: 'polling' }))
-  if (!sameUrls(rpc.urls, rpcUrls)) setRpc({ urls: rpcUrls, confirmMode: 'polling' })
+  // Public endpoints unless rpc-* says otherwise; Send confirms over HTTPS (no wss: needed in the host CSP);
+  // IDLs are read from the RPC only.
+  const [rpc, setRpc] = useState<RpcConfig>(() => ({ urls: rpcUrls, confirmMode: 'polling', selfHosted: true }))
+  if (!sameUrls(rpc.urls, rpcUrls)) setRpc({ urls: rpcUrls, confirmMode: 'polling', selfHosted: true })
   // New endpoints: drop what the old ones returned and read again. This must run after the commit: effects run
   // children first, so every query below already holds a query function with the new URLs.
   const readWith = useRef(rpc)
@@ -149,6 +147,8 @@ function Widget({ host, portal, queryClient, embedStore, attributes, flowRevisio
                         <FlowScope key={`${attempt}:${flowRevision}`}>
                           <FlowView
                             flow={flow}
+                            tx={tx}
+                            cluster={cluster}
                             flowId={flowId}
                             onReady={onReady}
                             onRetry={() => setAttempt((n) => n + 1)}
@@ -203,7 +203,15 @@ function mountWidget(
   let flowRevision = 0
   warnIgnored(attributes.ignored)
 
-  const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } })
+  // A refusal of the public mainnet endpoint is final: no retries, so the RPC notice shows at once.
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        retry: (failures, error) => failures < 3 && !isPublicMainnetBlocked(error),
+      },
+    },
+  })
   const embedStore = createEmbedStore({
     config: attributes.config,
     ignored: attributes.ignored,
@@ -241,7 +249,11 @@ function mountWidget(
       state.setConfig(attributes.config, attributes.ignored)
       // The shell resolved the theme (host markers for "auto"); never re-resolve from the OS here (K25).
       state.setResolvedTheme(next.resolvedTheme)
-      if (attributes.flow !== previous.flow) {
+      if (
+        attributes.flow !== previous.flow ||
+        attributes.tx !== previous.tx ||
+        (attributes.tx && attributes.cluster !== previous.cluster)
+      ) {
         flowRevision++
         state.setStatus('loading')
       }

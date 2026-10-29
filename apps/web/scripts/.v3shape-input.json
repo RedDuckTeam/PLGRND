@@ -1,0 +1,527 @@
+{
+ "types": [
+  "TEXT",
+  "HASH",
+  "KEYPAIR",
+  "PRIVATE_KEY",
+  "MNEMONIC",
+  "SIGN",
+  "DISPLAY",
+  "NUMBER",
+  "BOOLEAN",
+  "ADD",
+  "SUBTRACT",
+  "MULTIPLY",
+  "DIVIDE",
+  "MODULO",
+  "EXPONENT",
+  "ROUND",
+  "MIN",
+  "MAX",
+  "AND",
+  "OR",
+  "NOT",
+  "EQUAL",
+  "COMPARE",
+  "HAS_VALUE",
+  "IF",
+  "SOL_TO_LAMPORTS",
+  "LAMPORTS_TO_SOL",
+  "VALID_PUBLIC_KEY",
+  "ATA",
+  "TOKEN_AMOUNT_TO_RAW",
+  "RAW_TO_TOKEN_AMOUNT",
+  "RENT_EXEMPT",
+  "VERIFY_SIGNATURE",
+  "NETWORK",
+  "BALANCE",
+  "TRANSACTION_VIEW",
+  "PDA",
+  "TRANSACTION_BUILDER",
+  "INSTRUCTIONS",
+  "TRANSACTION",
+  "IDL",
+  "PROGRAM_INSTRUCTIONS",
+  "PROGRAM_ACCOUNT",
+  "WALLET",
+  "COMMENT",
+  "STRING_COMBINE",
+  "STRING_LENGTH",
+  "STRING_SUBSTRING",
+  "STRING_SPLIT",
+  "STRING_SEARCH",
+  "STRING_REPLACE",
+  "STRING_ENCODE",
+  "STRING_DECODE"
+ ],
+ "dataKeys": {
+  "TEXT": [
+   "text"
+  ],
+  "HASH": [
+   "hash",
+   "input"
+  ],
+  "KEYPAIR": [
+   "privateKey",
+   "publicKey"
+  ],
+  "PRIVATE_KEY": [
+   "privateKey",
+   "publicKey"
+  ],
+  "MNEMONIC": [
+   "mnemonic",
+   "privateKey"
+  ],
+  "SIGN": [
+   "message",
+   "privateKey",
+   "signature"
+  ],
+  "DISPLAY": [
+   "input",
+   "text"
+  ],
+  "NUMBER": [
+   "number"
+  ],
+  "BOOLEAN": [
+   "value"
+  ],
+  "ADD": [],
+  "SUBTRACT": [],
+  "MULTIPLY": [],
+  "DIVIDE": [],
+  "MODULO": [],
+  "EXPONENT": [],
+  "ROUND": [],
+  "MIN": [],
+  "MAX": [],
+  "AND": [
+   "a",
+   "b"
+  ],
+  "OR": [
+   "a",
+   "b"
+  ],
+  "NOT": [
+   "a",
+   "b"
+  ],
+  "EQUAL": [
+   "a",
+   "b",
+   "operator",
+   "result"
+  ],
+  "COMPARE": [
+   "a",
+   "b",
+   "operator",
+   "result"
+  ],
+  "HAS_VALUE": [
+   "result",
+   "value"
+  ],
+  "IF": [
+   "condition",
+   "value",
+   "whenFalse",
+   "whenTrue"
+  ],
+  "SOL_TO_LAMPORTS": [
+   "lamports",
+   "sol"
+  ],
+  "LAMPORTS_TO_SOL": [
+   "lamports",
+   "sol"
+  ],
+  "VALID_PUBLIC_KEY": [
+   "isValid",
+   "publicKey",
+   "value"
+  ],
+  "ATA": [
+   "ata",
+   "mint",
+   "owner",
+   "tokenProgram"
+  ],
+  "TOKEN_AMOUNT_TO_RAW": [
+   "amount",
+   "decimals",
+   "rawAmount"
+  ],
+  "RAW_TO_TOKEN_AMOUNT": [
+   "amount",
+   "decimals",
+   "rawAmount"
+  ],
+  "RENT_EXEMPT": [
+   "lamports",
+   "network",
+   "sol",
+   "space"
+  ],
+  "VERIFY_SIGNATURE": [
+   "isValid",
+   "message",
+   "publicKey",
+   "signature"
+  ],
+  "NETWORK": [
+   "network"
+  ],
+  "BALANCE": [
+   "balance",
+   "balanceRaw",
+   "network",
+   "pubkey",
+   "token"
+  ],
+  "TRANSACTION_VIEW": [
+   "blockTime",
+   "network",
+   "signature",
+   "slot",
+   "transactionJson"
+  ],
+  "PDA": [
+   "bump",
+   "pda",
+   "programId",
+   "seed#0"
+  ],
+  "TRANSACTION_BUILDER": [
+   "transaction"
+  ],
+  "INSTRUCTIONS": [
+   "instruction",
+   "transactionIn",
+   "transactionOut"
+  ],
+  "TRANSACTION": [
+   "network",
+   "privateKey",
+   "signature",
+   "status",
+   "transaction"
+  ],
+  "IDL": [
+   "idl",
+   "idlJson",
+   "programId"
+  ],
+  "PROGRAM_INSTRUCTIONS": [
+   "idl",
+   "programId",
+   "selectedInstruction",
+   "transactionIn",
+   "transactionOut"
+  ],
+  "PROGRAM_ACCOUNT": [
+   "address",
+   "decoded",
+   "error",
+   "field_count",
+   "idl",
+   "network",
+   "programId",
+   "selectedAccount"
+  ],
+  "WALLET": [
+   "publicKey",
+   "wallet"
+  ],
+  "COMMENT": [
+   "text"
+  ],
+  "STRING_COMBINE": [
+   "a",
+   "b",
+   "c",
+   "text"
+  ],
+  "STRING_LENGTH": [
+   "bytes",
+   "chars",
+   "text"
+  ],
+  "STRING_SUBSTRING": [
+   "length",
+   "start",
+   "text"
+  ],
+  "STRING_SPLIT": [
+   "count",
+   "first",
+   "json",
+   "last",
+   "separator",
+   "text"
+  ],
+  "STRING_SEARCH": [
+   "first",
+   "last",
+   "term",
+   "text"
+  ],
+  "STRING_REPLACE": [
+   "find",
+   "replacement",
+   "text"
+  ],
+  "STRING_ENCODE": [
+   "encoding",
+   "input",
+   "text"
+  ],
+  "STRING_DECODE": [
+   "encoding",
+   "input",
+   "text"
+  ]
+ },
+ "handles": {
+  "TEXT": [
+   "text"
+  ],
+  "HASH": [
+   "hash",
+   "input"
+  ],
+  "KEYPAIR": [
+   "privateKey",
+   "publicKey"
+  ],
+  "PRIVATE_KEY": [
+   "privateKey",
+   "publicKey"
+  ],
+  "MNEMONIC": [
+   "mnemonic",
+   "privateKey"
+  ],
+  "SIGN": [
+   "message",
+   "privateKey",
+   "signature"
+  ],
+  "DISPLAY": [
+   "input",
+   "text"
+  ],
+  "NUMBER": [
+   "number"
+  ],
+  "BOOLEAN": [
+   "value"
+  ],
+  "ADD": [
+   "a",
+   "b",
+   "result"
+  ],
+  "SUBTRACT": [],
+  "MULTIPLY": [
+   "a",
+   "b",
+   "result"
+  ],
+  "DIVIDE": [
+   "a",
+   "b",
+   "result"
+  ],
+  "MODULO": [],
+  "EXPONENT": [],
+  "ROUND": [],
+  "MIN": [],
+  "MAX": [],
+  "AND": [
+   "a",
+   "b"
+  ],
+  "OR": [
+   "a",
+   "b"
+  ],
+  "NOT": [
+   "a",
+   "b"
+  ],
+  "EQUAL": [
+   "a",
+   "b"
+  ],
+  "COMPARE": [
+   "a",
+   "b"
+  ],
+  "HAS_VALUE": [
+   "value"
+  ],
+  "IF": [
+   "condition",
+   "value",
+   "whenFalse",
+   "whenTrue"
+  ],
+  "SOL_TO_LAMPORTS": [
+   "lamports",
+   "sol"
+  ],
+  "LAMPORTS_TO_SOL": [
+   "lamports",
+   "sol"
+  ],
+  "VALID_PUBLIC_KEY": [
+   "isValid",
+   "publicKey",
+   "value"
+  ],
+  "ATA": [
+   "ata",
+   "mint",
+   "owner"
+  ],
+  "TOKEN_AMOUNT_TO_RAW": [
+   "amount",
+   "decimals",
+   "rawAmount"
+  ],
+  "RAW_TO_TOKEN_AMOUNT": [
+   "amount",
+   "decimals",
+   "rawAmount"
+  ],
+  "RENT_EXEMPT": [
+   "lamports",
+   "network",
+   "sol",
+   "space"
+  ],
+  "VERIFY_SIGNATURE": [
+   "isValid",
+   "message",
+   "publicKey",
+   "signature"
+  ],
+  "NETWORK": [
+   "network"
+  ],
+  "BALANCE": [
+   "balance",
+   "balanceRaw",
+   "network",
+   "pubkey",
+   "token"
+  ],
+  "TRANSACTION_VIEW": [
+   "blockTime",
+   "network",
+   "signature",
+   "slot",
+   "transactionJson"
+  ],
+  "PDA": [
+   "bump",
+   "pda",
+   "programId",
+   "seed#0",
+   "seed#1",
+   "seed#2"
+  ],
+  "TRANSACTION_BUILDER": [
+   "transaction"
+  ],
+  "INSTRUCTIONS": [
+   "amountUi",
+   "computeUnits",
+   "fromPubkey",
+   "microLamports",
+   "toPubkey",
+   "transactionIn",
+   "transactionOut"
+  ],
+  "TRANSACTION": [
+   "network",
+   "privateKey",
+   "signature",
+   "transaction"
+  ],
+  "IDL": [
+   "idl",
+   "programId"
+  ],
+  "PROGRAM_INSTRUCTIONS": [
+   "account_counter",
+   "account_user",
+   "arg_amount",
+   "idl",
+   "programId",
+   "transactionIn",
+   "transactionOut"
+  ],
+  "PROGRAM_ACCOUNT": [
+   "address",
+   "field_count",
+   "idl",
+   "network",
+   "programId"
+  ],
+  "WALLET": [
+   "publicKey",
+   "wallet"
+  ],
+  "COMMENT": [],
+  "STRING_COMBINE": [
+   "a",
+   "b",
+   "c",
+   "text"
+  ],
+  "STRING_LENGTH": [
+   "bytes",
+   "chars",
+   "text"
+  ],
+  "STRING_SUBSTRING": [
+   "length",
+   "start",
+   "text"
+  ],
+  "STRING_SPLIT": [
+   "count",
+   "first",
+   "json",
+   "last",
+   "separator",
+   "text"
+  ],
+  "STRING_SEARCH": [
+   "first",
+   "last",
+   "term",
+   "text"
+  ],
+  "STRING_REPLACE": [
+   "find",
+   "replacement",
+   "text"
+  ],
+  "STRING_ENCODE": [
+   "input",
+   "text"
+  ],
+  "STRING_DECODE": [
+   "input",
+   "text"
+  ]
+ },
+ "flows": 32
+}

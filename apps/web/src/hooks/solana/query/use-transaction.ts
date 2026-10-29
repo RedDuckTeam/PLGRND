@@ -1,7 +1,7 @@
 import type { Network } from '@/types/network'
 import { useQuery } from '@tanstack/react-query'
 import { isExist, isValidSignature } from '@/utils/validation/validation.utils'
-import { getSolanaConnection, type RpcUrls } from '@/constants/solana/connection'
+import { getSolanaConnection, isPublicMainnetBlocked, type RpcUrls } from '@/constants/solana/connection'
 import { useRpcConfig } from '@/providers/rpc-urls-context'
 
 export const getTransactionBySignature = async (signature: string, network: Network, urls: RpcUrls) => {
@@ -21,6 +21,8 @@ export const getTransactionBySignature = async (signature: string, network: Netw
 
     return { transactionJson, slot, blockTime }
   } catch (error) {
+    // Left to the query, so the self-hosted widget can say why mainnet reads fail.
+    if (isPublicMainnetBlocked(error)) throw error
     console.error('Error getting transaction by signature:', error)
     return { transactionJson: '', slot: '', blockTime: '' }
   }

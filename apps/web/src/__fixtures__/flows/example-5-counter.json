@@ -1,0 +1,623 @@
+{
+  "v": 3,
+  "nodes": [
+    {
+      "id": "8e1d12b311254a31b47ae6dbcef0f53b",
+      "type": "TRANSACTION_BUILDER",
+      "position": {
+        "x": -279.96342053589456,
+        "y": -370.5587178094722
+      },
+      "data": {},
+      "measured": {
+        "width": 100,
+        "height": 26
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "6e0fac97d5d54159990898d882ce2ed4",
+      "type": "TRANSACTION",
+      "position": {
+        "x": 476.79502879360035,
+        "y": -250.5776207156612
+      },
+      "data": {
+        "status": "success",
+        "signature": "4nZvRM5tveNCQ5YShsz8WM4AVHuEykMBHxumxrALfcnjDdaJPCfbBKRXhnF4G3ZrLerkCbewBVVbAvvmYppt2K7h"
+      },
+      "measured": {
+        "width": 300,
+        "height": 64
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "b061b1863c07429a93be55c85fc0930c",
+      "type": "NETWORK",
+      "position": {
+        "x": -239.30076547464228,
+        "y": -169.27630734036768
+      },
+      "data": {
+        "network": "DEVNET"
+      },
+      "measured": {
+        "width": 200,
+        "height": 48
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "20d62c31c59f4a59b2122b10edc92d32",
+      "type": "BALANCE",
+      "position": {
+        "x": 51.734483924246064,
+        "y": -56.27235275548108
+      },
+      "data": {
+        "balance": "2.230106837",
+        "balanceRaw": "2230106837"
+      },
+      "measured": {
+        "width": 200,
+        "height": 48
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "a2bdcf3346dc46bd9e8758ce5b2a7fd8",
+      "type": "DISPLAY",
+      "position": {
+        "x": 315.0531369909078,
+        "y": -56.806334477263995
+      },
+      "data": {
+        "text": "2.230106837"
+      },
+      "measured": {
+        "width": 300,
+        "height": 36
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "7ef3dc7770c147f3a3eeff4cce301132",
+      "type": "DISPLAY",
+      "position": {
+        "x": 614.7567933894206,
+        "y": -385.92699847337974
+      },
+      "data": {
+        "text": "4nZvRM5tveNCQ5YShsz8WM4AVHuEykMBHxumxrALfcnjDdaJPCfbBKRXhnF4G3ZrLerkCbewBVVbAvvmYppt2K7h"
+      },
+      "measured": {
+        "width": 300,
+        "height": 46
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "ee51cf3b94664e97b3030d8287c1c15e",
+      "type": "PROGRAM_ACCOUNT",
+      "position": {
+        "x": 91.40103812901569,
+        "y": -684.8027351046462
+      },
+      "data": {
+        "idl": {
+          "version": "0.1.0",
+          "name": "counter",
+          "instructions": [
+            {
+              "name": "initialize",
+              "accounts": [
+                {
+                  "name": "counter",
+                  "isMut": true,
+                  "isSigner": false
+                },
+                {
+                  "name": "user",
+                  "isMut": true,
+                  "isSigner": true
+                },
+                {
+                  "name": "systemProgram",
+                  "isMut": false,
+                  "isSigner": false
+                }
+              ],
+              "args": []
+            },
+            {
+              "name": "increment",
+              "accounts": [
+                {
+                  "name": "counter",
+                  "isMut": true,
+                  "isSigner": false
+                },
+                {
+                  "name": "user",
+                  "isMut": true,
+                  "isSigner": true
+                }
+              ],
+              "args": []
+            },
+            {
+              "name": "decrement",
+              "accounts": [
+                {
+                  "name": "counter",
+                  "isMut": true,
+                  "isSigner": false
+                },
+                {
+                  "name": "user",
+                  "isMut": true,
+                  "isSigner": true
+                }
+              ],
+              "args": []
+            }
+          ],
+          "accounts": [
+            {
+              "name": "Counter",
+              "type": {
+                "kind": "struct",
+                "fields": [
+                  {
+                    "name": "count",
+                    "type": "u64"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "selectedAccount": "Counter",
+        "decoded": {
+          "count": "5"
+        },
+        "error": null,
+        "field_count": "5"
+      },
+      "measured": {
+        "width": 350,
+        "height": 173
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "364a9b357c3e4362bff8bc5c2ce6cd7b",
+      "type": "PROGRAM_INSTRUCTIONS",
+      "position": {
+        "x": 90.07611029308006,
+        "y": -461.76465864828083
+      },
+      "data": {
+        "selectedInstruction": "increment",
+        "idl": {
+          "version": "0.1.0",
+          "name": "counter",
+          "instructions": [
+            {
+              "name": "initialize",
+              "accounts": [
+                {
+                  "name": "counter",
+                  "isMut": true,
+                  "isSigner": false
+                },
+                {
+                  "name": "user",
+                  "isMut": true,
+                  "isSigner": true
+                },
+                {
+                  "name": "systemProgram",
+                  "isMut": false,
+                  "isSigner": false
+                }
+              ],
+              "args": []
+            },
+            {
+              "name": "increment",
+              "accounts": [
+                {
+                  "name": "counter",
+                  "isMut": true,
+                  "isSigner": false
+                },
+                {
+                  "name": "user",
+                  "isMut": true,
+                  "isSigner": true
+                }
+              ],
+              "args": []
+            },
+            {
+              "name": "decrement",
+              "accounts": [
+                {
+                  "name": "counter",
+                  "isMut": true,
+                  "isSigner": false
+                },
+                {
+                  "name": "user",
+                  "isMut": true,
+                  "isSigner": true
+                }
+              ],
+              "args": []
+            }
+          ],
+          "accounts": [
+            {
+              "name": "Counter",
+              "type": {
+                "kind": "struct",
+                "fields": [
+                  {
+                    "name": "count",
+                    "type": "u64"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "programId": "FCRU9Fnd1XCPeYhtSnBamgGph41Eu5TKu8woYYQE5JUB"
+      },
+      "measured": {
+        "width": 350,
+        "height": 169
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "f7daf3194fd94da08bb94b88967fef35",
+      "type": "IDL",
+      "position": {
+        "x": -404.942501426017,
+        "y": -682.2752975523274
+      },
+      "data": {
+        "idlJson": "{\n  \"version\": \"0.1.0\",\n  \"name\": \"counter\",\n  \"instructions\": [\n    {\n      \"name\": \"initialize\",\n      \"accounts\": [\n        {\n          \"name\": \"counter\",\n          \"isMut\": true,\n          \"isSigner\": false\n        },\n        {\n          \"name\": \"user\",\n          \"isMut\": true,\n          \"isSigner\": true\n        },\n        {\n          \"name\": \"systemProgram\",\n          \"isMut\": false,\n          \"isSigner\": false\n        }\n      ],\n      \"args\": []\n    },\n    {\n      \"name\": \"increment\",\n      \"accounts\": [\n        {\n          \"name\": \"counter\",\n          \"isMut\": true,\n          \"isSigner\": false\n        },\n        {\n          \"name\": \"user\",\n          \"isMut\": true,\n          \"isSigner\": true\n        }\n      ],\n      \"args\": []\n    },\n    {\n      \"name\": \"decrement\",\n      \"accounts\": [\n        {\n          \"name\": \"counter\",\n          \"isMut\": true,\n          \"isSigner\": false\n        },\n        {\n          \"name\": \"user\",\n          \"isMut\": true,\n          \"isSigner\": true\n        }\n      ],\n      \"args\": []\n    }\n  ],\n  \"accounts\": [\n    {\n      \"name\": \"Counter\",\n      \"type\": {\n        \"kind\": \"struct\",\n        \"fields\": [\n          {\n            \"name\": \"count\",\n            \"type\": \"u64\"\n          }\n        ]\n      }\n    }\n  ]\n}",
+        "idl": {
+          "version": "0.1.0",
+          "name": "counter",
+          "instructions": [
+            {
+              "name": "initialize",
+              "accounts": [
+                {
+                  "name": "counter",
+                  "isMut": true,
+                  "isSigner": false
+                },
+                {
+                  "name": "user",
+                  "isMut": true,
+                  "isSigner": true
+                },
+                {
+                  "name": "systemProgram",
+                  "isMut": false,
+                  "isSigner": false
+                }
+              ],
+              "args": []
+            },
+            {
+              "name": "increment",
+              "accounts": [
+                {
+                  "name": "counter",
+                  "isMut": true,
+                  "isSigner": false
+                },
+                {
+                  "name": "user",
+                  "isMut": true,
+                  "isSigner": true
+                }
+              ],
+              "args": []
+            },
+            {
+              "name": "decrement",
+              "accounts": [
+                {
+                  "name": "counter",
+                  "isMut": true,
+                  "isSigner": false
+                },
+                {
+                  "name": "user",
+                  "isMut": true,
+                  "isSigner": true
+                }
+              ],
+              "args": []
+            }
+          ],
+          "accounts": [
+            {
+              "name": "Counter",
+              "type": {
+                "kind": "struct",
+                "fields": [
+                  {
+                    "name": "count",
+                    "type": "u64"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "programId": "FCRU9Fnd1XCPeYhtSnBamgGph41Eu5TKu8woYYQE5JUB"
+      },
+      "measured": {
+        "width": 350,
+        "height": 237
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "70ec44f20591468da9818848198d5f09",
+      "type": "DISPLAY",
+      "position": {
+        "x": 476.3098461280482,
+        "y": -631.9517990117689
+      },
+      "data": {
+        "text": "5"
+      },
+      "measured": {
+        "width": 300,
+        "height": 36
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "485bfba9bf0f46faa0efaeec9fafcce8",
+      "type": "WALLET",
+      "position": {
+        "x": -254.7795159967137,
+        "y": -62.731807126103874
+      },
+      "data": {
+        "publicKey": "",
+        "wallet": null
+      },
+      "measured": {
+        "width": 200,
+        "height": 55
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "c4250ba5097745c2811e8bb0ca791ffa",
+      "type": "TEXT",
+      "position": {
+        "x": -384.83097209848074,
+        "y": -278.39606279725547
+      },
+      "data": {
+        "text": "FGcsC1AgPA7k6qKq2LyHvzSgkuASgt1kivchwQuJNLDp"
+      },
+      "measured": {
+        "width": 300,
+        "height": 51
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "a4ad74e205254f958080448f5467ee51",
+      "type": "COMMENT",
+      "position": {
+        "x": -379.471899621742,
+        "y": -846.1202007576328
+      },
+      "data": {
+        "text": "What?\n\nThis flow drives a live on-chain counter program that stores a single number. The increment instruction adds 1 to it, the decrement instruction subtracts 1. Press Send on either transaction and the counter on Solana actually changes."
+      },
+      "measured": {
+        "width": 280,
+        "height": 122
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "56fac3d86b2e4cf88b8ecc06c4395957",
+      "type": "COMMENT",
+      "position": {
+        "x": 6.582378292980707,
+        "y": -892.057399069011
+      },
+      "data": {
+        "text": "Why?\n\nWhy a counter is the \"Hello World\" of Solana programs It's the smallest possible thing that has STATE. To use it you have to exercise the entire lifecycle of an on-chain account:                                        \n- write data into it (instructions)                                                        \n- read data from it (Program Account node)                                                 \n- prove ownership (a signer)                                                                                                              \nThe same four pieces show up in DEXes, lending protocols, and games just with bigger structs."
+      },
+      "measured": {
+        "width": 280,
+        "height": 177
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "20b393dd84db4a91932f34beb7a25d4c",
+      "type": "COMMENT",
+      "position": {
+        "x": 378.658204237137,
+        "y": -869.6602564206013
+      },
+      "data": {
+        "text": "You're now reading and writing program-owned state on Solana. The exact pattern every dapp uses. Try this: open a Solana explorer in another tab, paste the counter account address, and refresh after each Send. You'll see the count field change in real time. Every protocol you'll ever build is just a fancier version of this loop."
+      },
+      "measured": {
+        "width": 280,
+        "height": 122
+      },
+      "selected": false,
+      "dragging": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "b061b1863c07429a93be55c85fc0930c",
+      "sourceHandle": "b061b1863c07429a93be55c85fc0930c-network-right",
+      "target": "6e0fac97d5d54159990898d882ce2ed4",
+      "targetHandle": "6e0fac97d5d54159990898d882ce2ed4-network-left",
+      "id": "xy-edge__b061b1863c07429a93be55c85fc0930cb061b1863c07429a93be55c85fc0930c-network-right-6e0fac97d5d54159990898d882ce2ed46e0fac97d5d54159990898d882ce2ed4-network-left",
+      "selected": false
+    },
+    {
+      "source": "b061b1863c07429a93be55c85fc0930c",
+      "sourceHandle": "b061b1863c07429a93be55c85fc0930c-network-right",
+      "target": "20d62c31c59f4a59b2122b10edc92d32",
+      "targetHandle": "20d62c31c59f4a59b2122b10edc92d32-network-left",
+      "id": "xy-edge__b061b1863c07429a93be55c85fc0930cb061b1863c07429a93be55c85fc0930c-network-right-20d62c31c59f4a59b2122b10edc92d3220d62c31c59f4a59b2122b10edc92d32-network-left",
+      "selected": false
+    },
+    {
+      "id": "xy-edge__20d62c31c59f4a59b2122b10edc92d32-balance-right-a2bdcf3346dc46bd9e8758ce5b2a7fd8-input-left",
+      "source": "20d62c31c59f4a59b2122b10edc92d32",
+      "sourceHandle": "20d62c31c59f4a59b2122b10edc92d32-balance-right",
+      "target": "a2bdcf3346dc46bd9e8758ce5b2a7fd8",
+      "targetHandle": "a2bdcf3346dc46bd9e8758ce5b2a7fd8-input-left",
+      "selected": false
+    },
+    {
+      "id": "xy-edge__6e0fac97d5d54159990898d882ce2ed4-signature-right-7ef3dc7770c147f3a3eeff4cce301132-input-left",
+      "source": "6e0fac97d5d54159990898d882ce2ed4",
+      "sourceHandle": "6e0fac97d5d54159990898d882ce2ed4-signature-right",
+      "target": "7ef3dc7770c147f3a3eeff4cce301132",
+      "targetHandle": "7ef3dc7770c147f3a3eeff4cce301132-input-left",
+      "selected": false
+    },
+    {
+      "source": "f7daf3194fd94da08bb94b88967fef35",
+      "sourceHandle": "f7daf3194fd94da08bb94b88967fef35-idl-right",
+      "target": "364a9b357c3e4362bff8bc5c2ce6cd7b",
+      "targetHandle": "364a9b357c3e4362bff8bc5c2ce6cd7b-idl-left",
+      "id": "xy-edge__f7daf3194fd94da08bb94b88967fef35f7daf3194fd94da08bb94b88967fef35-idl-right-364a9b357c3e4362bff8bc5c2ce6cd7b364a9b357c3e4362bff8bc5c2ce6cd7b-idl-left"
+    },
+    {
+      "source": "f7daf3194fd94da08bb94b88967fef35",
+      "sourceHandle": "f7daf3194fd94da08bb94b88967fef35-programId-right",
+      "target": "364a9b357c3e4362bff8bc5c2ce6cd7b",
+      "targetHandle": "364a9b357c3e4362bff8bc5c2ce6cd7b-programId-left",
+      "id": "xy-edge__f7daf3194fd94da08bb94b88967fef35f7daf3194fd94da08bb94b88967fef35-programId-right-364a9b357c3e4362bff8bc5c2ce6cd7b364a9b357c3e4362bff8bc5c2ce6cd7b-programId-left",
+      "selected": false
+    },
+    {
+      "source": "8e1d12b311254a31b47ae6dbcef0f53b",
+      "sourceHandle": "8e1d12b311254a31b47ae6dbcef0f53b-transaction-right",
+      "target": "364a9b357c3e4362bff8bc5c2ce6cd7b",
+      "targetHandle": "364a9b357c3e4362bff8bc5c2ce6cd7b-transactionIn-left",
+      "id": "xy-edge__8e1d12b311254a31b47ae6dbcef0f53b8e1d12b311254a31b47ae6dbcef0f53b-transaction-right-364a9b357c3e4362bff8bc5c2ce6cd7b364a9b357c3e4362bff8bc5c2ce6cd7b-transactionIn-left"
+    },
+    {
+      "source": "f7daf3194fd94da08bb94b88967fef35",
+      "sourceHandle": "f7daf3194fd94da08bb94b88967fef35-idl-right",
+      "target": "ee51cf3b94664e97b3030d8287c1c15e",
+      "targetHandle": "ee51cf3b94664e97b3030d8287c1c15e-idl-left",
+      "id": "xy-edge__f7daf3194fd94da08bb94b88967fef35f7daf3194fd94da08bb94b88967fef35-idl-right-ee51cf3b94664e97b3030d8287c1c15eee51cf3b94664e97b3030d8287c1c15e-idl-left"
+    },
+    {
+      "source": "f7daf3194fd94da08bb94b88967fef35",
+      "sourceHandle": "f7daf3194fd94da08bb94b88967fef35-programId-right",
+      "target": "ee51cf3b94664e97b3030d8287c1c15e",
+      "targetHandle": "ee51cf3b94664e97b3030d8287c1c15e-programId-left",
+      "id": "xy-edge__f7daf3194fd94da08bb94b88967fef35f7daf3194fd94da08bb94b88967fef35-programId-right-ee51cf3b94664e97b3030d8287c1c15eee51cf3b94664e97b3030d8287c1c15e-programId-left",
+      "selected": false
+    },
+    {
+      "source": "b061b1863c07429a93be55c85fc0930c",
+      "sourceHandle": "b061b1863c07429a93be55c85fc0930c-network-right",
+      "target": "ee51cf3b94664e97b3030d8287c1c15e",
+      "targetHandle": "ee51cf3b94664e97b3030d8287c1c15e-network-left",
+      "id": "xy-edge__b061b1863c07429a93be55c85fc0930cb061b1863c07429a93be55c85fc0930c-network-right-ee51cf3b94664e97b3030d8287c1c15eee51cf3b94664e97b3030d8287c1c15e-network-left",
+      "selected": false
+    },
+    {
+      "source": "364a9b357c3e4362bff8bc5c2ce6cd7b",
+      "sourceHandle": "364a9b357c3e4362bff8bc5c2ce6cd7b-transactionOut-right",
+      "target": "6e0fac97d5d54159990898d882ce2ed4",
+      "targetHandle": "6e0fac97d5d54159990898d882ce2ed4-transaction-left",
+      "id": "xy-edge__364a9b357c3e4362bff8bc5c2ce6cd7b364a9b357c3e4362bff8bc5c2ce6cd7b-transactionOut-right-6e0fac97d5d54159990898d882ce2ed46e0fac97d5d54159990898d882ce2ed4-transaction-left",
+      "selected": false
+    },
+    {
+      "id": "xy-edge__ee51cf3b94664e97b3030d8287c1c15e-field_count-right-70ec44f20591468da9818848198d5f09-input-left",
+      "source": "ee51cf3b94664e97b3030d8287c1c15e",
+      "sourceHandle": "ee51cf3b94664e97b3030d8287c1c15e-field_count-right",
+      "target": "70ec44f20591468da9818848198d5f09",
+      "targetHandle": "70ec44f20591468da9818848198d5f09-input-left"
+    },
+    {
+      "source": "485bfba9bf0f46faa0efaeec9fafcce8",
+      "sourceHandle": "485bfba9bf0f46faa0efaeec9fafcce8-wallet-right",
+      "target": "6e0fac97d5d54159990898d882ce2ed4",
+      "targetHandle": "6e0fac97d5d54159990898d882ce2ed4-privateKey-left",
+      "id": "xy-edge__485bfba9bf0f46faa0efaeec9fafcce8485bfba9bf0f46faa0efaeec9fafcce8-wallet-right-6e0fac97d5d54159990898d882ce2ed46e0fac97d5d54159990898d882ce2ed4-privateKey-left",
+      "selected": false
+    },
+    {
+      "source": "485bfba9bf0f46faa0efaeec9fafcce8",
+      "sourceHandle": "485bfba9bf0f46faa0efaeec9fafcce8-publicKey-right",
+      "target": "20d62c31c59f4a59b2122b10edc92d32",
+      "targetHandle": "20d62c31c59f4a59b2122b10edc92d32-pubkey-left",
+      "id": "xy-edge__485bfba9bf0f46faa0efaeec9fafcce8485bfba9bf0f46faa0efaeec9fafcce8-publicKey-right-20d62c31c59f4a59b2122b10edc92d3220d62c31c59f4a59b2122b10edc92d32-pubkey-left",
+      "selected": false
+    },
+    {
+      "source": "485bfba9bf0f46faa0efaeec9fafcce8",
+      "sourceHandle": "485bfba9bf0f46faa0efaeec9fafcce8-publicKey-right",
+      "target": "364a9b357c3e4362bff8bc5c2ce6cd7b",
+      "targetHandle": "364a9b357c3e4362bff8bc5c2ce6cd7b-account_user-left",
+      "id": "xy-edge__485bfba9bf0f46faa0efaeec9fafcce8485bfba9bf0f46faa0efaeec9fafcce8-publicKey-right-364a9b357c3e4362bff8bc5c2ce6cd7b364a9b357c3e4362bff8bc5c2ce6cd7b-account_user-left"
+    },
+    {
+      "source": "c4250ba5097745c2811e8bb0ca791ffa",
+      "sourceHandle": "c4250ba5097745c2811e8bb0ca791ffa-text-right",
+      "target": "364a9b357c3e4362bff8bc5c2ce6cd7b",
+      "targetHandle": "364a9b357c3e4362bff8bc5c2ce6cd7b-account_counter-left",
+      "id": "xy-edge__c4250ba5097745c2811e8bb0ca791ffac4250ba5097745c2811e8bb0ca791ffa-text-right-364a9b357c3e4362bff8bc5c2ce6cd7b364a9b357c3e4362bff8bc5c2ce6cd7b-account_counter-left"
+    },
+    {
+      "source": "c4250ba5097745c2811e8bb0ca791ffa",
+      "sourceHandle": "c4250ba5097745c2811e8bb0ca791ffa-text-right",
+      "target": "ee51cf3b94664e97b3030d8287c1c15e",
+      "targetHandle": "ee51cf3b94664e97b3030d8287c1c15e-address-left",
+      "id": "xy-edge__c4250ba5097745c2811e8bb0ca791ffac4250ba5097745c2811e8bb0ca791ffa-text-right-ee51cf3b94664e97b3030d8287c1c15eee51cf3b94664e97b3030d8287c1c15e-address-left"
+    }
+  ],
+  "viewport": {
+    "x": 657.6127618766441,
+    "y": 757.2601082143598,
+    "zoom": 0.8096565411240814
+  }
+}

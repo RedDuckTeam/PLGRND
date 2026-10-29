@@ -1,0 +1,61 @@
+{
+  "name": "partially-signed",
+  "network": "mainnet",
+  "input": {
+    "kind": "serialized",
+    "encoding": "base64",
+    "value": "AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADNl6/S8qPDokvMVa9l7p/keIRq3Nhwpqvk4lk9MCXCa5iP9a6gLnOXyRdg9LdB0bP2bs/IgZa8f30301CmyAUHAgADBfvnDX0Vv+zGCFxfUmgyLvNmn2hrCdjkHGvkGYzvY5saNRnQU47NiIDAukvbvQDsc5IWjkZnnFYCt5oCeEXkGD4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAan1RcZLFxRIYzJTD1K8X9Y2u4Im6H9ROPb2YoAAAAABt324ddloZPZy+FGzut5rBy0he1fWzeROoz1hX7/AKnjMtr5L6vs6LY/96RABeX9/Zr6FYdWthxalfkEs7jQgQICAgABNAAAAABgTRYAAAAAAFIAAAAAAAAABt324ddloZPZy+FGzut5rBy0he1fWzeROoz1hX7/AKkEAgEDQwAG++cNfRW/7MYIXF9SaDIu82afaGsJ2OQca+QZjO9jmxoB++cNfRW/7MYIXF9SaDIu82afaGsJ2OQca+QZjO9jmxo="
+  },
+  "version": "legacy",
+  "capturedAt": "2026-10-28T14:07:11.335Z",
+  "slot": 462504141,
+  "wire": "AgADBfvnDX0Vv+zGCFxfUmgyLvNmn2hrCdjkHGvkGYzvY5saNRnQU47NiIDAukvbvQDsc5IWjkZnnFYCt5oCeEXkGD4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAan1RcZLFxRIYzJTD1K8X9Y2u4Im6H9ROPb2YoAAAAABt324ddloZPZy+FGzut5rBy0he1fWzeROoz1hX7/AKnjMtr5L6vs6LY/96RABeX9/Zr6FYdWthxalfkEs7jQgQICAgABNAAAAABgTRYAAAAAAFIAAAAAAAAABt324ddloZPZy+FGzut5rBy0he1fWzeROoz1hX7/AKkEAgEDQwAG++cNfRW/7MYIXF9SaDIu82afaGsJ2OQca+QZjO9jmxoB++cNfRW/7MYIXF9SaDIu82afaGsJ2OQca+QZjO9jmxo=",
+  "signatures": [
+    "1111111111111111111111111111111111111111111111111111111111111111",
+    "57QZjBz3CpM2yJQ4xtbZYGVpbBSaeAmztuQmYUHdUucHQXaf8e5Q1PckjWp6ZUzoxP1aHbmNPXmTFrpT94PdQHwt"
+  ],
+  "simulation": {
+    "accounts": null,
+    "err": "AccountNotFound",
+    "fee": null,
+    "innerInstructions": null,
+    "loadedAccountsDataSize": 0,
+    "loadedAddresses": {
+      "readonly": [],
+      "writable": []
+    },
+    "logs": [],
+    "postBalances": [0, 0, 1, 1009200, 230130698],
+    "postTokenBalances": [],
+    "preBalances": [0, 0, 1, 1009200, 230130698],
+    "preTokenBalances": [],
+    "replacementBlockhash": {
+      "blockhash": "J7adc5RpMjm9hDrg2aPRV8YasnVcGGHFTDB2oqdYhyY5",
+      "lastValidBlockHeight": 440528804
+    },
+    "returnData": null,
+    "unitsConsumed": 0
+  },
+  "altAccounts": {},
+  "programs": ["11111111111111111111111111111111", "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"],
+  "accounts": {
+    "2ypWVnvjZsraGzL18SHoqnZ637uEHC73KhqiE6nfyaCV": "2ypWVnvjZsraGzL18SHoqnZ637uEHC73KhqiE6nfyaCV.b64",
+    "FgsH6dRAER4htJGQFvBDw6x6rBvx4yCsWBwwh3zhdpzL": "FgsH6dRAER4htJGQFvBDw6x6rBvx4yCsWBwwh3zhdpzL.b64"
+  },
+  "accountMeta": {
+    "2ypWVnvjZsraGzL18SHoqnZ637uEHC73KhqiE6nfyaCV": {
+      "program": "11111111111111111111111111111111",
+      "kind": "pmp-foundation",
+      "owner": "ProgM6JCCvbYkfKqJYHePx4xxSUSqJp7rh8Lyv7nk7S",
+      "lamports": 22327680,
+      "size": 3080
+    },
+    "FgsH6dRAER4htJGQFvBDw6x6rBvx4yCsWBwwh3zhdpzL": {
+      "program": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+      "kind": "pmp-foundation",
+      "owner": "ProgM6JCCvbYkfKqJYHePx4xxSUSqJp7rh8Lyv7nk7S",
+      "lamports": 60231840,
+      "size": 8526
+    }
+  }
+}

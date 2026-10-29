@@ -91,6 +91,18 @@
       "classification": "safe",
       "note": "Reads globalThis.crypto."
     },
+    "@noble/hashes@2.4.0|globalThis.": {
+      "owner": "@noble/hashes@2.4.0",
+      "token": "globalThis.",
+      "count": 1,
+      "classification": "safe"
+    },
+    "@noble/hashes@2.4.0|setTimeout(": {
+      "owner": "@noble/hashes@2.4.0",
+      "token": "setTimeout(",
+      "count": 1,
+      "classification": "safe"
+    },
     "@radix-ui/primitive@1.1.3|activeElement|21eeb73fd255": {
       "owner": "@radix-ui/primitive@1.1.3",
       "token": "activeElement",
@@ -1218,12 +1230,24 @@
       "classification": "safe",
       "note": "Comment text."
     },
+    "@solana/codecs-strings@8.5.0|globalThis.": {
+      "owner": "@solana/codecs-strings@8.5.0",
+      "token": "globalThis.",
+      "count": 2,
+      "classification": "safe"
+    },
     "@solana/errors@2.3.0|history": {
       "owner": "@solana/errors@2.3.0",
       "token": "history",
       "count": 1,
       "classification": "safe",
       "note": "Error message text."
+    },
+    "@solana/errors@8.5.0|history": {
+      "owner": "@solana/errors@8.5.0",
+      "token": "history",
+      "count": 4,
+      "classification": "safe"
     },
     "@solana/web3.js@1.98.4|addEventListener(": {
       "owner": "@solana/web3.js@1.98.4",
@@ -1676,6 +1700,13 @@
       "classification": "safe",
       "note": "Refit debounce timer."
     },
+    "apps/web/src/components/embed/tx-import-view.tsx|location": {
+      "owner": "apps/web/src/components/embed/tx-import-view.tsx",
+      "token": "location",
+      "count": 1,
+      "classification": "safe",
+      "note": "Import path text (`@/embed/embed-location`, a type-only import)."
+    },
     "apps/web/src/components/flow/flow-canvas.tsx|addEventListener(": {
       "owner": "apps/web/src/components/flow/flow-canvas.tsx",
       "token": "addEventListener(",
@@ -1696,6 +1727,13 @@
       "count": 1,
       "classification": "safe",
       "note": "DOM queries scoped to the widget's root node."
+    },
+    "apps/web/src/components/nodes/transactions/tx-trace-node.tsx|setTimeout(": {
+      "owner": "apps/web/src/components/nodes/transactions/tx-trace-node.tsx",
+      "token": "setTimeout(",
+      "count": 1,
+      "classification": "safe",
+      "note": "Load-delay timer of the TX_TRACE fetch, cleared when the source changes or the node unmounts; the trace is read over the configured RPC."
     },
     "apps/web/src/components/ui/copy.tsx|navigator": {
       "owner": "apps/web/src/components/ui/copy.tsx",
@@ -1732,12 +1770,19 @@
       "classification": "safe",
       "note": "Comment text."
     },
+    "apps/web/src/embed/embed-location.ts|location": {
+      "owner": "apps/web/src/embed/embed-location.ts",
+      "token": "location",
+      "count": 1,
+      "classification": "safe",
+      "note": "Comment text."
+    },
     "apps/web/src/embed/embed-location.ts|window.": {
       "owner": "apps/web/src/embed/embed-location.ts",
       "token": "window.",
-      "count": 1,
+      "count": 2,
       "classification": "unreachable-in-S-N",
-      "note": "resolveLoc() reads window.location for the hosted /embed only; it is tree-shaken from the self-hosted artifacts."
+      "note": "resolveLoc() reads window.location and clearTxParams() writes window.history for the hosted pages only; the runtime uses parseCluster alone and both are tree-shaken from the self-hosted artifacts (verify check 3 asserts no replaceState/pushState)."
     },
     "apps/web/src/embed/embed-theme.ts|document.": {
       "owner": "apps/web/src/embed/embed-theme.ts",
@@ -1788,6 +1833,13 @@
       "classification": "safe",
       "note": "window.open to plgrnd.io on a user click (an outgoing navigation, allowed by the spec) and a clipboard fallback when the popup is blocked."
     },
+    "apps/web/src/hooks/nodes/use-transaction-draft.ts|setTimeout(": {
+      "owner": "apps/web/src/hooks/nodes/use-transaction-draft.ts",
+      "token": "setTimeout(",
+      "count": 1,
+      "classification": "safe",
+      "note": "Debounce timer of the \"matches original\" check, cleared on cleanup."
+    },
     "apps/web/src/hooks/use-blur-on-outside-click.ts|activeElement": {
       "owner": "apps/web/src/hooks/use-blur-on-outside-click.ts",
       "token": "activeElement",
@@ -1837,6 +1889,30 @@
       "classification": "unreachable-in-S-N",
       "note": "URL hash/search readers and the replaceState writer are app-only and tree-shaken (verify check 3 asserts no replaceState/pushState)."
     },
+    "apps/web/src/utils/idl/sources/app-resolver.ts|fetch(": {
+      "owner": "apps/web/src/utils/idl/sources/app-resolver.ts",
+      "token": "fetch(",
+      "count": 1,
+      "classification": "accepted:curated and Program Metadata URL sources only; fetchText is not passed when RpcConfig.selfHosted (widget fetches RPC only)"
+    },
+    "apps/web/src/utils/idl/sources/app-resolver.ts|sessionStorage": {
+      "owner": "apps/web/src/utils/idl/sources/app-resolver.ts",
+      "token": "sessionStorage",
+      "count": 2,
+      "classification": "accepted:IDL session cache only; not created when RpcConfig.selfHosted (no writes to the host page storage)"
+    },
+    "apps/web/src/utils/idl/sources/resolve.ts|setTimeout(": {
+      "owner": "apps/web/src/utils/idl/sources/resolve.ts",
+      "token": "setTimeout(",
+      "count": 1,
+      "classification": "safe"
+    },
+    "apps/web/src/utils/idl/sources/user.ts|localStorage": {
+      "owner": "apps/web/src/utils/idl/sources/user.ts",
+      "token": "localStorage",
+      "count": 2,
+      "classification": "accepted:remembered user IDLs; rememberedIdls is false when RpcConfig.selfHosted, so the widget never reads or writes it"
+    },
     "apps/web/src/utils/solana/transaction.utils.ts|addEventListener(": {
       "owner": "apps/web/src/utils/solana/transaction.utils.ts",
       "token": "addEventListener(",
@@ -1850,6 +1926,27 @@
       "count": 1,
       "classification": "safe",
       "note": "Abort-signal listener and the 1 s polling timer of confirmSignature."
+    },
+    "apps/web/src/utils/tx-import/load-trace.ts|addEventListener(": {
+      "owner": "apps/web/src/utils/tx-import/load-trace.ts",
+      "token": "addEventListener(",
+      "count": 1,
+      "classification": "safe",
+      "note": "Abort-signal listener and the retry delay of the trace lookup (getTransaction over the configured RPC)."
+    },
+    "apps/web/src/utils/tx-import/load-trace.ts|setTimeout(": {
+      "owner": "apps/web/src/utils/tx-import/load-trace.ts",
+      "token": "setTimeout(",
+      "count": 1,
+      "classification": "safe",
+      "note": "Abort-signal listener and the retry delay of the trace lookup (getTransaction over the configured RPC)."
+    },
+    "apps/web/src/utils/tx-import/rpc.ts|fetch(": {
+      "owner": "apps/web/src/utils/tx-import/rpc.ts",
+      "token": "fetch(",
+      "count": 1,
+      "classification": "safe",
+      "note": "JSON-RPC POST to the configured endpoints only (RpcConfig.urls: rpc-mainnet / rpc-devnet or the public defaults), like @solana/web3.js (AC-R2, AC-R8). Used by the tx importer and TX_TRACE."
     },
     "aria-hidden@1.2.6|document.": {
       "owner": "aria-hidden@1.2.6",
@@ -2039,6 +2136,20 @@
       "count": 1,
       "classification": "safe",
       "note": "Shell DOM and the <style> fallback inside the shadow root; the Retry click listener."
+    },
+    "packages/embed/src/runtime/attributes.ts|location": {
+      "owner": "packages/embed/src/runtime/attributes.ts",
+      "token": "location",
+      "count": 1,
+      "classification": "safe",
+      "note": "Import path text (`@/embed/embed-location`, for parseCluster, a pure string parser)."
+    },
+    "packages/embed/src/runtime/runtime.tsx|location": {
+      "owner": "packages/embed/src/runtime/runtime.tsx",
+      "token": "location",
+      "count": 1,
+      "classification": "safe",
+      "note": "Import path text (`@/embed/embed-location`, a type-only import)."
     },
     "packages/embed/src/runtime/shadow-root.ts|addEventListener(": {
       "owner": "packages/embed/src/runtime/shadow-root.ts",

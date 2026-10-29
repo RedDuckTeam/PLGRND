@@ -4,6 +4,7 @@ import { FlowCanvas } from '@/components/flow/flow-canvas'
 import { EmbedToolbar } from '@/components/embed/embed-toolbar'
 import { EmbedBadge } from '@/components/embed/embed-badge'
 import { EmbedError } from '@/components/embed/embed-error'
+import { PublicRpcNotice } from '@/components/embed/public-rpc-notice'
 import { useEmbedStore, useEmbedStoreApi } from '@/stores/embed-store'
 import { useFlowStore } from '@/stores/flow-store'
 import type { FlowSnapshot } from '@/stores/flow-snapshot'
@@ -109,6 +110,7 @@ export const EmbedCanvas = ({ snapshot, snapshotKey, onReady, selfHosted = false
           {config.minimap && <MiniMap className="mb-8" />}
           {config.toolbar && <EmbedToolbar />}
           <EmbedBadge />
+          {selfHosted && <PublicRpcNotice />}
         </FlowCanvas>
       )}
     </div>

@@ -174,10 +174,9 @@ export default defineConfig(({ mode }): UserConfig => {
       rollupOptions: {
         plugins: [bufferInject()],
         onwarn(warning, handler) {
-          // Expected (K23): spl-token is imported both statically and dynamically, and manualChunks keeps all of it
-          // in the runtime chunk anyway.
-          if (warning.message.includes('@solana/spl-token') && warning.message.includes('dynamic import will not move'))
-            return
+          // Expected (K23): spl-token and the IDL model (lazy in the app, static in the tx importer) are imported both
+          // statically and dynamically, and manualChunks keeps all of them in the runtime chunk anyway.
+          if (warning.message.includes('dynamic import will not move')) return
           handler(warning)
         },
         output: {

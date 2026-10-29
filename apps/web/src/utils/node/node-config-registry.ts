@@ -45,6 +45,7 @@ import { transactionNodeConfig } from './data/transactions/transaction-node-data
 import { idlNodeConfig } from './data/programs/idl-node-data'
 import { programInstructionsNodeConfig } from './data/programs/program-instructions-node-data'
 import { programAccountNodeConfig } from './data/programs/program-account-node-data'
+import { rawInstructionNodeConfig } from './data/programs/raw-instruction-node-data'
 import { walletNodeConfig } from './data/wallet/wallet-node-data'
 import { commentNodeConfig } from './data/input/comment-node-data'
 import { stringCombineNodeConfig } from './data/string/string-combine-node-data'
@@ -55,6 +56,7 @@ import { stringSearchNodeConfig } from './data/string/string-search-node-data'
 import { stringReplaceNodeConfig } from './data/string/string-replace-node-data'
 import { stringEncodeNodeConfig } from './data/utils/string-encode-node-data'
 import { stringDecodeNodeConfig } from './data/utils/string-decode-node-data'
+import { txTraceNodeConfig } from './data/transactions/tx-trace-node-data'
 
 export const nodeConfigRegistry = {
   [NodeTypeEnum.TEXT]: textNodeConfig,
@@ -110,6 +112,8 @@ export const nodeConfigRegistry = {
   [NodeTypeEnum.STRING_REPLACE]: stringReplaceNodeConfig,
   [NodeTypeEnum.STRING_ENCODE]: stringEncodeNodeConfig,
   [NodeTypeEnum.STRING_DECODE]: stringDecodeNodeConfig,
+  [NodeTypeEnum.RAW_INSTRUCTION]: rawInstructionNodeConfig,
+  [NodeTypeEnum.TX_TRACE]: txTraceNodeConfig,
 } as const satisfies Record<NodeType, NodeConfig>
 
 export const getNodeConfig = (nodeType: NodeType) => {

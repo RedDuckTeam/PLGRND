@@ -7,4 +7,5 @@ export type NodeActionConfigBase = {
 
 export type NodeActionConfig = NodeActionConfigBase & {
   onClick: () => void
+  disabled?: boolean
 }

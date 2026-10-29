@@ -50,6 +50,8 @@ export const nodeStyles: Record<NodeType, NodeStyle> = {
   [NodeTypeEnum.IDL]: { color: '#5a1d5f', width: 350 },
   [NodeTypeEnum.PROGRAM_INSTRUCTIONS]: { color: '#5a1d5f', width: 350 },
   [NodeTypeEnum.PROGRAM_ACCOUNT]: { color: '#5a1d5f', width: 350 },
+  [NodeTypeEnum.RAW_INSTRUCTION]: { color: '#5a1d5f', width: 400 },
+  [NodeTypeEnum.TX_TRACE]: { color: '#2a5f2b', width: 380 },
 
   [NodeTypeEnum.WALLET]: { color: '#1f3d6b', width: 200 },
 

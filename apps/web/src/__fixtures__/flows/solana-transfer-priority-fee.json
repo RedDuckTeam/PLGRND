@@ -1,0 +1,255 @@
+{
+  "v": 3,
+  "nodes": [
+    {
+      "id": "c1",
+      "type": "COMMENT",
+      "position": {
+        "x": 0,
+        "y": -260
+      },
+      "data": {
+        "text": "Anatomy of a transaction with a priority fee\n\nTX BUILDER starts an empty transaction; each INSTRUCTIONS node appends one instruction, in the recipe's order: compute unit limit (1,000,000), compute unit price (1 micro-lamport per CU), System transfer (0.01 SOL). DISPLAY shows the unsigned transaction: program ids, account metas, raw instruction data. Nothing is signed or sent."
+      }
+    },
+    {
+      "id": "b1",
+      "type": "TRANSACTION_BUILDER",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "data": {}
+    },
+    {
+      "id": "c2",
+      "type": "COMMENT",
+      "position": {
+        "x": -330,
+        "y": 110
+      },
+      "data": {
+        "text": "← compute unit limit"
+      }
+    },
+    {
+      "id": "n1",
+      "type": "NUMBER",
+      "position": {
+        "x": 0,
+        "y": 120
+      },
+      "data": {
+        "number": 1000000
+      }
+    },
+    {
+      "id": "i1",
+      "type": "INSTRUCTIONS",
+      "position": {
+        "x": 320,
+        "y": 0
+      },
+      "data": {
+        "instruction": "computeUnitLimit"
+      }
+    },
+    {
+      "id": "c3",
+      "type": "COMMENT",
+      "position": {
+        "x": -330,
+        "y": 210
+      },
+      "data": {
+        "text": "← price, micro-lamports per CU"
+      }
+    },
+    {
+      "id": "n2",
+      "type": "NUMBER",
+      "position": {
+        "x": 0,
+        "y": 220
+      },
+      "data": {
+        "number": 1
+      }
+    },
+    {
+      "id": "i2",
+      "type": "INSTRUCTIONS",
+      "position": {
+        "x": 700,
+        "y": 0
+      },
+      "data": {
+        "instruction": "computeUnitPrice"
+      }
+    },
+    {
+      "id": "c4",
+      "type": "COMMENT",
+      "position": {
+        "x": -330,
+        "y": 310
+      },
+      "data": {
+        "text": "← sender"
+      }
+    },
+    {
+      "id": "t1",
+      "type": "TEXT",
+      "position": {
+        "x": 0,
+        "y": 320
+      },
+      "data": {
+        "text": "6kgpBjmcjxtNsRhRrYd41EXS8JYhPFMWVSQMZgQQeKLY"
+      }
+    },
+    {
+      "id": "c5",
+      "type": "COMMENT",
+      "position": {
+        "x": -330,
+        "y": 400
+      },
+      "data": {
+        "text": "← recipient"
+      }
+    },
+    {
+      "id": "t2",
+      "type": "TEXT",
+      "position": {
+        "x": 0,
+        "y": 410
+      },
+      "data": {
+        "text": "BYtqBobk7npF9Jfs8h591xmVeV4RKgHTfhJak4A9NvqD"
+      }
+    },
+    {
+      "id": "c6",
+      "type": "COMMENT",
+      "position": {
+        "x": -330,
+        "y": 490
+      },
+      "data": {
+        "text": "← amount, SOL"
+      }
+    },
+    {
+      "id": "n3",
+      "type": "NUMBER",
+      "position": {
+        "x": 0,
+        "y": 500
+      },
+      "data": {
+        "number": 0.01
+      }
+    },
+    {
+      "id": "i3",
+      "type": "INSTRUCTIONS",
+      "position": {
+        "x": 1080,
+        "y": 0
+      },
+      "data": {
+        "instruction": "systemTransfer"
+      }
+    },
+    {
+      "id": "d1",
+      "type": "DISPLAY",
+      "position": {
+        "x": 1460,
+        "y": -40
+      },
+      "data": {
+        "text": ""
+      }
+    },
+    {
+      "id": "c7",
+      "type": "COMMENT",
+      "position": {
+        "x": 1460,
+        "y": -130
+      },
+      "data": {
+        "text": "← the transaction, instruction by instruction"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "xy-edge__b1-transaction-right-i1-transactionIn-left",
+      "source": "b1",
+      "sourceHandle": "b1-transaction-right",
+      "target": "i1",
+      "targetHandle": "i1-transactionIn-left"
+    },
+    {
+      "id": "xy-edge__n1-number-right-i1-computeUnits-left",
+      "source": "n1",
+      "sourceHandle": "n1-number-right",
+      "target": "i1",
+      "targetHandle": "i1-computeUnits-left"
+    },
+    {
+      "id": "xy-edge__i1-transactionOut-right-i2-transactionIn-left",
+      "source": "i1",
+      "sourceHandle": "i1-transactionOut-right",
+      "target": "i2",
+      "targetHandle": "i2-transactionIn-left"
+    },
+    {
+      "id": "xy-edge__n2-number-right-i2-microLamports-left",
+      "source": "n2",
+      "sourceHandle": "n2-number-right",
+      "target": "i2",
+      "targetHandle": "i2-microLamports-left"
+    },
+    {
+      "id": "xy-edge__i2-transactionOut-right-i3-transactionIn-left",
+      "source": "i2",
+      "sourceHandle": "i2-transactionOut-right",
+      "target": "i3",
+      "targetHandle": "i3-transactionIn-left"
+    },
+    {
+      "id": "xy-edge__t1-text-right-i3-fromPubkey-left",
+      "source": "t1",
+      "sourceHandle": "t1-text-right",
+      "target": "i3",
+      "targetHandle": "i3-fromPubkey-left"
+    },
+    {
+      "id": "xy-edge__t2-text-right-i3-toPubkey-left",
+      "source": "t2",
+      "sourceHandle": "t2-text-right",
+      "target": "i3",
+      "targetHandle": "i3-toPubkey-left"
+    },
+    {
+      "id": "xy-edge__n3-number-right-i3-amountUi-left",
+      "source": "n3",
+      "sourceHandle": "n3-number-right",
+      "target": "i3",
+      "targetHandle": "i3-amountUi-left"
+    },
+    {
+      "id": "xy-edge__i3-transactionOut-right-d1-input-left",
+      "source": "i3",
+      "sourceHandle": "i3-transactionOut-right",
+      "target": "d1",
+      "targetHandle": "d1-input-left"
+    }
+  ]
+}

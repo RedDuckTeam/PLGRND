@@ -1,6 +1,7 @@
 // `yarn workspace @plgrnd/embed size` (also run by `build`): raw, gzip -9 and brotli sizes of every artifact,
-// written to dist/size-report.md. There is no hard budget (spec: "about 420 KB gzip"); the tripwire fires when
-// the IIFE exceeds 500 kB gzip and lists the largest bundled modules from dist/module-list.json.
+// written to dist/size-report.md. The tripwire fires when the IIFE exceeds 500 kB gzip and lists the largest bundled
+// modules from dist/module-list.json. From 1.1.0 on it is a hard budget (the SDK cannot lazy-load, so the IIFE carries
+// everything): `size` and `build` exit 1. Earlier versions only warned.
 import fs from 'node:fs'
 import path from 'node:path'
 import zlib from 'node:zlib'
@@ -8,6 +9,12 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const TRIPWIRE_GZIP_BYTES = 500_000
+
+/** True when an IIFE over the tripwire fails the command (versions 1.1.0 and later). */
+export const tripwireFails = (version) => {
+  const [major, minor] = version.split('.').map(Number)
+  return major > 1 || (major === 1 && minor >= 1)
+}
 
 const kb = (bytes) => `${(bytes / 1000).toFixed(1)} kB`
 
@@ -57,8 +64,9 @@ export function writeSizeReport({ dist = path.join(PACKAGE_ROOT, 'dist'), versio
 
   const iife = rows.find((r) => r.rel === 'plgrnd-flow.iife.js')
   const tripped = iife.gzip > TRIPWIRE_GZIP_BYTES
+  const budget = tripwireFails(version) ? 'budget' : 'tripwire'
   lines.push(
-    `IIFE gzip: ${kb(iife.gzip)} (tripwire ${kb(TRIPWIRE_GZIP_BYTES)}: ${tripped ? '**exceeded**' : 'not exceeded'}).`,
+    `IIFE gzip: ${kb(iife.gzip)} (${budget} ${kb(TRIPWIRE_GZIP_BYTES)}: ${tripped ? '**exceeded**' : 'not exceeded'}).`,
     ''
   )
   if (tripped) {
@@ -85,5 +93,10 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   const { version } = JSON.parse(fs.readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8'))
   const { rows, tripped } = writeSizeReport({ version })
   for (const r of rows) console.log(`${r.rel.padEnd(52)} ${kb(r.raw).padStart(10)} ${kb(r.gzip).padStart(10)} gz`)
-  if (tripped) console.warn('[size-report] the IIFE exceeds the 500 kB gzip tripwire; see dist/size-report.md')
+  if (tripped && tripwireFails(version)) {
+    console.error('[size-report] the IIFE exceeds the 500 kB gzip budget; see dist/size-report.md')
+    process.exitCode = 1
+  } else if (tripped) {
+    console.warn('[size-report] the IIFE exceeds the 500 kB gzip tripwire; see dist/size-report.md')
+  }
 }

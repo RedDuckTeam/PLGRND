@@ -20,4 +20,5 @@ export const instructionsNodeConfig = {
     },
   ],
   actions: [],
+  transient: ['transactionOut'],
 } as const satisfies NodeConfig

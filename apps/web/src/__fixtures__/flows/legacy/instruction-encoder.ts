@@ -1,6 +1,7 @@
+// Frozen copy of the pre-rework IDL builder (formerly utils/idl), kept only so the baseline capture stays reproducible.
 import { Buffer } from 'buffer'
 import { PublicKey } from '@solana/web3.js'
-import type { IdlInstruction } from '@/types/nodes/programs/idl-node'
+import type { IdlInstruction } from './idl-types'
 import { sha256 } from 'js-sha256'
 
 export const encodeInstructionData = (

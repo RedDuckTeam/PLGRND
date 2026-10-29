@@ -10,6 +10,7 @@ import { truncatePubkey } from '@/utils/solana/transaction.utils'
 import { toast } from 'sonner'
 import { useFlowMode } from '@/components/flow/flow-mode-context'
 import { useOpenInEditor } from '@/hooks/embed/use-open-in-editor'
+import { computeWallet } from '@/utils/node/compute/wallet.compute'
 
 export const WalletNode = (props: NodeProps<WalletNodeType>) => {
   const { updateNodeData } = useTypedReactFlow()
@@ -20,11 +21,7 @@ export const WalletNode = (props: NodeProps<WalletNodeType>) => {
 
   useEffect(() => {
     if (embedded) return
-    const pk = publicKey?.toBase58() ?? ''
-    updateNodeData<WalletNodeData>(props.id, {
-      publicKey: pk,
-      wallet: pk ? { kind: 'wallet', publicKey: pk } : null,
-    })
+    updateNodeData<WalletNodeData>(props.id, computeWallet({}, {}, { walletPublicKey: publicKey?.toBase58() }))
   }, [embedded, publicKey, props.id, updateNodeData])
 
   const handleConnect = () => setVisible(true)

@@ -1,7 +1,10 @@
 import type { Node, Edge, Viewport } from '@xyflow/react'
+import type { NodeConfig } from '@/types/node-config'
+import { nodeConfigRegistry } from '@/utils/node/node-config-registry'
 
 export const FLOW_STORAGE_KEY = 'sol-learn:flow'
-export const FLOW_STORAGE_VERSION = 3
+/** Highest flow version this build reads. Shared flows are written as 3 unless they need 4 (utils/flow/requires-v4). */
+export const FLOW_STORAGE_VERSION = 4
 
 export interface FlowSnapshot {
   nodes: Node[]
@@ -51,8 +54,22 @@ const sanitizeForPersist = (value: unknown): unknown => {
   return undefined
 }
 
+/** Whether `key` is listed in `patterns`, where a trailing `*` matches any suffix. */
+export const matchesKeyPattern = (patterns: readonly string[], key: string) =>
+  patterns.some((p) => (p.endsWith('*') ? key.startsWith(p.slice(0, -1)) : key === p))
+
+const transientKeys = (type: string | undefined): readonly string[] =>
+  (type ? (nodeConfigRegistry as Record<string, NodeConfig>)[type]?.transient : undefined) ?? []
+
+// Data recomputed at runtime (a parsed IDL, built transactions, fetched account fields) is never persisted or shared.
+const stripTransient = (type: string | undefined, data: Node['data']): Node['data'] => {
+  const patterns = transientKeys(type)
+  if (patterns.length === 0 || !data) return data
+  return Object.fromEntries(Object.entries(data).filter(([key]) => !matchesKeyPattern(patterns, key)))
+}
+
 export const sanitizeNodes = (nodes: Node[]): Node[] =>
   nodes.map((node) => ({
     ...node,
-    data: (sanitizeForPersist(node.data) as Node['data']) ?? {},
+    data: (sanitizeForPersist(stripTransient(node.type, node.data)) as Node['data']) ?? {},
   }))

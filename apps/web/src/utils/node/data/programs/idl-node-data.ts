@@ -5,6 +5,13 @@ export const idlNodeConfig = {
   label: 'IDL',
   handles: [
     {
+      position: Position.Left,
+      type: 'target',
+      dataField: 'network',
+      label: 'Network',
+      dataType: 'network',
+    },
+    {
       position: Position.Right,
       type: 'source',
       dataField: 'idl',
@@ -20,4 +27,5 @@ export const idlNodeConfig = {
     },
   ],
   actions: [],
+  transient: ['idl', 'status'],
 } as const satisfies NodeConfig

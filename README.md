@@ -19,17 +19,17 @@ PLGRND is a visual playground for Solana. Instead of writing a script to derive 
 
 ## Built with
 
-| Area         | Technology                                                                                                                                                                                        |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| App          | React 19 + TypeScript, [Vite](https://vite.dev/)                                                                                                                                                  |
-| Canvas       | [React Flow](https://reactflow.dev/) (`@xyflow/react`)                                                                                                                                            |
-| Solana       | [`@solana/web3.js`](https://github.com/solana-foundation/solana-web3.js), [`@solana/spl-token`](https://github.com/solana-program/token), [Anchor](https://www.anchor-lang.com/) for IDL decoding |
-| Wallets      | [Solana Wallet Adapter](https://github.com/anza-xyz/wallet-adapter)                                                                                                                               |
-| Crypto       | `tweetnacl`, `bip39`, `ed25519-hd-key`, `bs58`                                                                                                                                                    |
-| State & data | [Zustand](https://zustand.docs.pmnd.rs/), [TanStack Query](https://tanstack.com/query)                                                                                                            |
-| UI           | Tailwind CSS v4, Radix UI, `lucide-react`, `sonner`                                                                                                                                               |
-| Tooling      | Yarn 4 workspaces, ESLint, Prettier                                                                                                                                                               |
-| Deploy       | Cloudflare Workers (`wrangler`)                                                                                                                                                                   |
+| Area         | Technology                                                                                                                                                                                                                                |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| App          | React 19 + TypeScript, [Vite](https://vite.dev/)                                                                                                                                                                                          |
+| Canvas       | [React Flow](https://reactflow.dev/) (`@xyflow/react`)                                                                                                                                                                                    |
+| Solana       | [`@solana/web3.js`](https://github.com/solana-foundation/solana-web3.js), [`@solana/spl-token`](https://github.com/solana-program/token), [Codama](https://github.com/codama-idl/codama) for IDL decoding (Anchor, Codama and Shank IDLs) |
+| Wallets      | [Solana Wallet Adapter](https://github.com/anza-xyz/wallet-adapter)                                                                                                                                                                       |
+| Crypto       | `tweetnacl`, `bip39`, `ed25519-hd-key`, `bs58`                                                                                                                                                                                            |
+| State & data | [Zustand](https://zustand.docs.pmnd.rs/), [TanStack Query](https://tanstack.com/query)                                                                                                                                                    |
+| UI           | Tailwind CSS v4, Radix UI, `lucide-react`, `sonner`                                                                                                                                                                                       |
+| Tooling      | Yarn 4 workspaces, ESLint, Prettier                                                                                                                                                                                                       |
+| Deploy       | Cloudflare Workers (`wrangler`)                                                                                                                                                                                                           |
 
 ## How it works
 
@@ -52,17 +52,28 @@ flowchart LR
 
 ## Node categories
 
-| Category              | Nodes                                                                                                       |
-| --------------------- | ----------------------------------------------------------------------------------------------------------- |
-| Input                 | Text, number, display, comment                                                                              |
-| Math / String / Logic | Arithmetic, combine, split, substring, search, replace, length, compare, equality, `if`, booleans           |
-| Crypto                | Keypair, mnemonic, private key, hash, sign, verify signature                                                |
-| Wallet / Network      | Connected wallet, cluster selection, balance                                                                |
-| Utils                 | SOL ↔ lamports, token amounts, ATA derivation, rent exemption, public key validation, string encode/decode |
-| Programs              | IDL import, program instructions, program accounts, PDA derivation                                          |
-| Transactions          | Transaction builder, transaction, transaction view                                                          |
+| Category              | Nodes                                                                                                                                           |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Input                 | Text, number, display, comment                                                                                                                  |
+| Math / String / Logic | Arithmetic, combine, split, substring, search, replace, length, compare, equality, `if`, booleans                                               |
+| Crypto                | Keypair, mnemonic, private key, hash, sign, verify signature                                                                                    |
+| Wallet / Network      | Connected wallet, cluster selection, balance                                                                                                    |
+| Utils                 | SOL ↔ lamports, token amounts, ATA derivation, rent exemption, public key validation, string encode/decode                                     |
+| Programs              | IDL (loads from chain by program id, or paste; Anchor, Codama, Shank), program instructions, raw instructions, program accounts, PDA derivation |
+| Transactions          | Transaction builder, transaction, transaction view, transaction trace                                                                           |
 
 Built-in example flows cover hashing, signature verification, balance checking, a SOL transfer and a program call — each one loads straight onto the canvas.
+
+## Import a transaction
+
+PLGRND also works backwards: paste a transaction and get the flow that builds it. Open **Import tx** in the editor toolbar, or link to `https://plgrnd.io/?tx=<signature>&cluster=mainnet`.
+
+- **Input**: a transaction signature (looked up on mainnet, then devnet, unless you pick a network), or a serialized transaction in base64 or base58, for example an unsigned transaction an agent or a dApp asks you to sign. A serialized transaction is simulated, so you see what it would do before signing.
+- **IDLs load by themselves**: for every program the importer looks for an IDL among the native programs it ships with, then on chain (the Program Metadata account, then the Anchor IDL account), then in a few pinned upstream sources. Legacy Anchor, Anchor 0.30+, Codama and Shank IDLs all work.
+- **The flow**: one node per instruction, in order. Decoded instructions become **Program instructions** nodes with named accounts and arguments; the rest become **Raw instruction** nodes that keep the exact bytes. Signers, associated token accounts, PDAs and values used by several instructions get their own nodes, so you can see where each value comes from. A **Tx trace** node shows the status, fee, compute units, SOL and token balance changes, the CPI tree and the logs.
+- **Round trip**: the imported flow rebuilds the original message byte for byte, and the transaction node says so ("matches original"). Change any value and send it again: a landed transaction always needs a fresh signature.
+- **Missing IDLs are optional**: after an import, the summary lists programs without an IDL. You can paste or upload one; it is marked as unverified, and the instructions stay raw if you skip it.
+- **Limits**: transaction versions newer than v0 are not supported yet; a program with no IDL anywhere stays raw.
 
 ## Embedding
 
@@ -87,21 +98,23 @@ The easiest way to get a snippet is the built-in builder: open a flow, hit **Sha
 
 Options travel in the query string; the flow itself stays in the `#flow=` hash. Options are also accepted inside the hash after `?`, which keeps old links working. Invalid values never break rendering — they fall back to their defaults.
 
-| Parameter  | Values                                                                      | Default        | Effect                             |
-| ---------- | --------------------------------------------------------------------------- | -------------- | ---------------------------------- |
-| `mode`     | `readonly` · `interactive` · `editor`                                       | `interactive`  | Interaction level (see below)      |
-| `theme`    | `dark` · `light` · `auto`                                                   | `dark`         | Palette preset                     |
-| `bg`       | hex without `#` (3, 4, 6 or 8 digits)                                       | from theme     | Canvas background                  |
-| `surface`  | hex                                                                         | from theme     | Node bodies, panels, popovers      |
-| `fg`       | hex                                                                         | from theme     | Text                               |
-| `border`   | hex                                                                         | from theme     | Borders and input outlines         |
-| `accent`   | hex                                                                         | from theme     | Highlights and focus ring          |
-| `radius`   | integer `0`–`24`                                                            | `8`            | Corner radius in px                |
-| `font`     | font-family string (letters, digits, spaces, `,`, quotes, `-`; ≤ 100 chars) | PLGRND default | UI font                            |
-| `fontMono` | same rules                                                                  | PLGRND default | Monospace font                     |
-| `controls` | `1`/`0`                                                                     | `1`            | Zoom/fit controls                  |
-| `minimap`  | `1`/`0`                                                                     | `0`            | MiniMap                            |
-| `toolbar`  | `1`/`0`                                                                     | `1`            | "Open in PLGRND" + "Reset" buttons |
+| Parameter  | Values                                                                      | Default        | Effect                                                                        |
+| ---------- | --------------------------------------------------------------------------- | -------------- | ----------------------------------------------------------------------------- |
+| `mode`     | `readonly` · `interactive` · `editor`                                       | `interactive`  | Interaction level (see below)                                                 |
+| `theme`    | `dark` · `light` · `auto`                                                   | `dark`         | Palette preset                                                                |
+| `bg`       | hex without `#` (3, 4, 6 or 8 digits)                                       | from theme     | Canvas background                                                             |
+| `surface`  | hex                                                                         | from theme     | Node bodies, panels, popovers                                                 |
+| `fg`       | hex                                                                         | from theme     | Text                                                                          |
+| `border`   | hex                                                                         | from theme     | Borders and input outlines                                                    |
+| `accent`   | hex                                                                         | from theme     | Highlights and focus ring                                                     |
+| `radius`   | integer `0`–`24`                                                            | `8`            | Corner radius in px                                                           |
+| `font`     | font-family string (letters, digits, spaces, `,`, quotes, `-`; ≤ 100 chars) | PLGRND default | UI font                                                                       |
+| `fontMono` | same rules                                                                  | PLGRND default | Monospace font                                                                |
+| `controls` | `1`/`0`                                                                     | `1`            | Zoom/fit controls                                                             |
+| `minimap`  | `1`/`0`                                                                     | `0`            | MiniMap                                                                       |
+| `toolbar`  | `1`/`0`                                                                     | `1`            | "Open in PLGRND" + "Reset" buttons                                            |
+| `tx`       | a transaction signature                                                     | —              | Import this transaction instead of a `#flow=` (the hash wins if both are set) |
+| `cluster`  | `mainnet` · `devnet`                                                        | auto           | Where to look up `tx`                                                         |
 
 Unknown parameters are ignored. `id=` is reserved for future server-stored flows and is read from the query string only. The "Powered by PLGRND" badge is always shown.
 
@@ -161,22 +174,22 @@ Old-style `https://plgrnd.io/#flow=…?view=true` links keep working — they ar
 
 The widget ships as the npm package [`@plgrnd/embed`](packages/embed) and as versioned downloads under `https://plgrnd.io/sdk/<version>/`. To get a snippet, open **Share → Embed → Self-hosted** and pick HTML, MDX, Mintlify or Markdoc. The snippet carries the same flow payload and options as the iframe snippet.
 
-### Files and sizes (1.0.1)
+### Files and sizes (1.1.0)
 
 | File                                       | Raw      | gzip   | Use                                                    |
 | ------------------------------------------ | -------- | ------ | ------------------------------------------------------ |
-| `plgrnd-flow-1.0.1.js`                     | 1,255 kB | 395 kB | Classic script, everything in one file                 |
-| `plgrnd-flow-1.0.1/plgrnd-flow.js`         | 7 kB     | 3 kB   | ESM entry: defines the element                         |
-| `plgrnd-flow-1.0.1/plgrnd-flow-runtime.js` | 1,322 kB | 394 kB | ESM runtime, loaded the first time an element connects |
+| `plgrnd-flow-1.1.0.js`                     | 1,781 kB | 484 kB | Classic script, everything in one file                 |
+| `plgrnd-flow-1.1.0/plgrnd-flow.js`         | 7 kB     | 3 kB   | ESM entry: defines the element                         |
+| `plgrnd-flow-1.1.0/plgrnd-flow-runtime.js` | 1,849 kB | 482 kB | ESM runtime, loaded the first time an element connects |
 
 Download the files once and serve them yourself. Never hot-link `plgrnd.io/sdk`. The version is in the file name, so a page keeps exactly the build it was tested with.
 
 ```html
 <!-- classic script, once per page -->
-<script src="/plgrnd-flow-1.0.1.js"></script>
+<script src="/plgrnd-flow-1.1.0.js"></script>
 
 <!-- or the ESM folder, served as-is -->
-<script type="module" src="/plgrnd-flow-1.0.1/plgrnd-flow.js"></script>
+<script type="module" src="/plgrnd-flow-1.1.0/plgrnd-flow.js"></script>
 
 <plgrnd-flow flow="N4Ig…" theme="auto" style="display:block;aspect-ratio:16/9;min-height:320px"></plgrnd-flow>
 ```
@@ -188,6 +201,8 @@ With a bundler, use `npm install @plgrnd/embed` and then `import '@plgrnd/embed'
 | Attribute                                 | Values                           | Default                                              |
 | ----------------------------------------- | -------------------------------- | ---------------------------------------------------- |
 | `flow`                                    | The payload from the snippet     | —                                                    |
+| `tx`                                      | A signature or a serialized tx   | — (imported when there is no `flow`; since 1.1.0)    |
+| `cluster`                                 | `mainnet` · `devnet`             | Mainnet, then devnet (since 1.1.0)                   |
 | `theme`                                   | `dark` · `light` · `auto`        | `dark`                                               |
 | `bg`, `surface`, `fg`, `border`, `accent` | Hex, with or without `#`         | From the theme                                       |
 | `radius`                                  | `0`–`24` (px)                    | `8`                                                  |
@@ -203,6 +218,7 @@ How attributes behave:
 - Every attribute also exists as a camelCase property, such as `fontMono`, `rpcDevnet` or `linkRef`. Properties do not reflect to attributes, and the last write wins.
 - The element fires `plgrnd:ready` after each successful (re)initialization. The event bubbles, is composed, and carries `detail.version`.
 - A widget mounts when it comes within one viewport height of the visible area, so an off-screen widget fires `plgrnd:ready` only after the reader scrolls near it.
+- `tx` shows a live transaction instead of a saved flow: `<plgrnd-flow tx="5Kj…" cluster="mainnet">`. It takes a signature, or a serialized transaction in base64 or base58, which is simulated. The widget imports it as the editor's **Import tx** does, but reads only your RPC endpoints: IDLs come from the native programs bundled in the file and from on-chain IDL accounts, and a program without one stays a raw instruction. There is no IDL paste. A change of `flow`, `tx` or `cluster` rebuilds the view.
 
 `theme="auto"` follows your site's own toggle, live. It checks these markers in order:
 
@@ -213,7 +229,7 @@ How attributes behave:
 
 ### RPC
 
-The defaults are `https://api.mainnet-beta.solana.com` and `https://api.devnet.solana.com`. Both are rate-limited public endpoints, so production docs should pass their own, for example `rpc-mainnet="https://…"`.
+The defaults are `https://api.mainnet-beta.solana.com` and `https://api.devnet.solana.com`. Both are rate-limited public endpoints, so production docs should pass their own, for example `rpc-mainnet="https://…"`. The public mainnet endpoint can refuse requests from web pages outright (HTTP 403), so a flow or a `tx` that reads mainnet needs `rpc-mainnet`. Since 1.1.0 the widget says so in a notice when that happens.
 
 Transactions are confirmed by HTTPS polling, so the widget never opens a WebSocket. No private RPC key is compiled into the files. A key you put in an attribute is visible in your page source, so restrict it by referrer.
 
@@ -241,7 +257,7 @@ plgrnd-flow:not(:defined) {
 
 **Mintlify.**
 
-1. Put `plgrnd-flow-1.0.1.js` at the root of the docs repo. Mintlify injects every `.js` file in the repo into every page, so keep exactly one version file. Never add the ESM folder: its files would be injected as classic scripts too.
+1. Put `plgrnd-flow-1.1.0.js` at the root of the docs repo. Mintlify injects every `.js` file in the repo into every page, so keep exactly one version file. Never add the ESM folder: its files would be injected as classic scripts too.
 2. Add `snippets/plgrnd-flow.jsx`:
 
    ```jsx
@@ -258,10 +274,10 @@ plgrnd-flow:not(:defined) {
    <PlgrndFlow flow="N4Ig…" theme="auto" />
    ```
 
-**Docusaurus.** Copy the ESM folder to `static/plgrnd-flow-1.0.1/`, then load it from `docusaurus.config.js` (prefix `baseUrl` if it is not `/`):
+**Docusaurus.** Copy the ESM folder to `static/plgrnd-flow-1.1.0/`, then load it from `docusaurus.config.js` (prefix `baseUrl` if it is not `/`):
 
 ```js
-scripts: [{ src: '/plgrnd-flow-1.0.1/plgrnd-flow.js', type: 'module' }],
+scripts: [{ src: '/plgrnd-flow-1.1.0/plgrnd-flow.js', type: 'module' }],
 ```
 
 Alternatively, run `npm install @plgrnd/embed` and add a client module (`clientModules: [require.resolve('./src/plgrnd.js')]`) whose only line is `import '@plgrnd/embed'`. In MDX, use the **MDX** format (`<plgrnd-flow … style={{ … }} />`).
@@ -270,7 +286,7 @@ Alternatively, run `npm install @plgrnd/embed` and add a client module (`clientM
 
 ```yaml
 extra_javascript:
-  - path: javascripts/plgrnd-flow-1.0.1/plgrnd-flow.js
+  - path: javascripts/plgrnd-flow-1.1.0/plgrnd-flow.js
     type: module
 ```
 
@@ -297,7 +313,7 @@ Then use the **MDX** format in your pages. On the server the import is an empty 
   selfClosing: true,
   render: PlgrndFlow,
   attributes: Object.fromEntries(
-    ['flow', 'theme', 'bg', 'surface', 'fg', 'border', 'accent', 'radius', 'font', 'fontMono',
+    ['flow', 'tx', 'cluster', 'theme', 'bg', 'surface', 'fg', 'border', 'accent', 'radius', 'font', 'fontMono',
      'controls', 'minimap', 'toolbar', 'mode', 'rpcMainnet', 'rpcDevnet', 'linkRef',
      'aspect', 'height'].map((name) => [name, { type: String }])
   ),

@@ -1,0 +1,325 @@
+{
+  "version": "0.1.0",
+  "name": "all_types_legacy",
+  "docs": ["Self-authored PLGRND test fixture (MIT). Not a deployed program."],
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "state"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "payer"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "valueU8",
+          "type": "u8"
+        },
+        {
+          "name": "valueI8",
+          "type": "i8"
+        },
+        {
+          "name": "valueU16",
+          "type": "u16"
+        },
+        {
+          "name": "valueI16",
+          "type": "i16"
+        },
+        {
+          "name": "valueU32",
+          "type": "u32"
+        },
+        {
+          "name": "valueI32",
+          "type": "i32"
+        },
+        {
+          "name": "valueU64",
+          "type": "u64"
+        },
+        {
+          "name": "valueI64",
+          "type": "i64"
+        },
+        {
+          "name": "valueU128",
+          "type": "u128"
+        },
+        {
+          "name": "valueI128",
+          "type": "i128"
+        },
+        {
+          "name": "valueF32",
+          "type": "f32"
+        },
+        {
+          "name": "valueF64",
+          "type": "f64"
+        },
+        {
+          "name": "valueBool",
+          "type": "bool"
+        },
+        {
+          "name": "valueString",
+          "type": "string"
+        },
+        {
+          "name": "valueBytes",
+          "type": "bytes"
+        },
+        {
+          "name": "valuePubkey",
+          "type": "publicKey"
+        },
+        {
+          "name": "fixedArray",
+          "type": {
+            "array": ["u16", 4]
+          }
+        },
+        {
+          "name": "list",
+          "type": {
+            "vec": "u32"
+          }
+        },
+        {
+          "name": "maybe",
+          "type": {
+            "option": "u64"
+          }
+        },
+        {
+          "name": "nested",
+          "type": {
+            "option": {
+              "vec": {
+                "defined": "Point"
+              }
+            }
+          }
+        },
+        {
+          "name": "flavor",
+          "type": {
+            "defined": "Kind"
+          }
+        },
+        {
+          "name": "action",
+          "type": {
+            "defined": "Action"
+          }
+        }
+      ]
+    },
+    {
+      "name": "setAuthority",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "newAuthority",
+          "type": {
+            "option": "publicKey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "closeStateAccount",
+      "docs": ["Composite (nested) accounts group."],
+      "accounts": [
+        {
+          "name": "common",
+          "accounts": [
+            {
+              "name": "state",
+              "isMut": true,
+              "isSigner": false
+            },
+            {
+              "name": "authority",
+              "isMut": false,
+              "isSigner": true
+            }
+          ]
+        },
+        {
+          "name": "receiver",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "State",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "counter",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "points",
+            "type": {
+              "vec": {
+                "defined": "Point"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "Point",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "x",
+            "type": "i32"
+          },
+          {
+            "name": "y",
+            "type": "i32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Kind",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Alpha"
+          },
+          {
+            "name": "Beta"
+          },
+          {
+            "name": "Gamma"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Action",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Idle"
+          },
+          {
+            "name": "Move",
+            "fields": [
+              {
+                "name": "dx",
+                "type": "i64"
+              },
+              {
+                "name": "dy",
+                "type": "i64"
+              }
+            ]
+          },
+          {
+            "name": "Say",
+            "fields": ["string", "u8"]
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "AuthorityChanged",
+      "fields": [
+        {
+          "name": "oldAuthority",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "newAuthority",
+          "type": {
+            "option": "publicKey"
+          },
+          "index": false
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Unauthorized",
+      "msg": "Signer is not the authority"
+    }
+  ],
+  "metadata": {
+    "address": "79jDEA2BdHou4dcWuXAVEbnw9eSU7S1Li3PcuzU547Va"
+  }
+}

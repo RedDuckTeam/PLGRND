@@ -5,7 +5,6 @@ import type { ActionsFor, NodeTypeEnum } from '@/types/node'
 import { useNodeActions } from '@/hooks/flow/use-node-actions'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { getNodeStyles } from '@/utils/node/node-style.utils'
-import { getIdlTypeString } from '@/utils/idl'
 import { useProgramAccountNode } from '@/hooks/nodes/use-program-account-node'
 import { Check, Loader2, AlertCircle } from 'lucide-react'
 
@@ -75,11 +74,11 @@ export const ProgramAccountNode = (props: NodeProps<ProgramAccountNodeType>) => 
               <div className="mt-2 text-[8px] space-y-1.5">
                 <div className="font-semibold text-foreground">Fields:</div>
                 <div className="space-y-1 pl-2">
-                  {selectedAccountDef.type.fields.map((field) => (
+                  {selectedAccountDef.fields.map((field) => (
                     <div key={field.name} className="text-foreground flex items-baseline gap-1">
                       <span>•</span>
                       <span className="font-mono">{field.name}</span>
-                      <span className="text-muted-foreground">: {getIdlTypeString(field.type)}</span>
+                      {field.label && <span className="text-muted-foreground">: {field.label}</span>}
                       {decoded && (
                         <span className="ml-auto font-mono text-foreground truncate max-w-[140px]">
                           {formatValue(decoded[field.name])}

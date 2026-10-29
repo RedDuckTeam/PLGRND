@@ -1,0 +1,9 @@
+[
+  {
+    "name": "token-metadata",
+    "programId": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s",
+    "url": "https://raw.githubusercontent.com/metaplex-foundation/mpl-token-metadata/7c95f9948d7fed8db9947188b8040f0d560ac2d3/idls/token_metadata.json",
+    "sha256": "58f1a1397a1e4f6c671d2a3bf8f6e9465eedd8abb0025c943d42030180ff411f",
+    "licence": "Metaplex NFT Open Source License: not redistributed, downloaded into the gitignored .cache"
+  }
+]

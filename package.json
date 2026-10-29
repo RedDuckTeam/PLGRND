@@ -7,6 +7,7 @@
   "scripts": {
     "web:dev": "yarn workspace web dev",
     "web:build": "yarn workspace web build",
+    "web:test": "yarn workspace web test",
     "landing:dev": "yarn workspace landing dev",
     "landing:build": "yarn workspace landing build",
     "landing:deploy": "yarn workspace landing deploy",

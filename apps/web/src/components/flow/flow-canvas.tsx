@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, type PropsWithChildren } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type PropsWithChildren } from 'react'
 import {
   ReactFlow,
   addEdge,
+  useReactFlow,
   type Connection,
+  type Edge,
   type IsValidConnection,
   type Node,
   type Viewport,
@@ -16,6 +18,8 @@ import { FlowModeContext } from '@/components/flow/flow-mode-context'
 import { FLOW_PANE_CLICK, FlowPaneEventsContext } from '@/components/flow/flow-pane-events'
 
 const EDGE_OPTIONS_LOCKED = { selectable: false }
+const NO_NODES: Node[] = []
+const NO_EDGES: Edge[] = []
 
 interface FlowCanvasProps extends PropsWithChildren {
   mode: EmbedMode
@@ -56,12 +60,34 @@ export const FlowCanvas = ({
   const setNodes = useFlowStore((s) => s.setNodes)
   const setEdges = useFlowStore((s) => s.setEdges)
   const setViewport = useFlowStore((s) => s.setViewport)
+  const generation = useFlowStore((s) => s.generation)
 
   const flowRef = useRef<HTMLDivElement>(null)
   const paneEvents = useMemo(() => new EventTarget(), [])
   const editable = mode === 'editor'
 
   const flowMode = useMemo(() => ({ mode, embedded }), [mode, embedded])
+
+  // React Flow keys node components by id, and a replaced flow often reuses ids (an import's `ix0`, a link's IDL
+  // node). One render without nodes unmounts the old components, so none carries its state into the new flow.
+  const [shownGeneration, setShownGeneration] = useState(generation)
+  const replacing = shownGeneration !== generation
+  useEffect(() => {
+    if (replacing) setShownGeneration(generation)
+  }, [replacing, generation])
+
+  // The editor shows a replaced flow (a link, an example, an import) at its own viewport, or fits one that has none
+  // once every node is measured: React Flow applies `defaultViewport` only on mount, and its `fitView` fits whichever
+  // nodes it measured first. Embeds place themselves.
+  const { fitView, setViewport: moveViewport } = useReactFlow()
+  const [placement, setPlacement] = useState({ generation, viewport, pending: !embedded && !viewport })
+  if (placement.generation !== generation) setPlacement({ generation, viewport, pending: !embedded })
+  const measured = nodes.length > 0 && nodes.every((node) => node.measured?.width !== undefined)
+  useEffect(() => {
+    if (!placement.pending || (!placement.viewport && !measured)) return
+    setPlacement((p) => ({ ...p, pending: false }))
+    void (placement.viewport ? moveViewport(placement.viewport) : fitView())
+  }, [placement, measured, fitView, moveViewport])
 
   // Handle lookups stay inside this canvas's own tree (document, or a widget's shadow root).
   const queryRoot = useCallback((): ParentNode => (flowRef.current?.getRootNode() ?? document) as ParentNode, [])
@@ -167,8 +193,8 @@ export const FlowCanvas = ({
           ref={flowRef}
           id={flowId}
           colorMode={colorMode}
-          nodes={nodes}
-          edges={edges}
+          nodes={replacing ? NO_NODES : nodes}
+          edges={replacing ? NO_EDGES : edges}
           nodeTypes={nodeMap}
           onNodesChange={handleNodesChange}
           onEdgesChange={handleEdgesChange}
@@ -192,11 +218,11 @@ export const FlowCanvas = ({
           preventScrolling={!embedded}
           zoomOnScroll={!embedded}
           zoomOnDoubleClick={!embedded}
-          minZoom={embedded ? 0.1 : 0.5}
+          // Low enough to fit an imported transaction's flow (up to ~2000 x 2500 px) in the editor.
+          minZoom={embedded ? 0.1 : 0.2}
           panOnScroll={false}
           zoomOnPinch={true}
           defaultViewport={embedded ? undefined : viewport}
-          fitView={embedded ? false : !viewport}
           selectionOnDrag={false}
           selectionMode={SelectionMode.Full}
           panOnDrag={true}

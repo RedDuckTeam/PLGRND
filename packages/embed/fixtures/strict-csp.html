@@ -23,6 +23,16 @@
     <plgrnd-flow id="w-p2" flow="%%FLOW:P2%%"></plgrnd-flow>
     <h2>Program execution (P4)</h2>
     <plgrnd-flow id="w-p4" flow="%%FLOW:P4%%"></plgrnd-flow>
+    <h2>Imported transaction (tx)</h2>
+    <!-- A devnet Whirlpool transaction imported in the widget: the transaction, its IDLs and the trace are read over
+         the public RPC only, so connect-src above is all it needs. Devnet (the public mainnet endpoint refuses requests
+         from web pages with HTTP 403). If devnet no longer has it, take a recent signature from getSignaturesForAddress
+         for whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc. -->
+    <plgrnd-flow
+      id="w-tx"
+      tx="2r35zK43twpabPpJufFwX8e7xAiSyz7k7o6XD2TwqVHrd9zd85QE7uzaYefJLtNcjPapqsshsRESUSwaeDQ7fNT4"
+      cluster="devnet"
+    ></plgrnd-flow>
     <h2>Key-signer Send (P5)</h2>
     <!-- The QA harness sets this widget's flow from a throwaway devnet key kept outside the repository. -->
     <plgrnd-flow id="w-send"></plgrnd-flow>

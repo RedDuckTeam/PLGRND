@@ -1,5 +1,6 @@
 import LZString from 'lz-string'
-import { FLOW_STORAGE_VERSION, sanitizeNodes, type FlowSnapshot } from '@/stores/flow-snapshot'
+import { sanitizeNodes, type FlowSnapshot } from '@/stores/flow-snapshot'
+import { requiresV4 } from './requires-v4'
 import { FLOW_HASH_KEY, isLegacyViewMode, normalizeHash, parseLocationParams } from '@/embed/embed-location'
 
 export { FLOW_HASH_KEY, parseLocationParams }
@@ -17,12 +18,9 @@ const stripSelection = <T extends { selected?: boolean }>(items: T[]): T[] =>
   items.map((item) => (item.selected ? { ...item, selected: false } : item))
 
 export const encodeFlowToHash = (snapshot: FlowSnapshot): string => {
-  const payload: SerializedFlow = {
-    v: FLOW_STORAGE_VERSION,
-    nodes: stripSelection(sanitizeNodes(snapshot.nodes)),
-    edges: stripSelection(snapshot.edges),
-    viewport: snapshot.viewport,
-  }
+  const nodes = stripSelection(sanitizeNodes(snapshot.nodes))
+  const edges = stripSelection(snapshot.edges)
+  const payload: SerializedFlow = { v: requiresV4({ nodes, edges }) ? 4 : 3, nodes, edges, viewport: snapshot.viewport }
   return LZString.compressToEncodedURIComponent(JSON.stringify(payload))
 }
 
